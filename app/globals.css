@@ -1,0 +1,212 @@
+@import url("https://fonts.cdnfonts.com/css/museo-sans-rounded");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 120 60% 97%;
+    --foreground: 120 10% 15%;
+    --card: 120 60% 98%;
+    --card-foreground: 120 10% 15%;
+    --popover: 120 60% 98%;
+    --popover-foreground: 120 10% 15%;
+    --primary: 142 70% 35%;
+    --primary-foreground: 120 60% 98%;
+    --secondary: 120 30% 92%;
+    --secondary-foreground: 120 10% 20%;
+    --muted: 120 30% 94%;
+    --muted-foreground: 120 8% 45%;
+    --accent: 142 70% 45%;
+    --accent-foreground: 120 60% 98%;
+    --orange: 25 95% 75%;
+    --orange-foreground: 25 95% 20%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 120 60% 98%;
+    --border: 120 20% 88%;
+    --input: 120 20% 88%;
+    --ring: 142 70% 35%;
+    --radius: 0.75rem;
+  }
+
+  .dark {
+    --background: 120 15% 8%;
+    --foreground: 120 60% 95%;
+    --card: 120 15% 10%;
+    --card-foreground: 120 60% 95%;
+    --popover: 120 15% 10%;
+    --popover-foreground: 120 60% 95%;
+    --primary: 142 70% 45%;
+    --primary-foreground: 120 15% 8%;
+    --secondary: 120 10% 15%;
+    --secondary-foreground: 120 60% 95%;
+    --muted: 120 10% 15%;
+    --muted-foreground: 120 20% 65%;
+    --accent: 142 70% 45%;
+    --accent-foreground: 120 15% 8%;
+    --orange: 25 85% 65%;
+    --orange-foreground: 25 95% 95%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 120 60% 95%;
+    --border: 120 10% 18%;
+    --input: 120 10% 18%;
+    --ring: 142 70% 45%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+    font-family: "Museo Sans Rounded", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  }
+  body {
+    @apply bg-background text-foreground;
+    background-image: radial-gradient(circle at 20% 80%, rgba(34, 197, 94, 0.03) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, rgba(34, 197, 94, 0.03) 0%, transparent 50%),
+      radial-gradient(circle at 50% 50%, rgba(251, 146, 60, 0.02) 0%, transparent 60%);
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: "Museo Sans Rounded", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-weight: 700;
+  }
+}
+
+/* Leaf pattern backgrounds */
+.leaf-pattern {
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2322c55e' fill-opacity='0.05'%3E%3Cpath d='M30 30c0-11.046-8.954-20-20-20s-20 8.954-20 20 8.954 20 20 20c0-11.046 8.954-20 20-20z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+
+.leaf-pattern-dense {
+  background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%2322c55e' fill-opacity='0.03'%3E%3Cpath d='M20 20c0-5.5-4.5-10-10-10s-10 4.5-10 10 4.5 10 10 10c0-5.5 4.5-10 10-10zm10 0c0-5.5-4.5-10-10-10s-10 4.5-10 10 4.5 10 10 10c0-5.5 4.5-10 10-10z'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+.orange-gradient {
+  background: linear-gradient(135deg, rgba(251, 146, 60, 0.1) 0%, rgba(34, 197, 94, 0.1) 100%);
+}
+
+.orange-gradient-strong {
+  background: linear-gradient(135deg, rgba(251, 146, 60, 0.15) 0%, rgba(34, 197, 94, 0.05) 100%);
+}
+
+/* Organic shape styles - restored quirky shapes */
+.organic-shape {
+  border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+}
+
+.organic-shape-alt {
+  border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+}
+
+.organic-shape-soft {
+  border-radius: 40% 60% 60% 40% / 50% 50% 50% 50%;
+}
+
+/* Clean image styles */
+.clean-image {
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+/* Button gradient styles with quirky shapes */
+.btn-gradient {
+  background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--orange)) 100%);
+  color: white;
+  transition: all 0.3s ease;
+  border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+}
+
+.btn-gradient:hover {
+  background: linear-gradient(135deg, hsl(var(--orange)) 0%, hsl(var(--primary)) 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(34, 197, 94, 0.3);
+}
+
+/* Card organic shapes */
+.card-organic {
+  border-radius: 20px;
+}
+
+.image-clean {
+  border-radius: 16px;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(var(--muted));
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--primary) / 0.3);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--primary) / 0.5);
+}
+
+/* Animations */
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes pulse-soft {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-pulse-soft {
+  animation: pulse-soft 3s ease-in-out infinite;
+}
+
+/* Product card hover effects */
+.product-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(34, 197, 94, 0.15);
+}
+
+/* Button enhancements */
+.btn-orange {
+  background: linear-gradient(135deg, hsl(var(--orange)) 0%, hsl(var(--accent)) 100%);
+  color: hsl(var(--orange-foreground));
+  transition: all 0.3s ease;
+}
+
+.btn-orange:hover {
+  background: linear-gradient(135deg, hsl(var(--accent)) 0%, hsl(var(--orange)) 100%);
+  transform: scale(1.02);
+}
+
+/* Cart badge */
+.cart-badge {
+  animation: pulse-soft 2s ease-in-out infinite;
+}
