@@ -18,7 +18,7 @@ export default function Home() {
       <section className="relative h-[80vh] min-h-[600px] w-full overflow-hidden leaf-pattern">
         <div className="absolute inset-0 bg-gradient-to-b from-transparent to-background/90 z-10"></div>
         <Image
-          src="https://images.unsplash.com/photo-1594736797933-d0401ba2fe65?w=1920&h=1080&fit=crop&crop=center"
+          src="./images/ekondo-14.jpg"
           alt="Young African woman tending to plants in urban setting"
           fill
           className="object-cover"
@@ -75,8 +75,8 @@ export default function Home() {
               <div className="grid md:grid-cols-2 gap-8 items-center">
                 <div>
                   <Image
-                    src="https://images.unsplash.com/photo-1616627188467-fac8d174d157?w=800&h=600&fit=crop&crop=center"
-                    alt="Young African woman arranging handcrafted pots and plants"
+                    src="./images/girl2.jpeg"
+                    alt="Young African woman with beautiful plants"
                     width={800}
                     height={600}
                     className="object-cover aspect-[4/3] image-clean"
@@ -121,7 +121,7 @@ export default function Home() {
               <div className="grid md:grid-cols-2 gap-8 items-center">
                 <div>
                   <Image
-                    src="https://images.unsplash.com/photo-1544717297-fa95b6ee9643?w=800&h=600&fit=crop&crop=center"
+                    src="./images/two girls.jpg"
                     alt="Young African people participating in plant workshop"
                     width={800}
                     height={600}
@@ -167,8 +167,8 @@ export default function Home() {
               <div className="grid md:grid-cols-2 gap-8 items-center">
                 <div>
                   <Image
-                    src="https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=800&h=600&fit=crop&crop=center"
-                    alt="African landscaper working on urban garden installation"
+                    src="./images/guy working.jpg"
+                    alt="Professional working on plants maintenance"
                     width={800}
                     height={600}
                     className="object-cover aspect-[4/3] image-clean"
@@ -213,8 +213,8 @@ export default function Home() {
               <div className="grid md:grid-cols-2 gap-8 items-center">
                 <div>
                   <Image
-                    src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=600&fit=crop&crop=center"
-                    alt="Modern African community space with plants and natural elements"
+                    src="./images/ekondo event.jpg"
+                    alt="Ekondo Park Event"
                     width={800}
                     height={600}
                     className="object-cover aspect-[4/3] image-clean"
@@ -272,27 +272,31 @@ export default function Home() {
             {[
               {
                 id: 1,
-                image: "https://images.unsplash.com/photo-1485955900006-10f4d324d411?w=400&h=400&fit=crop&crop=center",
-                name: "Handwoven Basket Planter",
-                description: "Traditional African weaving",
+                image: "/images/Ekondo Products/Size_B_Baby_Rubber_in_a_Purple_Chidi-scaled.webp",
+                name: "Baby Rubber Plant",
+                description: "Size B in Purple Chidi pot",
+                price: 25000,
               },
               {
                 id: 2,
-                image: "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=400&h=400&fit=crop&crop=center",
-                name: "Ceramic Plant Pot",
-                description: "Locally crafted ceramic",
+                image: "/images/Ekondo Products/Aglaonema__Blue_Mide-scaled.webp",
+                name: "Aglaonema Plant",
+                description: "Beautiful foliage in Blue Mide pot",
+                price: 25000,
               },
               {
                 id: 3,
-                image: "https://images.unsplash.com/photo-1463320726281-696a485928c7?w=400&h=400&fit=crop&crop=center",
-                name: "Succulent Collection",
-                description: "Drought-resistant plants",
+                image: "/images/Ekondo Products/Blue-Chidi.webp",
+                name: "Blue Chidi Pot",
+                description: "Handcrafted ceramic planter",
+                price: 15000,
               },
               {
                 id: 4,
-                image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=400&fit=crop&crop=center",
-                name: "Bamboo Plant Stand",
-                description: "Sustainable bamboo design",
+                image: "/images/Ekondo Products/Yellow-Edak-1-scaled.webp",
+                name: "Yellow Edak Pot",
+                description: "Traditional African design",
+                price: 9000,
               },
             ].map((item) => (
               <Card key={item.id} className="overflow-hidden border-none shadow-md card-organic">
@@ -303,7 +307,7 @@ export default function Home() {
                   <h3 className="font-medium text-lg mb-1">{item.name}</h3>
                   <p className="text-muted-foreground text-sm mb-2">{item.description}</p>
                   <div className="flex justify-between items-center">
-                    <span className="font-bold">$49.99</span>
+                    <span className="font-bold">₦{item.price.toLocaleString()}</span>
                     <Button size="sm" variant="outline" className="btn-gradient bg-transparent organic-shape">
                       Add to Cart
                     </Button>
@@ -329,26 +333,41 @@ export default function Home() {
             {[
               {
                 id: 1,
-                image: "https://images.unsplash.com/photo-1544717297-fa95b6ee9643?w=500&h=300&fit=crop&crop=center",
-                title: "Plant Styling Workshop",
+                image: "/images/pot design.jpeg",
+                title: "Paint & Plant Pottery Experience",
                 type: "Workshop",
-                date: "June 15, 2025",
+                date: "On-Demand",
+                description:
+                  "Step away from the daily hustle and reconnect through creativity. Decorate your own pot and plant something meaningful inside.",
               },
               {
                 id: 2,
-                image: "https://images.unsplash.com/photo-1594736797933-d0401ba2fe65?w=500&h=300&fit=crop&crop=center",
-                title: "Urban Gardening Class",
-                type: "Class",
-                date: "June 20, 2025",
+                image: "/images/table tennis game.jpg",
+                title: "Play 4 Wellness",
+                type: "Event",
+                date: "On-Demand",
+                description:
+                  "Wellness starts with play—active games, mindful group activities, and moments of shared joy for all ages.",
               },
               {
                 id: 3,
-                image: "https://images.unsplash.com/photo-1616627188467-fac8d174d157?w=500&h=300&fit=crop&crop=center",
-                title: "Community Plant Swap",
+                image: "/images/ekondo event.jpg",
+                title: "Fridays at Ekondo",
                 type: "Event",
-                date: "June 25, 2025",
+                date: "Every Friday",
+                description:
+                  "Music, games, creativity, and community—unwind, meet new people, and try something joyful at Ekondo Park.",
               },
-            ].map((item) => (
+              {
+                id: 4,
+                image: "/images/two women.JPG",
+                title: "Creative Upcycling",
+                type: "Workshop",
+                date: "On-Demand",
+                description:
+                  "Blend art and sustainability—reimagine waste into beautiful, practical creations that inspire greener living.",
+              },
+            ].slice(0, 3).map((item) => (
               <Card key={item.id} className="overflow-hidden border-none shadow-md card-organic">
                 <div className="relative h-48">
                   <Image src={item.image || "/placeholder.svg"} alt={item.title} fill className="object-cover" />
@@ -361,9 +380,7 @@ export default function Home() {
                     <div className="text-xs text-muted-foreground">{item.date}</div>
                   </div>
                   <h3 className="font-medium text-lg mb-1">{item.title}</h3>
-                  <p className="text-muted-foreground text-sm mb-4">
-                    Learn how to style your plants for maximum impact in your space.
-                  </p>
+                  <p className="text-muted-foreground text-sm mb-4">{item.description}</p>
                   <Button size="sm" className="w-full btn-gradient organic-shape">
                     Book Now
                   </Button>

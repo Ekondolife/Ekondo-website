@@ -1,5 +1,8 @@
+"use client"
+
 import Image from "next/image"
 import Link from "next/link"
+import { useMemo, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { ArrowRight, Calendar, Clock } from "lucide-react"
@@ -7,81 +10,61 @@ import { Input } from "@/components/ui/input"
 
 export default function JournalPage() {
   const featuredPost = {
-    title: "The Rise of Urban Farming in African Cities",
+    title: "10 Low-Maintenance Indoor Plants You Can Buy in Lagos (Under ₦20,000)",
     excerpt:
-      "How young Africans are transforming rooftops, balconies, and empty lots into thriving food gardens, creating sustainable food systems in the heart of our cities.",
-    author: "Ama Kofi",
-    date: "June 5, 2025",
-    readTime: "8 min read",
-    category: "Urban Farming",
-    image: "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=1200&h=600&fit=crop&crop=center",
-    slug: "urban-farming-african-cities",
+      "Looking for affordable low-maintenance indoor plants in Lagos that thrive in Nigeria’s climate? Discover 10 low-maintenance houseplants (under ₦20,000)…",
+    author: "Favour",
+    date: "October 6, 2025",
+    readTime: "6 min read",
+    category: "Plant Care",
+    image: "/images/Ekondo Products/Size_B_Spider_Plant_in_a_Red_Chidi-scaled.webp",
+    slug: "low-maintenance-indoor-plants-lagos-under-20000",
   }
 
   const posts = [
     {
-      title: "10 Low-Maintenance Plants for Busy Urban Professionals",
-      excerpt: "Discover hardy plants that thrive with minimal care, perfect for Lagos, Nairobi, and Accra climates.",
-      author: "Chidi Okonkwo",
-      date: "June 2, 2025",
+      title: "DETERMINING THE RIGHT LIGHT OF YOUR SPACE FOR YOUR PLANT.",
+      excerpt:
+        "This article helps you evaluate light conditions so you can place your plants where they will flourish.",
+      author: "Favour",
+      date: "August 20, 2025",
       readTime: "5 min read",
       category: "Plant Care",
-      image: "https://images.unsplash.com/photo-1463320726281-696a485928c7?w=600&h=400&fit=crop&crop=center",
-      slug: "low-maintenance-plants",
+      image: "/images/fine plant image.webp",
+      slug: "determining-right-light-for-your-plant",
     },
     {
-      title: "Biophilic Design: Traditional African Wisdom Meets Modern Spaces",
-      excerpt: "How ancient African building practices are inspiring contemporary green architecture.",
-      author: "Zainab Hassan",
-      date: "May 28, 2025",
-      readTime: "7 min read",
-      category: "Design",
-      image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&h=400&fit=crop&crop=center",
-      slug: "biophilic-design-african-homes",
+      title: "5 essential tips for keeping your plants alive",
+      excerpt:
+        "Embarking on your journey as a plant parent can be exciting—start here with five essential tips to keep your plants thriving.",
+      author: "Favour",
+      date: "August 20, 2025",
+      readTime: "4 min read",
+      category: "Plant Care",
+      image: "/images/sans img.jpg",
+      slug: "essential-tips-for-keeping-plants-alive",
     },
     {
-      title: "The Healing Power of African Indigenous Plants",
-      excerpt: "Exploring traditional plant medicine and its integration into modern wellness practices.",
-      author: "Kwesi Mensah",
-      date: "May 25, 2025",
+      title: "EKONDO- COMMUNITY HERALDING CONTENTMENT",
+      excerpt:
+        "A heartfelt look at how Ekondo fosters contentment and togetherness through community and creativity.",
+      author: "Favour",
+      date: "August 20, 2025",
       readTime: "6 min read",
-      category: "Wellness",
-      image: "https://images.unsplash.com/photo-1594736797933-d0401ba2fe65?w=600&h=400&fit=crop&crop=center",
-      slug: "traditional-plant-medicine",
-    },
-    {
-      title: "Creating Community Gardens in Urban Africa",
-      excerpt: "Success stories and practical guides for starting community gardens in your neighborhood.",
-      author: "Ama Kofi",
-      date: "May 20, 2025",
-      readTime: "9 min read",
       category: "Community",
-      image: "https://images.unsplash.com/photo-1485955900006-10f4d324d411?w=600&h=400&fit=crop&crop=center",
-      slug: "community-gardens",
-    },
-    {
-      title: "Sustainable Living: Small Changes, Big Impact",
-      excerpt: "Practical tips for reducing your environmental footprint while living in African cities.",
-      author: "Zara Mwangi",
-      date: "May 15, 2025",
-      readTime: "5 min read",
-      category: "Sustainability",
-      image: "https://images.unsplash.com/photo-1616627188467-fac8d174d157?w=600&h=400&fit=crop&crop=center",
-      slug: "sustainable-living-tips",
-    },
-    {
-      title: "Plant Styling Tips from African Interior Designers",
-      excerpt: "How to incorporate plants into your home décor with African aesthetic sensibilities.",
-      author: "Chidi Okonkwo",
-      date: "May 10, 2025",
-      readTime: "6 min read",
-      category: "Design",
-      image: "https://images.unsplash.com/photo-1544717297-fa95b6ee9643?w=600&h=400&fit=crop&crop=center",
-      slug: "plant-styling-tips",
+      image: "/images/two women.JPG",
+      slug: "ekondo-community-heralding-contentment",
     },
   ]
 
-  const categories = ["All", "Urban Farming", "Plant Care", "Design", "Wellness", "Community", "Sustainability"]
+  const categories = ["All", "Plant Care", "Community", "Urban Farming", "Design", "Wellness", "Sustainability"]
+
+  const [activeCategory, setActiveCategory] = useState<string>("All")
+
+  const filteredPosts = useMemo(() => {
+    if (activeCategory === "All") return posts
+    return posts.filter((p) => p.category === activeCategory)
+  }, [posts, activeCategory])
 
   return (
     <div className="flex flex-col">
@@ -146,9 +129,10 @@ export default function JournalPage() {
               {categories.map((category) => (
                 <Button
                   key={category}
-                  variant={category === "All" ? "default" : "outline"}
+                  variant={activeCategory === category ? "default" : "outline"}
                   size="sm"
                   className="organic-shape"
+                  onClick={() => setActiveCategory(category)}
                 >
                   {category}
                 </Button>
@@ -163,8 +147,8 @@ export default function JournalPage() {
         <div className="container px-4">
           <h2 className="font-serif text-2xl md:text-3xl font-bold mb-12">Latest Articles</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {posts.map((post) => (
-              <Card key={post.slug} className="border-none shadow-md organic-shape overflow-hidden group">
+            {filteredPosts.map((post) => (
+              <Card key={post.slug} className="border-none shadow-md organic-shape overflow-hidden group h-full">
                 <Link href={`/journal/${post.slug}`}>
                   <div className="relative h-48 overflow-hidden">
                     <Image
@@ -175,7 +159,7 @@ export default function JournalPage() {
                     />
                   </div>
                 </Link>
-                <CardContent className="p-6">
+                <CardContent className="p-6 flex flex-col h-full">
                   <div className="flex items-center gap-2 mb-3">
                     <div className="bg-primary/10 text-primary text-xs font-medium px-2 py-1 rounded organic-shape">
                       {post.category}
@@ -186,7 +170,7 @@ export default function JournalPage() {
                       {post.title}
                     </h3>
                   </Link>
-                  <p className="text-muted-foreground text-sm mb-4 line-clamp-2">{post.excerpt}</p>
+                  <p className="text-muted-foreground text-sm mb-4 line-clamp-2 flex-1">{post.excerpt}</p>
                   <div className="flex items-center gap-3 text-xs text-muted-foreground mb-4">
                     <div className="flex items-center gap-1">
                       <Calendar className="h-3 w-3" />
@@ -198,11 +182,13 @@ export default function JournalPage() {
                       <span>{post.readTime}</span>
                     </div>
                   </div>
-                  <Button variant="ghost" size="sm" className="p-0 h-auto" asChild>
-                    <Link href={`/journal/${post.slug}`}>
-                      Read more <ArrowRight className="ml-1 h-4 w-4" />
-                    </Link>
-                  </Button>
+                  <div>
+                    <Button variant="ghost" size="sm" className="p-0 h-auto" asChild>
+                      <Link href={`/journal/${post.slug}`}>
+                        Read more <ArrowRight className="ml-1 h-4 w-4" />
+                      </Link>
+                    </Button>
+                  </div>
                 </CardContent>
               </Card>
             ))}

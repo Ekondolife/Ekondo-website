@@ -1,6 +1,9 @@
+"use client"
+
 import { Filter } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
+import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -12,122 +15,199 @@ import { AddToCartButton } from "@/components/add-to-cart-button"
 import { Badge } from "@/components/ui/badge"
 
 export default function RetailPage() {
-  // Sample product data
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([])
+  const [selectedPriceRanges, setSelectedPriceRanges] = useState<string[]>([])
+  const [sortBy, setSortBy] = useState("featured")
+  // Real Ekondo product data with Naira pricing
   const products = [
+    // Plants
     {
       id: 1,
-      name: "Handwoven Basket Planter",
-      description: "Traditional African weaving",
-      price: 49.99,
-      image: "https://images.unsplash.com/photo-1485955900006-10f4d324d411?w=400&h=400&fit=crop&crop=center",
-      category: "Pots",
+      name: "Baby Rubber Plant",
+      description: "Size B in Purple Chidi pot",
+      price: 25000, // Plants in Chidi pots are 25k
+      image: "/images/Ekondo Products/Size_B_Baby_Rubber_in_a_Purple_Chidi-scaled.webp",
+      category: "Plants",
       featured: true,
-      discount: 10,
     },
     {
       id: 2,
-      name: "Ceramic Plant Pot - Terracotta",
-      description: "Locally crafted ceramic",
-      price: 39.99,
-      image: "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=400&h=400&fit=crop&crop=center",
-      category: "Pots",
-      featured: false,
+      name: "Aglaonema Plant",
+      description: "Beautiful foliage in Blue Mide pot",
+      price: 25000, // Plants in Mide pots are 25k
+      image: "/images/Ekondo Products/Aglaonema__Blue_Mide-scaled.webp",
+      category: "Plants",
+      featured: true,
     },
     {
       id: 3,
-      name: "Succulent Collection",
-      description: "Drought-resistant plants",
-      price: 34.99,
-      image: "https://images.unsplash.com/photo-1463320726281-696a485928c7?w=400&h=400&fit=crop&crop=center",
+      name: "Sansevieria Plant",
+      description: "Yellow and Green in Green Edak pot",
+      price: 15000, // Plants in Edak pots are 15k
+      image: "/images/Ekondo Products/Size_A_Yellow_and_Green_san_in_Green_Edak-scaled.webp",
       category: "Plants",
       featured: false,
       newArrival: true,
     },
     {
       id: 4,
-      name: "Bamboo Plant Stand",
-      description: "Sustainable bamboo design",
-      price: 59.99,
-      image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=400&fit=crop&crop=center",
-      category: "Accessories",
-      featured: true,
+      name: "Sansevieria Plant",
+      description: "Yellow and Green in Yellow Mide pot",
+      price: 25000, // Plants in Mide pots are 25k
+      image: "/images/Ekondo Products/Size_B_Yellow_and_Green_san_in_a_Yellow_Mide-scaled.webp",
+      category: "Plants",
+      featured: false,
     },
     {
       id: 5,
-      name: "Hanging Planter Set",
-      description: "Set of 3 macramé planters",
-      price: 44.99,
-      image: "https://images.unsplash.com/photo-1463320726281-696a485928c7?w=400&h=400&fit=crop&crop=center",
-      category: "Pots",
+      name: "Spider Plant",
+      description: "Size B in Red Chidi pot",
+      price: 25000, // Plants in Chidi pots are 25k
+      image: "/images/Ekondo Products/Size_B_Spider_Plant_in_a_Red_Chidi-scaled.webp",
+      category: "Plants",
       featured: false,
     },
     {
       id: 6,
-      name: "African Violet Plant",
-      description: "Indoor flowering plant",
-      price: 24.99,
-      image: "https://images.unsplash.com/photo-1594736797933-d0401ba2fe65?w=400&h=400&fit=crop&crop=center",
+      name: "Syngonium Plant",
+      description: "Brown variety in Murna pot",
+      price: 20000, // Plants in Murna pots are 20k
+      image: "/images/Ekondo Products/Syngonium__Brown_Murna-scaled.webp",
       category: "Plants",
       featured: false,
       newArrival: true,
     },
+    // Pots
     {
       id: 7,
-      name: "Watering Can - Copper",
-      description: "Handcrafted copper finish",
-      price: 29.99,
-      image: "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=400&h=400&fit=crop&crop=center",
-      category: "Tools",
-      featured: false,
-    },
-    {
-      id: 8,
-      name: "Plant Food Organic Set",
-      description: "Natural plant nutrition",
-      price: 19.99,
-      image: "https://images.unsplash.com/photo-1616627188467-fac8d174d157?w=400&h=400&fit=crop&crop=center",
-      category: "Tools",
-      featured: false,
-    },
-    {
-      id: 9,
-      name: "Monstera Deliciosa",
-      description: "Large tropical plant",
-      price: 79.99,
-      image: "https://images.unsplash.com/photo-1463320726281-696a485928c7?w=400&h=400&fit=crop&crop=center",
-      category: "Plants",
+      name: "Blue Chidi Pot",
+      description: "Handcrafted ceramic planter",
+      price: 15000, // Chidi pots are 15k
+      image: "/images/Ekondo Products/Blue-Chidi.webp",
+      category: "Pots",
       featured: true,
     },
     {
-      id: 10,
-      name: "Clay Pot Trio",
-      description: "Set of 3 terracotta pots",
-      price: 54.99,
-      image: "https://images.unsplash.com/photo-1485955900006-10f4d324d411?w=400&h=400&fit=crop&crop=center",
+      id: 8,
+      name: "Yellow Edak Pot",
+      description: "Traditional African design",
+      price: 9000, // Edak pots are 9k
+      image: "/images/Ekondo Products/Yellow-Edak-1-scaled.webp",
+      category: "Pots",
+      featured: true,
+    },
+    {
+      id: 9,
+      name: "Blue Mini Edak Pot",
+      description: "Compact ceramic planter",
+      price: 5000, // All mini pots are 5k
+      image: "/images/Ekondo Products/Blue-Mini-Edak.webp",
       category: "Pots",
       featured: false,
-      discount: 15,
+    },
+    {
+      id: 10,
+      name: "Green Mini Murna Pot",
+      description: "Small green ceramic pot",
+      price: 5000, // All mini pots are 5k
+      image: "/images/Ekondo Products/Green-Mini-Murna-scaled.webp",
+      category: "Pots",
+      featured: false,
     },
     {
       id: 11,
-      name: "LED Grow Light",
-      description: "Full spectrum plant light",
-      price: 89.99,
-      image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=400&fit=crop&crop=center",
-      category: "Lighting",
+      name: "Orange Mini Mide Pot",
+      description: "Vibrant orange ceramic planter",
+      price: 5000, // All mini pots are 5k
+      image: "/images/Ekondo Products/Orange-Mini-Mide-1-scaled.webp",
+      category: "Pots",
       featured: false,
       newArrival: true,
     },
     {
       id: 12,
-      name: "Potting Mix - Organic",
-      description: "Premium soil blend",
-      price: 14.99,
-      image: "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=400&h=400&fit=crop&crop=center",
-      category: "Tools",
+      name: "Orange Murna Pot",
+      description: "Large orange ceramic pot",
+      price: 12000, // Murna pots are 12k
+      image: "/images/Ekondo Products/Orange-Murna-1-scaled.webp",
+      category: "Pots",
       featured: false,
     },
+    {
+      id: 13,
+      name: "Pink Mide Pot",
+      description: "Elegant pink ceramic planter",
+      price: 15000, // Mide pots are 15k
+      image: "/images/Ekondo Products/Pink-Mide.webp",
+      category: "Pots",
+      featured: false,
+    },
+    // Accessories
+    {
+      id: 14,
+      name: "Yellow Nala Tray",
+      description: "Traditional serving tray",
+      price: 5000, // Nala tray is 5k
+      image: "/images/Ekondo Products/Yellow-Nala-scaled.webp",
+      category: "Accessories",
+      featured: false,
+      newArrival: true,
+    },
   ]
+
+  // Filter products based on selected categories and price ranges
+  const filteredProducts = products.filter(product => {
+    // Category filter
+    const categoryMatch = selectedCategories.length === 0 || selectedCategories.includes(product.category)
+    
+    // Price range filter
+    const priceMatch = selectedPriceRanges.length === 0 || selectedPriceRanges.some(range => {
+      switch (range) {
+        case "Under ₦10,000":
+          return product.price < 10000
+        case "₦10,000 - ₦15,000":
+          return product.price >= 10000 && product.price <= 15000
+        case "₦20,000 - ₦25,000":
+          return product.price >= 20000 && product.price <= 25000
+        default:
+          return true
+      }
+    })
+    
+    return categoryMatch && priceMatch
+  })
+
+  // Sort products
+  const sortedProducts = [...filteredProducts].sort((a, b) => {
+    switch (sortBy) {
+      case "newest":
+        return (b.newArrival ? 1 : 0) - (a.newArrival ? 1 : 0)
+      case "price-low":
+        return a.price - b.price
+      case "price-high":
+        return b.price - a.price
+      case "popular":
+        return (b.featured ? 1 : 0) - (a.featured ? 1 : 0)
+      default: // featured
+        return (b.featured ? 1 : 0) - (a.featured ? 1 : 0)
+    }
+  })
+
+  const handleCategoryChange = (category: string, checked: boolean) => {
+    if (checked) {
+      setSelectedCategories(prev => [...prev, category])
+    } else {
+      setSelectedCategories(prev => prev.filter(c => c !== category))
+    }
+  }
+
+  const handlePriceRangeChange = (range: string, checked: boolean) => {
+    if (checked) {
+      setSelectedPriceRanges(prev => [...prev, range])
+    } else {
+      setSelectedPriceRanges(prev => prev.filter(r => r !== range))
+    }
+  }
 
   return (
     <div className="flex flex-col">
@@ -183,9 +263,13 @@ export default function RetailPage() {
                   <div className="py-4">
                     <h3 className="font-medium mb-2">Categories</h3>
                     <div className="space-y-2">
-                      {["Pots", "Plants", "Lighting", "Accessories", "Tools"].map((category) => (
+                      {["Pots", "Plants", "Accessories"].map((category) => (
                         <div key={category} className="flex items-center space-x-2">
-                          <Checkbox id={`category-mobile-${category}`} />
+                          <Checkbox 
+                            id={`category-mobile-${category}`}
+                            checked={selectedCategories.includes(category)}
+                            onCheckedChange={(checked) => handleCategoryChange(category, checked as boolean)}
+                          />
                           <Label htmlFor={`category-mobile-${category}`}>{category}</Label>
                         </div>
                       ))}
@@ -195,9 +279,13 @@ export default function RetailPage() {
 
                     <h3 className="font-medium mb-2">Price Range</h3>
                     <div className="space-y-2">
-                      {["Under $25", "$25 - $50", "$50 - $100", "Over $100"].map((range) => (
+                      {["Under ₦10,000", "₦10,000 - ₦15,000", "₦20,000 - ₦25,000"].map((range) => (
                         <div key={range} className="flex items-center space-x-2">
-                          <Checkbox id={`price-mobile-${range}`} />
+                          <Checkbox 
+                            id={`price-mobile-${range}`}
+                            checked={selectedPriceRanges.includes(range)}
+                            onCheckedChange={(checked) => handlePriceRangeChange(range, checked as boolean)}
+                          />
                           <Label htmlFor={`price-mobile-${range}`}>{range}</Label>
                         </div>
                       ))}
@@ -206,7 +294,7 @@ export default function RetailPage() {
                 </SheetContent>
               </Sheet>
 
-              <Select defaultValue="featured">
+              <Select value={sortBy} onValueChange={setSortBy}>
                 <SelectTrigger className="w-full md:w-[180px] organic-shape">
                   <SelectValue placeholder="Sort by" />
                 </SelectTrigger>
@@ -233,9 +321,13 @@ export default function RetailPage() {
                       <div>
                         <h4 className="font-medium mb-3">Categories</h4>
                         <div className="space-y-2">
-                          {["Pots", "Plants", "Lighting", "Accessories", "Tools"].map((category) => (
+                          {["Pots", "Plants", "Accessories"].map((category) => (
                             <div key={category} className="flex items-center space-x-2">
-                              <Checkbox id={`category-${category}`} />
+                              <Checkbox 
+                                id={`category-${category}`}
+                                checked={selectedCategories.includes(category)}
+                                onCheckedChange={(checked) => handleCategoryChange(category, checked as boolean)}
+                              />
                               <Label htmlFor={`category-${category}`} className="text-sm">
                                 {category}
                               </Label>
@@ -249,9 +341,13 @@ export default function RetailPage() {
                       <div>
                         <h4 className="font-medium mb-3">Price Range</h4>
                         <div className="space-y-2">
-                          {["Under $25", "$25 - $50", "$50 - $100", "Over $100"].map((range) => (
+                          {["Under ₦10,000", "₦10,000 - ₦15,000", "₦20,000 - ₦25,000"].map((range) => (
                             <div key={range} className="flex items-center space-x-2">
-                              <Checkbox id={`price-${range}`} />
+                              <Checkbox 
+                                id={`price-${range}`}
+                                checked={selectedPriceRanges.includes(range)}
+                                onCheckedChange={(checked) => handlePriceRangeChange(range, checked as boolean)}
+                              />
                               <Label htmlFor={`price-${range}`} className="text-sm">
                                 {range}
                               </Label>
@@ -288,7 +384,7 @@ export default function RetailPage() {
             {/* Product Grid */}
             <div className="flex-1">
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {products.map((product) => (
+                {sortedProducts.map((product) => (
                   <Card key={product.id} className="overflow-hidden border-none shadow-md card-organic organic-shape">
                     <Link href={`/retail/product/${product.id}`} className="relative block aspect-square">
                       <Image
@@ -330,14 +426,14 @@ export default function RetailPage() {
                           {product.discount ? (
                             <div className="flex items-center gap-2">
                               <span className="font-bold text-lg text-primary">
-                                ${(product.price * (1 - product.discount / 100)).toFixed(2)}
+                                ₦{(product.price * (1 - product.discount / 100)).toLocaleString()}
                               </span>
                               <span className="text-sm text-muted-foreground line-through">
-                                ${product.price.toFixed(2)}
+                                ₦{product.price.toLocaleString()}
                               </span>
                             </div>
                           ) : (
-                            <span className="font-bold text-lg">${product.price.toFixed(2)}</span>
+                            <span className="font-bold text-lg">₦{product.price.toLocaleString()}</span>
                           )}
                         </div>
                         <AddToCartButton

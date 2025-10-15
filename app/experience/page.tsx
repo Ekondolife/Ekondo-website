@@ -1,102 +1,109 @@
+"use client"
+
 import { Calendar, Clock, MapPin, Users } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
+import { useMemo, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 export default function ExperiencePage() {
-  // Sample experience data
+  // Real Ekondo experiences data (₦15,000 default price)
   const experiences = [
     {
       id: 1,
-      title: "Plant Styling Masterclass",
-      description: "Learn the art of plant styling and create stunning arrangements for your home.",
-      date: "June 15, 2025",
-      time: "2:00 PM - 4:00 PM",
+      title: "Paint & Plant Pottery Experience",
+      description:
+        "Step away from the daily hustle and reconnect through creativity. Paint and Plant offers a calming, hands-on experience where you’ll decorate your own pot and plant something meaningful inside.",
+      date: "On-Demand",
+      time: "",
       location: "Ekondo Park",
-      price: 45,
-      capacity: 12,
-      spotsLeft: 3,
+      price: 15000,
+      capacity: 20,
+      spotsLeft: 12,
       type: "Workshop",
-      image: "/placeholder.svg?height=400&width=600&text=Plant+Styling",
+      image: "/images/pot design.jpeg",
       featured: true,
     },
     {
       id: 2,
-      title: "Terrarium Building Workshop",
-      description: "Create your own miniature ecosystem in a glass container.",
-      date: "June 20, 2025",
-      time: "10:00 AM - 12:00 PM",
-      location: "Ekondo Studio",
-      price: 35,
-      capacity: 8,
-      spotsLeft: 5,
-      type: "Workshop",
-      image: "/placeholder.svg?height=400&width=600&text=Terrarium",
+      title: "Play 4 Wellness",
+      description:
+        "Wellness starts with play, and Play 4 Wellness is your invitation to move, laugh, and connect, no matter your age. These sessions are a refreshing break from routine, filled with active games, mindful group activities, and moments of shared joy.",
+      date: "On-Demand",
+      time: "",
+      location: "Ekondo Park",
+      price: 15000,
+      capacity: 30,
+      spotsLeft: 18,
+      type: "Event",
+      image: "/images/table tennis game.jpg",
       featured: false,
     },
     {
       id: 3,
-      title: "Urban Gardening Basics",
-      description: "Start your urban garden with expert tips and hands-on practice.",
-      date: "June 25, 2025",
-      time: "9:00 AM - 11:00 AM",
+      title: "Fridays at Ekondo",
+      description:
+        "Every Friday, Ekondo Park transforms into a space of music, games, creativity, and community. Unwind, meet new people, and try something joyful.",
+      date: "Every Friday",
+      time: "",
       location: "Ekondo Park",
-      price: 40,
-      capacity: 15,
-      spotsLeft: 8,
-      type: "Class",
-      image: "/placeholder.svg?height=400&width=600&text=Urban+Garden",
-      featured: false,
-    },
-    {
-      id: 4,
-      title: "Mindful Plant Meditation",
-      description: "Connect with nature through guided meditation in our plant sanctuary.",
-      date: "June 30, 2025",
-      time: "6:00 PM - 7:30 PM",
-      location: "Ekondo Sanctuary",
-      price: 25,
-      capacity: 20,
-      spotsLeft: 12,
+      price: 15000,
+      capacity: 100,
+      spotsLeft: 50,
       type: "Event",
-      image: "/placeholder.svg?height=400&width=600&text=Meditation",
+      image: "/images/ekondo event.jpg",
       featured: true,
     },
     {
-      id: 5,
-      title: "Sustainable Living Workshop",
-      description: "Discover practical ways to live more sustainably with plants and eco-friendly practices.",
-      date: "July 5, 2025",
-      time: "1:00 PM - 4:00 PM",
+      id: 4,
+      title: "Creative Upcycling",
+      description:
+        "Rediscover the magic in everyday materials. Blend art and sustainability to reimagine waste into beautiful, practical creations.",
+      date: "On-Demand",
+      time: "",
       location: "Ekondo Park",
-      price: 50,
-      capacity: 10,
-      spotsLeft: 2,
+      price: 15000,
+      capacity: 16,
+      spotsLeft: 10,
       type: "Workshop",
-      image: "/placeholder.svg?height=400&width=600&text=Sustainable",
-      featured: false,
-    },
-    {
-      id: 6,
-      title: "Plant Propagation Masterclass",
-      description: "Learn advanced techniques for propagating your favorite plants.",
-      date: "July 10, 2025",
-      time: "11:00 AM - 1:00 PM",
-      location: "Ekondo Studio",
-      price: 38,
-      capacity: 12,
-      spotsLeft: 7,
-      type: "Class",
-      image: "/placeholder.svg?height=400&width=600&text=Propagation",
+      image: "/images/two women.JPG",
       featured: false,
     },
   ]
 
+  const [typeFilter, setTypeFilter] = useState<string>("all")
+  const [dateSort, setDateSort] = useState<string>("date")
+
   const featuredExperiences = experiences.filter((exp) => exp.featured)
-  const allExperiences = experiences
+
+  const allExperiences = useMemo(() => {
+    const filtered = experiences.filter((exp) => {
+      if (typeFilter === "all") return true
+      return exp.type.toLowerCase() === typeFilter
+    })
+
+    const getDatePriority = (dateStr: string): number => {
+      if (!dateStr) return 999999
+      const lower = dateStr.toLowerCase()
+      if (lower.includes("every friday")) return 0
+      if (lower.includes("on-demand")) return 2
+      const parsed = Date.parse(dateStr)
+      if (!Number.isNaN(parsed)) return parsed
+      return 1
+    }
+
+    const sorted = [...filtered].sort((a, b) => {
+      if (dateSort === "date") {
+        return getDatePriority(a.date) - getDatePriority(b.date)
+      }
+      return 0
+    })
+
+    return sorted
+  }, [experiences, typeFilter, dateSort])
 
   return (
     <div className="container px-4 py-8 md:py-12">
@@ -104,8 +111,8 @@ export default function ExperiencePage() {
       <div className="text-center mb-12">
         <h1 className="font-serif text-3xl md:text-4xl font-bold mb-4">Ekondo Experiences</h1>
         <p className="text-muted-foreground max-w-2xl mx-auto">
-          Join our community for hands-on workshops, creative events, and transformative experiences that deepen your
-          connection with nature and sustainable living.
+          Looking to connect with your friends, family, colleagues, or community?
+          Join our nature-inspired experiences, designed to spark joy and meaningful connection.
         </p>
       </div>
 
@@ -157,7 +164,7 @@ export default function ExperiencePage() {
                 </div>
 
                 <div className="flex items-center justify-between">
-                  <div className="text-2xl font-bold">${experience.price}</div>
+                  <div className="text-2xl font-bold">₦{experience.price.toLocaleString()}</div>
                   <Button asChild>
                     <Link href={`/experience/${experience.id}`}>Book Now</Link>
                   </Button>
@@ -174,7 +181,7 @@ export default function ExperiencePage() {
           <h2 className="font-serif text-2xl font-bold">All Experiences</h2>
 
           <div className="flex items-center gap-4 w-full md:w-auto">
-            <Select defaultValue="all">
+            <Select value={typeFilter} onValueChange={setTypeFilter}>
               <SelectTrigger className="w-full md:w-[180px]">
                 <SelectValue placeholder="Filter by type" />
               </SelectTrigger>
@@ -186,7 +193,7 @@ export default function ExperiencePage() {
               </SelectContent>
             </Select>
 
-            <Select defaultValue="date">
+            <Select value={dateSort} onValueChange={setDateSort}>
               <SelectTrigger className="w-full md:w-[180px]">
                 <SelectValue placeholder="Sort by" />
               </SelectTrigger>
@@ -241,7 +248,7 @@ export default function ExperiencePage() {
                 </div>
 
                 <div className="flex items-center justify-between">
-                  <div className="font-bold">${experience.price}</div>
+                  <div className="font-bold">₦{experience.price.toLocaleString()}</div>
                   <Button size="sm" asChild>
                     <Link href={`/experience/${experience.id}`}>Book Now</Link>
                   </Button>

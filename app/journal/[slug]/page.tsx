@@ -6,73 +6,99 @@ import { Calendar, Clock, User, ArrowLeft, Share2 } from "lucide-react"
 import { Separator } from "@/components/ui/separator"
 
 export default function BlogPostPage({ params }: { params: { slug: string } }) {
-  // This would normally fetch the post based on the slug
-  const post = {
-    title: "The Rise of Urban Farming in African Cities",
-    author: "Ama Kofi",
-    authorBio: "Founder & CEO of Ekondo. Environmental scientist passionate about urban sustainability.",
-    authorImage: "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=200&h=200&fit=crop&crop=face",
-    date: "June 5, 2025",
-    readTime: "8 min read",
-    category: "Urban Farming",
-    image: "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=1200&h=600&fit=crop&crop=center",
-    content: `
-      <p>Urban farming is transforming the landscape of African cities. From Lagos to Nairobi, young Africans are reclaiming rooftops, balconies, and unused spaces to grow food and create sustainable urban ecosystems.</p>
+  const postsBySlug: Record<string, any> = {
+    "low-maintenance-indoor-plants-lagos-under-20000": {
+      title: "10 Low-Maintenance Indoor Plants You Can Buy in Lagos (Under ₦20,000)",
+      author: "Favour",
+      authorBio: "Ekondo writer and plant enthusiast.",
+      authorImage: "/placeholder-user.jpg",
+      date: "October 6, 2025",
+      readTime: "8 min read",
+      category: "Plant Care",
+      image: "/images/Ekondo Products/Size_B_Spider_Plant_in_a_Red_Chidi-scaled.webp",
+      content: `
+        <p>Looking for affordable low-maintenance indoor plants in Lagos that thrive in Nigeria’s climate? 
+        Discover 10 low-maintenance houseplants (under ₦20,000) you can buy at Ekondo Life, plus care tips and pot pairing ideas.</p>
 
-      <p>This movement isn't just about food production—it's about reimagining our relationship with the environment, building community resilience, and creating sustainable solutions for rapidly growing cities.</p>
+        <p>Living in Lagos can feel fast-paced and hectic, but adding plants to your apartment or office is one of the simplest ways to create calm, beauty, and fresh air. 
+        At Ekondo Life, we specialize in low-maintenance indoor plants for Nigeria, carefully chosen for their ability to adapt to Lagos’s humidity, heat, and small living spaces.</p>
 
-      <h2>Why Urban Farming Matters in Africa</h2>
+        <h2>Why Low-Maintenance Plants Are Ideal for Lagos Apartments</h2>
+        <ul>
+          <li>Adaptable to Nigeria’s climate — handle humidity, heat, and dusty harmattan air.</li>
+          <li>Beginner-friendly — easy to care for even with a busy schedule.</li>
+          <li>Affordable & accessible — with options under ₦20,000, anyone can start a plant collection.</li>
+          <li>Space-saving — fit perfectly into apartments, balconies, or office desks.</li>
+        </ul>
 
-      <p>With Africa's urban population expected to triple by 2050, cities are facing unprecedented challenges in food security, environmental sustainability, and community well-being. Urban farming offers innovative solutions to these complex issues.</p>
+        <h2>Top 10 Low-Maintenance Indoor Plants (Available at Ekondo Life)</h2>
 
-      <p>Studies show that urban agriculture can provide up to 15% of food needs in major African cities while reducing the carbon footprint of food transportation and improving air quality in dense urban areas.</p>
+        <h3>1. Snake Plant (Sansevieria)</h3>
+        <p><strong>Light & Placement:</strong> Thrives in low to bright light. Great for corners.<br/>
+        <strong>Care Tips:</strong> Water once every 2–3 weeks. Extremely drought-tolerant.<br/>
+        <strong>Price at Ekondo Life:</strong> ₦15,000 – ₦25,000</p>
 
-      <h2>Success Stories Across the Continent</h2>
+        <h3>2. Baby Rubber Plant (Peperomia obtusifolia)</h3>
+        <p><strong>Light & Placement:</strong> Medium to bright indirect light.<br/>
+        <strong>Care Tips:</strong> Water when topsoil feels dry; leaves store water.<br/>
+        <strong>Price at Ekondo Life:</strong> ₦15,000 – ₦25,000</p>
 
-      <p>In Lagos, community rooftop gardens are producing fresh vegetables for hundreds of families while creating green jobs for young people. These spaces have become hubs for environmental education and community gathering.</p>
+        <h3>3. Peace Lily (Spathiphyllum)</h3>
+        <p><strong>Light & Placement:</strong> Bright, indirect light.<br/>
+        <strong>Care Tips:</strong> Water weekly. Leaves droop when thirsty — easy reminder!<br/>
+        <strong>Price:</strong> ₦15,000 – ₦25,000</p>
 
-      <p>Nairobi's vertical farming initiatives are showing how technology and tradition can merge to create efficient food production systems adapted to urban constraints. Young entrepreneurs are using hydroponics and vertical growing systems to maximize limited space.</p>
+        <h3>4. Aloe Vera</h3>
+        <p><strong>Light & Placement:</strong> Sunny window spots.<br/>
+        <strong>Care Tips:</strong> Water sparingly. Bonus: natural skin care benefits.<br/>
+        <strong>Price:</strong> ₦15,000 – ₦25,000</p>
 
-      <h2>Getting Started with Urban Farming</h2>
+        <h3>5. Pothos (Golden / Marble Queen)</h3>
+        <p><strong>Light & Placement:</strong> Hanging shelves or trailing from pots.<br/>
+        <strong>Care Tips:</strong> Tolerates low light. Water when topsoil is dry.<br/>
+        <strong>Price:</strong> ₦15,000 – ₦25,000</p>
 
-      <p>You don't need acres of land to start urban farming. Begin with container gardens on your balcony, or join a community garden initiative. Many cities now have programs supporting urban agriculture through land access, resources, and training.</p>
+        <h2>Care Tips for Indoor Plants in Lagos</h2>
+        <ul>
+          <li>Use well-draining soil and pots with holes.</li>
+          <li>Rotate plants monthly so all sides get light.</li>
+          <li>Wipe dust from leaves (especially during harmattan).</li>
+          <li>Water less during rainy season to prevent root rot.</li>
+        </ul>
 
-      <p>Start small with herbs and leafy greens, which are forgiving for beginners and provide quick harvests. As you gain confidence, expand to vegetables and fruits suited to your climate.</p>
+        <h2>Where to Buy Indoor Plants in Lagos</h2>
+        <p>You can buy all these plants directly from Ekondo Life:</p>
+        <ul>
+          <li><a href="https://ekondolife.com/plants/" target="_blank">Browse our Indoor Plant Collection</a></li>
+          <li>Shop stylish Pots & Planters</li>
+          <li>Join our Community Workshops</li>
+        </ul>
 
-      <h2>Challenges and Solutions</h2>
+        <h2>Why Indoor Plants Are Worth It</h2>
+        <p>Indoor plants improve air quality, reduce stress, and bring nature closer to your home — even in a busy city like Lagos.</p>
 
-      <p>Urban farming in Africa faces unique challenges: limited water access, soil contamination, and space constraints. However, innovative farmers are developing solutions using rainwater harvesting, container growing, and companion planting techniques.</p>
-
-      <p>Climate-smart agriculture practices are being adapted for urban contexts, helping farmers work with natural systems rather than against them. This includes using indigenous plants that are naturally adapted to local conditions.</p>
-
-      <h2>The Future of Urban Farming</h2>
-
-      <p>As technology becomes more accessible, we're seeing exciting innovations in urban agriculture. Mobile apps help farmers optimize growing conditions, connect with markets, and share knowledge across the continent.</p>
-
-      <p>The future of African cities is green—not just in rhetoric, but in practice. Urban farming is proving that sustainability, food security, and community building can grow together, one garden at a time.</p>
-    `,
+        <h2>Conclusion</h2>
+        <p>Ready to transform your Lagos apartment into a green sanctuary? Start small — pick one or two low-maintenance indoor plants, pair them with a beautiful pot, and watch your home come alive.</p>
+      `,
+    },
   }
 
-  const relatedPosts = [
-    {
-      title: "10 Low-Maintenance Plants for Busy Urban Professionals",
-      image: "https://images.unsplash.com/photo-1463320726281-696a485928c7?w=400&h=300&fit=crop&crop=center",
-      slug: "low-maintenance-plants",
-    },
-    {
-      title: "Creating Community Gardens in Urban Africa",
-      image: "https://images.unsplash.com/photo-1485955900006-10f4d324d411?w=400&h=300&fit=crop&crop=center",
-      slug: "community-gardens",
-    },
-    {
-      title: "Sustainable Living: Small Changes, Big Impact",
-      image: "https://images.unsplash.com/photo-1616627188467-fac8d174d157?w=400&h=300&fit=crop&crop=center",
-      slug: "sustainable-living-tips",
-    },
-  ]
+  const fallback = {
+    title: "The Ekondo Journal",
+    author: "Ekondo",
+    authorBio: "Community stories and plant wisdom.",
+    authorImage: "/placeholder-user.jpg",
+    date: "",
+    readTime: "",
+    category: "Plant Care",
+    image: "/images/fine plant image.webp",
+    content: `<p>Article coming soon.</p>`,
+  }
+
+  const post = postsBySlug[params.slug] ?? fallback
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col bg-background">
       {/* Back Button */}
       <div className="container px-4 py-8">
         <Button variant="ghost" asChild className="organic-shape">
@@ -83,117 +109,62 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
         </Button>
       </div>
 
-      {/* Hero Image */}
-      <div className="relative h-[50vh] min-h-[400px] w-full overflow-hidden">
+      {/* Hero Section */}
+      <div className="relative h-[55vh] min-h-[400px] w-full overflow-hidden rounded-none">
         <Image src={post.image || "/placeholder.svg"} alt={post.title} fill className="object-cover" priority />
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent"></div>
       </div>
 
       {/* Article Content */}
-      <article className="py-12 md:py-16">
-        <div className="container px-4">
+      <article className="py-16 bg-background/80">
+        <div className="container px-6">
           <div className="max-w-3xl mx-auto">
-            {/* Category Badge */}
+            {/* Category */}
             <div className="flex justify-center mb-6">
-              <div className="bg-primary/10 text-primary text-sm font-medium px-4 py-2 rounded organic-shape">
+              <div className="bg-green-100 text-green-700 text-sm font-semibold px-4 py-1 rounded-full">
                 {post.category}
               </div>
             </div>
 
             {/* Title */}
-            <h1 className="font-serif text-3xl md:text-5xl font-bold text-center mb-6">{post.title}</h1>
+            <h1 className="font-serif text-3xl md:text-5xl font-bold text-center mb-6 leading-tight">
+              {post.title}
+            </h1>
 
-            {/* Meta Info */}
-            <div className="flex flex-wrap items-center justify-center gap-4 text-sm text-muted-foreground mb-8">
-              <div className="flex items-center gap-2">
-                <Calendar className="h-4 w-4" />
-                <span>{post.date}</span>
-              </div>
+            {/* Meta */}
+            <div className="flex flex-wrap items-center justify-center gap-4 text-sm text-muted-foreground mb-10">
+              <div className="flex items-center gap-2"><Calendar className="h-4 w-4" />{post.date}</div>
               <span>•</span>
-              <div className="flex items-center gap-2">
-                <Clock className="h-4 w-4" />
-                <span>{post.readTime}</span>
-              </div>
+              <div className="flex items-center gap-2"><Clock className="h-4 w-4" />{post.readTime}</div>
               <span>•</span>
-              <div className="flex items-center gap-2">
-                <User className="h-4 w-4" />
-                <span>{post.author}</span>
-              </div>
+              <div className="flex items-center gap-2"><User className="h-4 w-4" />{post.author}</div>
             </div>
 
-            {/* Share Button */}
-            <div className="flex justify-center mb-12">
-              <Button variant="outline" size="sm" className="organic-shape bg-transparent">
-                <Share2 className="h-4 w-4 mr-2" />
-                Share Article
-              </Button>
-            </div>
+            <Separator className="mb-10" />
 
-            <Separator className="mb-12" />
-
-            {/* Article Content */}
+            {/* Main Text */}
             <div
-              className="prose prose-lg max-w-none mb-12"
+              className="prose prose-lg max-w-none prose-headings:font-serif prose-headings:text-2xl prose-headings:mt-10 prose-headings:mb-4 prose-p:mb-6 prose-li:mb-2 prose-a:text-green-700 prose-a:underline"
               dangerouslySetInnerHTML={{ __html: post.content }}
-              style={{
-                lineHeight: "1.8",
-              }}
             />
 
-            <Separator className="mb-12" />
+            <Separator className="my-12" />
 
-            {/* Author Bio */}
-            <Card className="border-none shadow-md organic-shape">
-              <CardContent className="p-6">
-                <div className="flex items-start gap-4">
-                  <div className="relative w-16 h-16 rounded-full overflow-hidden flex-shrink-0 organic-shape">
-                    <Image
-                      src={post.authorImage || "/placeholder.svg"}
-                      alt={post.author}
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
-                  <div>
-                    <h3 className="font-serif text-xl font-bold mb-1">{post.author}</h3>
-                    <p className="text-sm text-muted-foreground">{post.authorBio}</p>
-                  </div>
+            {/* Author Box */}
+            <Card className="border-none shadow-md rounded-xl bg-muted/40">
+              <CardContent className="p-6 flex gap-4 items-center">
+                <div className="relative w-16 h-16 rounded-full overflow-hidden">
+                  <Image src={post.authorImage || "/placeholder.svg"} alt={post.author} fill className="object-cover" />
+                </div>
+                <div>
+                  <h3 className="font-serif text-xl font-semibold">{post.author}</h3>
+                  <p className="text-muted-foreground text-sm">{post.authorBio}</p>
                 </div>
               </CardContent>
             </Card>
           </div>
         </div>
       </article>
-
-      {/* Related Posts */}
-      <section className="py-16 md:py-24 leaf-pattern-dense">
-        <div className="container px-4">
-          <h2 className="font-serif text-3xl font-bold text-center mb-12">Related Articles</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            {relatedPosts.map((relatedPost, index) => (
-              <Card key={index} className="border-none shadow-md organic-shape overflow-hidden group">
-                <Link href={`/journal/${relatedPost.slug}`}>
-                  <div className="relative h-48">
-                    <Image
-                      src={relatedPost.image || "/placeholder.svg"}
-                      alt={relatedPost.title}
-                      fill
-                      className="object-cover transition-transform duration-300 group-hover:scale-110"
-                    />
-                  </div>
-                </Link>
-                <CardContent className="p-4">
-                  <Link href={`/journal/${relatedPost.slug}`}>
-                    <h3 className="font-medium text-lg group-hover:text-primary transition-colors">
-                      {relatedPost.title}
-                    </h3>
-                  </Link>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
     </div>
   )
 }

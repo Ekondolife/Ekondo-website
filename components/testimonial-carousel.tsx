@@ -9,32 +9,33 @@ import Image from "next/image"
 const testimonials = [
   {
     id: 1,
-    name: "Amara Okafor",
-    role: "Urban Gardener",
+    name: "Anonymous Customer",
+    role: "",
     content:
-      "Ekondo has transformed my small Lagos apartment into a green sanctuary. Their plant pairing suggestions were perfect for my space, and their maintenance service keeps everything thriving in our climate.",
+      "Omo the mood changed in my house since those plants entered. Yes o, make e no cause pressure.",
     rating: 5,
-    image: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=100&h=100&fit=crop&crop=face",
+    image: "/placeholder-user.jpg",
   },
   {
     id: 2,
-    name: "Kwame Asante",
-    role: "Interior Designer",
+    name: "Anonymous Customer",
+    role: "",
     content:
-      "As an interior designer in Accra, I rely on Ekondo for all my biophilic design needs. Their products celebrate African craftsmanship while being sustainable. My clients love the authentic touch.",
+      "I fell in love with experience ekondo because of the versatility of the brand. They constantly produce products that people truly want and need without compromising on quality. It truly is an experience with ekondo.",
     rating: 5,
-    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face",
+    image: "/placeholder-user.jpg",
   },
   {
     id: 3,
-    name: "Zara Mwangi",
-    role: "Wellness Coach",
+    name: "Favour Ojo",
+    role: "",
     content:
-      "I've hosted several events at Ekondo Spaces in Nairobi, and the atmosphere is perfect for my wellness workshops. The team understands our culture and creates spaces that feel like home.",
-    rating: 4,
-    image: "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=100&h=100&fit=crop&crop=face",
+      "Adding Ekondo plants to my home genuinely elevated the entire aura and vibe. Caring for them gives me the same sense of responsibility and joy as having a pet. I deeply appreciate the satisfaction and wellness these plants bring to my space.",
+    rating: 5,
+    image: "/placeholder-user.jpg",
   },
 ]
+
 
 export default function TestimonialCarousel() {
   const [currentIndex, setCurrentIndex] = useState(0)
@@ -57,9 +58,9 @@ export default function TestimonialCarousel() {
           {testimonials.map((testimonial) => (
             <Card key={testimonial.id} className="flex-shrink-0 w-full border-none shadow-md organic-shape">
               <CardContent className="p-6 md:p-8 flex flex-col items-center text-center">
-                <div className="w-16 h-16 rounded-full overflow-hidden mb-4 relative organic-shape">
+                <div className="w-16 h-16 rounded-full overflow-hidden mb-4 relative">
                   <Image
-                    src={testimonial.image || "/placeholder.svg"}
+                    src={testimonial.image || "/placeholder-user.jpg"}
                     alt={testimonial.name}
                     fill
                     className="object-cover"

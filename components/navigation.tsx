@@ -42,8 +42,7 @@ export default function Navigation() {
             <SheetContent side="left" className="w-[300px] sm:w-[400px]">
               <div className="flex items-center justify-between mb-8">
                 <Link href="/" className="text-2xl font-bold tracking-tight" onClick={() => setIsOpen(false)}>
-                  <span className="text-primary">Eko</span>
-                  <span className="text-orange">ndo</span>
+                  <img src="./images/ekondo logo.png" alt="Ekondo Logo" />
                 </Link>
                 <Button variant="ghost" size="icon" onClick={() => setIsOpen(false)}>
                   <X className="h-6 w-6" />
@@ -70,9 +69,8 @@ export default function Navigation() {
               </nav>
             </SheetContent>
           </Sheet>
-          <Link href="/" className="text-2xl font-bold tracking-tight">
-            <span className="text-primary">Eko</span>
-            <span className="text-orange">ndo</span>
+          <Link href="/" className="font-bold tracking-tight">
+            <img src="./images/ekondo logo.png" alt="Ekondo Logo" className="h-10 w-200" />
           </Link>
         </div>
 
