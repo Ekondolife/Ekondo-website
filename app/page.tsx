@@ -18,7 +18,7 @@ export default function Home() {
       <section className="relative h-[80vh] min-h-[600px] w-full overflow-hidden leaf-pattern">
         <div className="absolute inset-0 bg-gradient-to-b from-transparent to-background/90 z-10"></div>
         <Image
-          src="./images/ekondo-14.jpg"
+          src="./images/Ekondo-14.JPG"
           alt="Young African woman tending to plants in urban setting"
           fill
           className="object-cover"
