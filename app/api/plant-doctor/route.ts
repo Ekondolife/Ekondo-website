@@ -1,44 +1,31 @@
-import { openai } from "@ai-sdk/openai"
-import { generateText } from "ai"
-
 export async function POST(req: Request) {
   try {
     const { messages } = await req.json()
 
-    const systemPrompt = `You are Dibia, a wise and knowledgeable plant expert specializing in African climates and conditions. Your name means "healer" or "medicine person" in Igbo, reflecting your role as a plant wisdom keeper.
+    // Simple, dependency-free advice generator to avoid external AI packages
+    const userMessage: string = Array.isArray(messages)
+      ? String(messages[messages.length - 1]?.content ?? "")
+      : ""
 
-You have deep knowledge of:
-1. Plants that thrive in African climates (tropical, subtropical, savanna, desert)
-2. Common plant diseases and pests in African regions
-3. Water conservation and irrigation for different African climates
-4. Indigenous African plants and their traditional uses
-5. Urban gardening in African cities (Lagos, Nairobi, Accra, Cape Town, Kigali, etc.)
-6. Seasonal variations across different African regions
-7. Soil types common in Africa
-8. Climate-specific challenges (high heat, drought, heavy rains, humidity)
+    const lower = userMessage.toLowerCase()
+    let advice =
+      "Hi! I'm Dibia 🌿. Tell me your plant type, location, and what's happening (yellow leaves? pests? watering?). I'll share tips suited for our climate."
 
-Your approach:
-- Always greet warmly and acknowledge the user's concern
-- Ask about their location in Africa to give region-specific advice
-- Consider water scarcity and recommend drought-tolerant options
-- Suggest indigenous plants when appropriate
-- Provide practical solutions using locally available materials
-- Be culturally sensitive and incorporate African gardening wisdom
-- Consider indoor and outdoor conditions typical in African homes
-- Provide watering schedules based on local climate patterns
-- Recommend natural, affordable pest control methods
+    if (lower.includes("yellow") || lower.includes("brown")) {
+      advice =
+        "Yellowing leaves often come from overwatering or low light. Let the top 2–3cm of soil dry before watering, move to bright indirect light, and trim damaged leaves. In Lagos humidity, water less during rainy season."
+    } else if (lower.includes("pest") || lower.includes("insect") || lower.includes("mealy") || lower.includes("aphid")) {
+      advice =
+        "For common pests (mealybugs/aphids), wipe leaves with a mild soapy-water solution, then rinse. Repeat 2–3 times weekly. Improve airflow and avoid overfertilizing. Neem oil spray at night can help."
+    } else if (lower.includes("water") || lower.includes("watering")) {
+      advice =
+        "Water when the topsoil dries. Most indoor plants prefer deep watering then full drain—never let pots sit in water. In warm seasons, check twice weekly; in rainy season, reduce frequency."
+    } else if (lower.includes("light") || lower.includes("sun")) {
+      advice =
+        "Aim for bright, indirect light. East-facing windows are gentle; harsh afternoon sun can scorch leaves. Rotate the pot monthly so growth stays even."
+    }
 
-Keep responses warm, encouraging, and concise (2-3 short paragraphs). Use occasional emojis (🌿, 🌱, 💧, ☀️) to make conversations friendly. When diagnosing issues, ask follow-up questions if needed.
-
-Embrace your role as Dibia - a trusted guide helping people connect with nature through their plants.`
-
-    const { text } = await generateText({
-      model: openai("gpt-4o"),
-      system: systemPrompt,
-      messages,
-    })
-
-    return Response.json({ message: text })
+    return Response.json({ message: advice })
   } catch (error) {
     console.error("Plant Doctor API error:", error)
     return Response.json({ error: "Failed to generate response" }, { status: 500 })
