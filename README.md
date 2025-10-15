@@ -1,2 +1,2 @@
 # Ekondo-website
-A new and improved website for Ekondo
+A new and updated website for Ekondo
