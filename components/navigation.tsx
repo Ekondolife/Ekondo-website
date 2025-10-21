@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import Link from "next/link"
+import Image from "next/image"
 import { usePathname } from "next/navigation"
 import { Menu, ShoppingBag, User, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -42,7 +43,13 @@ export default function Navigation() {
             <SheetContent side="left" className="w-[300px] sm:w-[400px]">
               <div className="flex items-center justify-between mb-8">
                 <Link href="/" className="text-2xl font-bold tracking-tight" onClick={() => setIsOpen(false)}>
-                  <img src="./images/ekondo logo.png" alt="Ekondo Logo" />
+                  <Image 
+                    src="/images/ekondo logo.png" 
+                    alt="Ekondo Logo" 
+                    width={120}
+                    height={40}
+                    className="h-8 w-auto max-w-[120px] object-contain"
+                  />
                 </Link>
                 <Button variant="ghost" size="icon" onClick={() => setIsOpen(false)}>
                   <X className="h-6 w-6" />
@@ -70,7 +77,13 @@ export default function Navigation() {
             </SheetContent>
           </Sheet>
           <Link href="/" className="font-bold tracking-tight">
-            <img src="./images/ekondo logo.png" alt="Ekondo Logo" className="h-10 w-200" />
+            <Image 
+              src="/images/ekondo logo.png" 
+              alt="Ekondo Logo" 
+              width={150}
+              height={50}
+              className="h-10 w-auto max-w-[150px] object-contain"
+            />
           </Link>
         </div>
 

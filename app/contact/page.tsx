@@ -39,25 +39,18 @@ export default function ContactPage() {
 
   const locations = [
     {
-      city: "Lagos, Nigeria",
-      address: "123 Victoria Island, Lagos",
-      phone: "+234 xxx xxx xxxx",
-      email: "lagos@ekondo.com",
+      city: "Abuja, Nigeria",
+      address: "MaMa Village Garden, beside Sharon Rose Garden, Abuja, Nigeria",
+      phone: "09162358827",
+      email: "hello@ekondolife.com",
       hours: "Mon-Sat: 9AM-7PM",
     },
     {
-      city: "Accra, Ghana",
-      address: "45 East Legon, Accra",
-      phone: "+233 xxx xxx xxxx",
-      email: "accra@ekondo.com",
-      hours: "Tue-Sat: 10AM-6PM",
-    },
-    {
-      city: "Nairobi, Kenya",
-      address: "78 Karen Road, Nairobi",
-      phone: "+254 xxx xxx xxxx",
-      email: "nairobi@ekondo.com",
-      hours: "Mon-Sun: 8AM-8PM",
+      city: "Lagos, Nigeria",
+      address: "2 Saka Jojo St, Victoria Island, Lagos, Nigeria",
+      phone: "09162358827",
+      email: "hello@ekondolife.com",
+      hours: "Mon-Sat: 9AM-7PM",
     },
   ]
 
@@ -67,7 +60,7 @@ export default function ContactPage() {
       <section className="relative h-[50vh] min-h-[400px] w-full overflow-hidden leaf-pattern">
         <div className="absolute inset-0 bg-gradient-to-b from-transparent to-background/90 z-10"></div>
         <Image
-          src="https://images.unsplash.com/photo-1594736797933-d0401ba2fe65?w=1920&h=1080&fit=crop&crop=center"
+          src="/images/two women.JPG"
           alt="Contact Ekondo"
           fill
           className="object-cover"

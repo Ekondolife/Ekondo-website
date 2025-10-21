@@ -29,25 +29,25 @@ export default function AboutPage() {
     {
       name: "Ama Kofi",
       role: "Founder & CEO",
-      image: "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=400&h=400&fit=crop&crop=face",
+      image: "/images/girl.jpeg",
       bio: "Environmental scientist passionate about bringing nature into urban African spaces.",
     },
     {
       name: "Chidi Okonkwo",
       role: "Head of Experiences",
-      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face",
+      image: "/images/man.jpeg",
       bio: "Community builder and workshop facilitator with 10 years of experience.",
     },
     {
       name: "Zainab Hassan",
       role: "Creative Director",
-      image: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=400&h=400&fit=crop&crop=face",
+      image: "/images/girl2.jpeg",
       bio: "Designer bringing African aesthetics and sustainable design together.",
     },
     {
       name: "Kwesi Mensah",
       role: "Head of Services",
-      image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop&crop=face",
+      image: "/images/man2.jpg",
       bio: "Landscape architect specializing in urban green spaces across Africa.",
     },
   ]
@@ -58,7 +58,7 @@ export default function AboutPage() {
       <section className="relative h-[60vh] min-h-[500px] w-full overflow-hidden leaf-pattern">
         <div className="absolute inset-0 bg-gradient-to-b from-transparent to-background/90 z-10"></div>
         <Image
-          src="https://images.unsplash.com/photo-1544717297-fa95b6ee9643?w=1920&h=1080&fit=crop&crop=center"
+          src="/images/group pic.JPG"
           alt="Ekondo team working with plants"
           fill
           className="object-cover image-clean"
@@ -122,7 +122,7 @@ export default function AboutPage() {
       </section>
 
       {/* Team Section */}
-      <section className="py-16 md:py-24">
+      {/* <section className="py-16 md:py-24">
         <div className="container px-4">
           <h2 className="font-serif text-3xl md:text-4xl font-bold text-center mb-12">Meet Our Team</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -145,7 +145,7 @@ export default function AboutPage() {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Impact Section */}
       <section className="py-16 md:py-24 bg-primary/5 leaf-pattern">

@@ -10,8 +10,8 @@ export default function ServicesPage() {
       id: 1,
       title: "Plant Maintenance",
       description: "Keep your plants healthy and thriving with our expert care services.",
-      image: "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=600&h=400&fit=crop&crop=center",
-      price: "From $50/month",
+      image: "/images/guy working.jpg",
+      price: "From ₦25,000/month",
       features: [
         "Weekly or bi-weekly visits",
         "Watering and feeding",
@@ -25,8 +25,8 @@ export default function ServicesPage() {
       id: 2,
       title: "Landscape Design & Installation",
       description: "Transform your outdoor space with custom landscape design tailored to African climates.",
-      image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&h=400&fit=crop&crop=center",
-      price: "From $500",
+      image: "/images/Ekondo-14.JPG",
+      price: "From ₦150,000",
       features: [
         "Custom design consultation",
         "Native plant selection",
@@ -40,8 +40,8 @@ export default function ServicesPage() {
       id: 3,
       title: "Indoor Plant Styling",
       description: "Professional styling services to create stunning indoor green spaces.",
-      image: "https://images.unsplash.com/photo-1594736797933-d0401ba2fe65?w=600&h=400&fit=crop&crop=center",
-      price: "From $200",
+      image: "/images/girl2.jpeg",
+      price: "From ₦75,000",
       features: [
         "Space assessment",
         "Plant selection and sourcing",
@@ -55,7 +55,7 @@ export default function ServicesPage() {
       id: 4,
       title: "Corporate Green Spaces",
       description: "Enhance your workplace with biophilic design that boosts productivity and wellness.",
-      image: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=600&h=400&fit=crop&crop=center",
+      image: "/images/ekondo event.jpg",
       price: "Custom Quote",
       features: [
         "Workspace analysis",
@@ -70,8 +70,8 @@ export default function ServicesPage() {
       id: 5,
       title: "Garden Consultation",
       description: "Get expert advice on planning and maintaining your garden.",
-      image: "https://images.unsplash.com/photo-1485955900006-10f4d324d411?w=600&h=400&fit=crop&crop=center",
-      price: "From $100/session",
+      image: "/images/fine plant image.webp",
+      price: "From ₦35,000/session",
       features: [
         "Site visit and assessment",
         "Personalized recommendations",
@@ -85,8 +85,8 @@ export default function ServicesPage() {
       id: 6,
       title: "Vertical Garden Installation",
       description: "Maximize your space with beautiful living walls and vertical gardens.",
-      image: "https://images.unsplash.com/photo-1463320726281-696a485928c7?w=600&h=400&fit=crop&crop=center",
-      price: "From $400",
+      image: "/images/pot group.jpg",
+      price: "From ₦120,000",
       features: [
         "Custom design",
         "Structural assessment",
@@ -104,7 +104,7 @@ export default function ServicesPage() {
       <section className="relative h-[60vh] min-h-[500px] w-full overflow-hidden leaf-pattern">
         <div className="absolute inset-0 bg-gradient-to-b from-transparent to-background/90 z-10"></div>
         <Image
-          src="https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=1920&h=1080&fit=crop&crop=center"
+          src="/images/guy working.jpg"
           alt="Professional landscaping services"
           fill
           className="object-cover"
@@ -173,11 +173,8 @@ export default function ServicesPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {[
                 "Lagos, Nigeria",
-                "Accra, Ghana",
-                "Nairobi, Kenya",
-                "Cape Town, South Africa",
-                "Addis Ababa, Ethiopia",
-                "Kigali, Rwanda",
+                "Abuja, Nigeria",
+                "Port Harcourt, Nigeria",
               ].map((city, index) => (
                 <Card key={index} className="border-none shadow-md organic-shape">
                   <CardContent className="p-4 flex items-center gap-3">

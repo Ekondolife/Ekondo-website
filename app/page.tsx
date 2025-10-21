@@ -10,6 +10,7 @@ import BlogPreview from "@/components/blog-preview"
 import InstagramFeed from "@/components/instagram-feed"
 import { PlantDoctorChat } from "@/components/plant-doctor-chat"
 import { Badge } from "@/components/ui/badge"
+import { getFeaturedExperiences } from "@/lib/experiences-data"
 
 export default function Home() {
   return (
@@ -330,44 +331,7 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {[
-              {
-                id: 1,
-                image: "/images/pot design.jpeg",
-                title: "Paint & Plant Pottery Experience",
-                type: "Workshop",
-                date: "On-Demand",
-                description:
-                  "Step away from the daily hustle and reconnect through creativity. Decorate your own pot and plant something meaningful inside.",
-              },
-              {
-                id: 2,
-                image: "/images/table tennis game.jpg",
-                title: "Play 4 Wellness",
-                type: "Event",
-                date: "On-Demand",
-                description:
-                  "Wellness starts with play—active games, mindful group activities, and moments of shared joy for all ages.",
-              },
-              {
-                id: 3,
-                image: "/images/ekondo event.jpg",
-                title: "Fridays at Ekondo",
-                type: "Event",
-                date: "Every Friday",
-                description:
-                  "Music, games, creativity, and community—unwind, meet new people, and try something joyful at Ekondo Park.",
-              },
-              {
-                id: 4,
-                image: "/images/two women.JPG",
-                title: "Creative Upcycling",
-                type: "Workshop",
-                date: "On-Demand",
-                description:
-                  "Blend art and sustainability—reimagine waste into beautiful, practical creations that inspire greener living.",
-              },
-            ].slice(0, 3).map((item) => (
+            {getFeaturedExperiences().slice(0, 3).map((item) => (
               <Card key={item.id} className="overflow-hidden border-none shadow-md card-organic">
                 <div className="relative h-48">
                   <Image src={item.image || "/placeholder.svg"} alt={item.title} fill className="object-cover" />
@@ -422,7 +386,7 @@ export default function Home() {
           <InstagramFeed />
           <div className="text-center mt-8">
             <Button variant="outline" size="lg" asChild className="btn-gradient bg-transparent organic-shape">
-              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
+              <a href="https://www.instagram.com/ekondolife/" target="_blank" rel="noopener noreferrer">
                 Follow @ekondo
               </a>
             </Button>

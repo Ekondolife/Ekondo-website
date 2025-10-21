@@ -68,7 +68,7 @@ export default function BlogPreview() {
             <Button
               variant="ghost"
               size="sm"
-              className="h-auto px-2 py-1 transition-all duration-300 rounded-md hover:px-3 hover:bg-primary/10 text-white hover:text-white"
+              className="h-auto px-2 py-1 transition-all duration-300 rounded-md hover:px-3 hover:bg-primary/10 text-black dark:text-white hover:text-black dark:hover:text-white"
               asChild
             >
              <Link href={`/journal/${post.slug}`}>

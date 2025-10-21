@@ -1,43 +1,43 @@
 import Image from "next/image"
 
 export default function InstagramFeed() {
-  // Instagram feed with images of young urban Africans and plants
+
   const instagramPosts = [
     {
       id: 1,
-      image: "https://images.unsplash.com/photo-1594736797933-d0401ba2fe65?w=300&h=300&fit=crop&crop=center",
+      image: "./images/girl.jpeg",
       alt: "Young African woman with plants",
-      link: "https://instagram.com",
+      link: "https://www.instagram.com/ekondolife/",
     },
     {
       id: 2,
-      image: "https://images.unsplash.com/photo-1616627188467-fac8d174d157?w=300&h=300&fit=crop&crop=center",
+      image: "./images/ekondo event 2.jpg",
       alt: "African hands planting seeds",
-      link: "https://instagram.com",
+      link: "https://www.instagram.com/ekondolife/",
     },
     {
       id: 3,
-      image: "https://images.unsplash.com/photo-1544717297-fa95b6ee9643?w=300&h=300&fit=crop&crop=center",
+      image: "./images/instagram3.jpg",
       alt: "Plant workshop with young Africans",
-      link: "https://instagram.com",
+      link: "https://www.instagram.com/ekondolife/",
     },
     {
       id: 4,
-      image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=300&h=300&fit=crop&crop=center",
+      image: "./images/girl3.jpg",
       alt: "Modern African home with plants",
-      link: "https://instagram.com",
+      link: "https://www.instagram.com/ekondolife/",
     },
     {
       id: 5,
-      image: "https://images.unsplash.com/photo-1485955900006-10f4d324d411?w=300&h=300&fit=crop&crop=center",
+      image: "./images/instagram2.jpg",
       alt: "Traditional African plant containers",
-      link: "https://instagram.com",
+      link: "https://www.instagram.com/ekondolife/",
     },
     {
       id: 6,
-      image: "https://images.unsplash.com/photo-1463320726281-696a485928c7?w=300&h=300&fit=crop&crop=center",
+      image: "./images/instagram1.jpg",
       alt: "Urban garden in African city",
-      link: "https://instagram.com",
+      link: "https://www.instagram.com/ekondolife/",
     },
   ]
 

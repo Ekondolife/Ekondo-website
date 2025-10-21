@@ -3,70 +3,38 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { MapPin, Clock, Users, Calendar, Phone } from "lucide-react"
+import { getRecurringEvents } from "@/lib/experiences-data"
 
 export default function SpacesPage() {
   const spaces = [
     {
       id: 1,
-      name: "Ekondo Park Lagos",
+      name: "Ekondo Park Abuja",
       description:
-        "Our flagship location in the heart of Lagos. A 5,000 sq ft green oasis featuring a retail shop, workshop space, and community garden.",
-      image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=600&fit=crop&crop=center",
-      location: "Victoria Island, Lagos, Nigeria",
-      hours: "Mon-Sat: 9AM-7PM, Sun: 10AM-5PM",
+        "Our flagship location in the heart of Abuja. A nature-focused space for events and community gatherings, and the brand has expanded to have retail locations at other spots, like the Living Room in Wuse 2. It offers a peaceful environment for events like team bonding, paint and plant sessions, and other community-focused activities. You can also find Ekondolife products, such as plants and pots, at other retail locations in Abuja. ",
+      image: "/images/ekondo event.jpg",
+      location: "MaMa Village Garden, beside Sharon rose garden, Abuja, Nigeria",
+      hours: "Mon-Sat: 9AM-6PM, Sun: 10AM-5PM",
       capacity: "Up to 50 people",
       amenities: ["Retail Shop", "Workshop Space", "Community Garden", "Cafe", "Parking"],
       featured: true,
     },
     {
       id: 2,
-      name: "Ekondo Studio Accra",
+      name: "Ekondo Studio at Locale Lagos",
       description:
         "An intimate creative space for workshops and private events, surrounded by tropical plants and natural light.",
-      image: "https://images.unsplash.com/photo-1544717297-fa95b6ee9643?w=800&h=600&fit=crop&crop=center",
-      location: "East Legon, Accra, Ghana",
-      hours: "Tue-Sat: 10AM-6PM",
+      image: "/images/two girls.jpg",
+      location: " 2 Saka Jojo St, Victoria Island, Lagos, Nigeria",
+      hours: "Tue-Sat: 10AM-11PM",
       capacity: "Up to 25 people",
-      amenities: ["Workshop Tables", "Natural Light", "Plant Library", "Refreshments", "WiFi"],
-      featured: false,
-    },
-    {
-      id: 3,
-      name: "Ekondo Sanctuary Nairobi",
-      description:
-        "A tranquil wellness space offering meditation gardens, plant therapy sessions, and holistic experiences.",
-      image: "https://images.unsplash.com/photo-1594736797933-d0401ba2fe65?w=800&h=600&fit=crop&crop=center",
-      location: "Karen, Nairobi, Kenya",
-      hours: "Mon-Sun: 8AM-8PM",
-      capacity: "Up to 30 people",
-      amenities: ["Meditation Garden", "Yoga Space", "Private Rooms", "Organic Cafe", "Parking"],
+      amenities: ["Workshop Tables", "Natural Light", "Plant Library", "Refreshments"],
       featured: false,
     },
   ]
 
-  const upcomingEvents = [
-    {
-      title: "Sunday Plant Market",
-      location: "Ekondo Park Lagos",
-      date: "Every Sunday",
-      time: "10:00 AM - 4:00 PM",
-      image: "https://images.unsplash.com/photo-1616627188467-fac8d174d157?w=400&h=300&fit=crop&crop=center",
-    },
-    {
-      title: "Wellness Wednesday",
-      location: "Ekondo Sanctuary Nairobi",
-      date: "Every Wednesday",
-      time: "6:00 PM - 8:00 PM",
-      image: "https://images.unsplash.com/photo-1594736797933-d0401ba2fe65?w=400&h=300&fit=crop&crop=center",
-    },
-    {
-      title: "Creative Workshop Series",
-      location: "Ekondo Studio Accra",
-      date: "Bi-weekly Saturdays",
-      time: "2:00 PM - 5:00 PM",
-      image: "https://images.unsplash.com/photo-1544717297-fa95b6ee9643?w=400&h=300&fit=crop&crop=center",
-    },
-  ]
+  // Dynamic recurring events pulled from shared experiences data
+  const upcomingEvents = getRecurringEvents().slice(0, 3) // Show max 3 events
 
   return (
     <div className="flex flex-col">
@@ -74,7 +42,7 @@ export default function SpacesPage() {
       <section className="relative h-[60vh] min-h-[500px] w-full overflow-hidden leaf-pattern">
         <div className="absolute inset-0 bg-gradient-to-b from-transparent to-background/90 z-10"></div>
         <Image
-          src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1920&h=1080&fit=crop&crop=center"
+          src="/images/ekondo event.jpg"
           alt="Ekondo spaces community area"
           fill
           className="object-cover"
@@ -173,7 +141,10 @@ export default function SpacesPage() {
                   <Image src={event.image || "/placeholder.svg"} alt={event.title} fill className="object-cover" />
                 </div>
                 <CardContent className="p-6">
-                  <h3 className="font-serif text-xl font-bold mb-2">{event.title}</h3>
+                  <div className="flex items-center justify-between mb-2">
+                    <h3 className="font-serif text-xl font-bold">{event.title}</h3>
+                    <div className="text-sm font-bold text-primary">₦{event.price.toLocaleString()}</div>
+                  </div>
                   <div className="space-y-2 text-sm text-muted-foreground mb-4">
                     <div className="flex items-center gap-2">
                       <MapPin className="h-4 w-4 text-primary" />
@@ -187,9 +158,13 @@ export default function SpacesPage() {
                       <Clock className="h-4 w-4 text-primary" />
                       <span>{event.time}</span>
                     </div>
+                    <div className="flex items-center gap-2">
+                      <Users className="h-4 w-4 text-primary" />
+                      <span>{event.spotsLeft} spots left</span>
+                    </div>
                   </div>
                   <Button variant="outline" className="w-full organic-shape bg-transparent" asChild>
-                    <Link href="/experience">View Details</Link>
+                    <Link href={`/experience/${event.id}`}>View Details</Link>
                   </Button>
                 </CardContent>
               </Card>
@@ -211,7 +186,7 @@ export default function SpacesPage() {
               <Card className="border-none shadow-md organic-shape">
                 <CardContent className="p-6">
                   <h3 className="font-serif text-xl font-bold mb-4">Hourly Rental</h3>
-                  <div className="text-3xl font-bold text-primary mb-4">From $50/hour</div>
+                  <div className="text-3xl font-bold text-primary mb-4">From ₦15,000/hour</div>
                   <ul className="space-y-2 text-sm mb-6">
                     <li className="flex items-start gap-2">
                       <div className="h-2 w-2 rounded-full bg-primary mt-1.5 flex-shrink-0"></div>
@@ -238,7 +213,7 @@ export default function SpacesPage() {
                     Most Popular
                   </div>
                   <h3 className="font-serif text-xl font-bold mb-4">Full Day Rental</h3>
-                  <div className="text-3xl font-bold text-primary mb-4">From $300/day</div>
+                  <div className="text-3xl font-bold text-primary mb-4">From ₦90,000/day</div>
                   <ul className="space-y-2 text-sm mb-6">
                     <li className="flex items-start gap-2">
                       <div className="h-2 w-2 rounded-full bg-primary mt-1.5 flex-shrink-0"></div>

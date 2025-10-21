@@ -10,6 +10,7 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import Image from "next/image"
 import Link from "next/link"
+import { experiences as experienceIndex } from "@/lib/experiences-data"
 
 interface SearchResult {
   id: number
@@ -52,7 +53,7 @@ export function SearchDialog() {
     localStorage.removeItem("ekondo-recent-searches")
   }
 
-  // Simulate search (in production, this would be an API call)
+  // Build search results from local indices (products, articles, experiences)
   useEffect(() => {
     if (!query.trim()) {
       setResults([])
@@ -61,59 +62,113 @@ export function SearchDialog() {
 
     setIsSearching(true)
     const timer = setTimeout(() => {
-      // Mock search results
-      const mockResults: SearchResult[] = [
+      const q = query.toLowerCase()
+
+      // Minimal product index (links to retail; refine later to deep-link)
+      const productIndex: SearchResult[] = [
         {
-          id: 1,
-          title: "Handwoven Basket Planter",
+          id: 101,
+          title: "Baby Rubber Plant",
           type: "product",
-          description: "Traditional African weaving",
-          image: "https://images.unsplash.com/photo-1485955900006-10f4d324d411?w=100&h=100&fit=crop",
-          price: 49.99,
-          url: "/retail/product/1",
+          description: "Size B in Purple Chidi pot",
+          image: "/images/Ekondo Products/Size_B_Baby_Rubber_in_a_Purple_Chidi-scaled.webp",
+          price: 25000,
+          url: "/retail",
+          category: "Plants",
+        },
+        {
+          id: 102,
+          title: "Aglaonema Plant",
+          type: "product",
+          description: "Beautiful foliage in Blue Mide pot",
+          image: "/images/Ekondo Products/Aglaonema__Blue_Mide-scaled.webp",
+          price: 25000,
+          url: "/retail",
+          category: "Plants",
+        },
+        {
+          id: 103,
+          title: "Blue Chidi Pot",
+          type: "product",
+          description: "Handcrafted ceramic planter",
+          image: "/images/Ekondo Products/Blue-Chidi.webp",
+          price: 15000,
+          url: "/retail",
           category: "Pots",
         },
         {
-          id: 2,
-          title: "Urban Farming in African Cities",
-          type: "article",
-          description: "How young Africans are revolutionizing urban agriculture",
-          image: "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=100&h=100&fit=crop",
-          url: "/journal/urban-farming-african-cities",
-          category: "Urban Farming",
+          id: 104,
+          title: "Yellow Edak Pot",
+          type: "product",
+          description: "Traditional African design",
+          image: "/images/Ekondo Products/Yellow-Edak-1-scaled.webp",
+          price: 9000,
+          url: "/retail",
+          category: "Pots",
         },
-        {
-          id: 3,
-          title: "Plant Styling Masterclass",
-          type: "experience",
-          description: "Learn the art of plant styling",
-          image: "https://images.unsplash.com/photo-1544717297-fa95b6ee9643?w=100&h=100&fit=crop",
-          price: 45,
-          url: "/experience/1",
-          category: "Workshop",
-        },
-        {
-          id: 4,
-          title: "Landscape Design & Installation",
-          type: "service",
-          description: "Transform your outdoor space",
-          image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=100&h=100&fit=crop",
-          price: 500,
-          url: "/services/2",
-          category: "Services",
-        },
-        {
-          id: 5,
-          title: "Ekondo Park Lagos",
-          type: "space",
-          description: "Our flagship location in Lagos",
-          image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=100&h=100&fit=crop",
-          url: "/spaces/1",
-          category: "Community Space",
-        },
-      ].filter((item) => item.title.toLowerCase().includes(query.toLowerCase()))
+      ]
 
-      setResults(mockResults)
+      // Articles index (from homepage/journal)
+      const articleIndex: SearchResult[] = [
+        {
+          id: 201,
+          title: "10 Low-Maintenance Indoor Plants You Can Buy in Lagos (Under ₦20,000)",
+          type: "article",
+          description: "Affordable low-maintenance indoor plants in Lagos that thrive in Nigeria’s climate.",
+          image: "/images/Ekondo Products/Size_B_Spider_Plant_in_a_Red_Chidi-scaled.webp",
+          url: "/journal/low-maintenance-indoor-plants-lagos-under-20000",
+          category: "Plant Care",
+        },
+        {
+          id: 202,
+          title: "DETERMINING THE RIGHT LIGHT OF YOUR SPACE FOR YOUR PLANT.",
+          type: "article",
+          description: "Evaluate light conditions so your plants flourish.",
+          image: "/images/fine plant image.webp",
+          url: "/journal/determining-right-light-for-your-plant",
+          category: "Plant Care",
+        },
+        {
+          id: 203,
+          title: "5 essential tips for keeping your plants alive",
+          type: "article",
+          description: "Five essential, practical tips to keep your plants healthy.",
+          image: "/images/sans img.jpg",
+          url: "/journal/essential-tips-for-keeping-plants-alive",
+          category: "Plant Care",
+        },
+        {
+          id: 204,
+          title: "EKONDO- COMMUNITY HERALDING CONTENTMENT",
+          type: "article",
+          description: "How Ekondo fosters contentment and togetherness.",
+          image: "/images/two women.JPG",
+          url: "/journal/ekondo-community-heralding-contentment",
+          category: "Community",
+        },
+      ]
+
+      // Experiences index (shared)
+      const experienceResults: SearchResult[] = experienceIndex.map((e) => ({
+        id: e.id,
+        title: e.title,
+        type: "experience" as const,
+        description: e.description,
+        image: e.image,
+        price: e.price,
+        url: `/experience/${e.id}`,
+        category: e.type,
+      }))
+
+      const all = [...productIndex, ...articleIndex, ...experienceResults]
+      const filtered = all.filter(
+        (item) =>
+          item.title.toLowerCase().includes(q) ||
+          item.description.toLowerCase().includes(q) ||
+          (item.category?.toLowerCase().includes(q) ?? false),
+      )
+
+      setResults(filtered)
       setIsSearching(false)
     }, 500)
 
