@@ -3,13 +3,14 @@ import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import NewsletterSignup from "@/components/newsletter-signup"
 import TestimonialCarousel from "@/components/testimonial-carousel"
 import BlogPreview from "@/components/blog-preview"
 import InstagramFeed from "@/components/instagram-feed"
 import { PlantDoctorChat } from "@/components/plant-doctor-chat"
-import { Badge } from "@/components/ui/badge"
+import { AddToCartButton } from "@/components/add-to-cart-button"
 import { getFeaturedExperiences } from "@/lib/experiences-data"
 
 export default function Home() {
@@ -307,12 +308,15 @@ export default function Home() {
                 <CardContent className="p-4">
                   <h3 className="font-medium text-lg mb-1">{item.name}</h3>
                   <p className="text-muted-foreground text-sm mb-2">{item.description}</p>
-                  <div className="flex justify-between items-center">
-                    <span className="font-bold">₦{item.price.toLocaleString()}</span>
-                    <Button size="sm" variant="outline" className="btn-gradient bg-transparent organic-shape">
-                      Add to Cart
-                    </Button>
-                  </div>
+            <div className="flex justify-between items-center">
+              <span className="font-bold">₦{item.price.toLocaleString()}</span>
+              <AddToCartButton 
+                product={item} 
+                size="sm" 
+                variant="outline" 
+                className="bg-transparent" 
+              />
+            </div>
                 </CardContent>
               </Card>
             ))}

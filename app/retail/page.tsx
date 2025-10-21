@@ -478,7 +478,7 @@ export default function RetailPage() {
         <div className="container px-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
             {[
-              { label: "Free Shipping", value: "Orders $75+" },
+              { label: "Free Shipping", value: "Orders ₦50,000+" },
               { label: "Secure Payment", value: "100% Protected" },
               { label: "Easy Returns", value: "30 Days" },
               { label: "Support", value: "24/7 Help" },

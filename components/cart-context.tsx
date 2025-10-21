@@ -32,7 +32,25 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const savedCart = localStorage.getItem("ekondo-cart")
     if (savedCart) {
-      setItems(JSON.parse(savedCart))
+      try {
+        const parsedCart = JSON.parse(savedCart)
+        // Validate that the cart contains real products (not dummy data)
+        const hasRealProducts = parsedCart.some((item: CartItem) => 
+          item.image && !item.image.includes('unsplash.com') && item.image.includes('/images/')
+        )
+        
+        if (hasRealProducts || parsedCart.length === 0) {
+          setItems(parsedCart)
+        } else {
+          // Clear dummy data
+          localStorage.removeItem("ekondo-cart")
+          setItems([])
+        }
+      } catch (error) {
+        console.error("Error parsing cart from localStorage:", error)
+        localStorage.removeItem("ekondo-cart")
+        setItems([])
+      }
     }
   }, [])
 

@@ -6,41 +6,53 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
-import { Minus, Plus, Trash2, ShoppingBag } from "lucide-react"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Minus, Plus, Trash2, ShoppingBag, CreditCard } from "lucide-react"
+import { useCart } from "@/components/cart-context"
 
 export default function CartPage() {
-  const [cartItems, setCartItems] = useState([
-    {
-      id: 1,
-      name: "Handwoven Basket Planter",
-      description: "Traditional African weaving",
-      price: 49.99,
-      quantity: 1,
-      image: "https://images.unsplash.com/photo-1485955900006-10f4d324d411?w=200&h=200&fit=crop&crop=center",
-    },
-    {
-      id: 2,
-      name: "Ceramic Plant Pot",
-      description: "Locally crafted ceramic",
-      price: 39.99,
-      quantity: 2,
-      image: "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=200&h=200&fit=crop&crop=center",
-    },
-  ])
+  const { items: cartItems, updateQuantity, removeItem, subtotal, clearCart } = useCart()
+  const [email, setEmail] = useState("")
+  const [isProcessing, setIsProcessing] = useState(false)
 
-  const updateQuantity = (id: number, change: number) => {
-    setCartItems(
-      cartItems.map((item) => (item.id === id ? { ...item, quantity: Math.max(1, item.quantity + change) } : item)),
-    )
-  }
-
-  const removeItem = (id: number) => {
-    setCartItems(cartItems.filter((item) => item.id !== id))
-  }
-
-  const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0)
-  const shipping = subtotal > 75 ? 0 : 10
+  const shipping = subtotal > 50000 ? 0 : 5000 // Free shipping over ₦50,000
   const total = subtotal + shipping
+
+  // Debug: Log cart items to console
+  console.log("Cart items:", cartItems)
+
+  const handlePaystackPayment = async () => {
+    if (!email) {
+      alert("Please enter your email address")
+      return
+    }
+
+    setIsProcessing(true)
+    try {
+      const res = await fetch("/api/paystack", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, amount: total }),
+      })
+      const data = await res.json()
+
+      if (!data.ok) throw new Error(data.error || "Payment init failed")
+
+      // Redirect user to Paystack checkout
+      window.location.href = data.data.data.authorization_url
+    } catch (err: any) {
+      alert("Payment failed: " + err.message)
+    } finally {
+      setIsProcessing(false)
+    }
+  }
+
+  const handleClearCart = () => {
+    if (confirm("Are you sure you want to clear your cart?")) {
+      clearCart()
+    }
+  }
 
   if (cartItems.length === 0) {
     return (
@@ -61,7 +73,19 @@ export default function CartPage() {
 
   return (
     <div className="container px-4 py-12 md:py-16">
-      <h1 className="font-serif text-3xl md:text-4xl font-bold mb-8">Shopping Cart</h1>
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="font-serif text-3xl md:text-4xl font-bold">Shopping Cart</h1>
+        {cartItems.length > 0 && (
+          <Button 
+            variant="outline" 
+            onClick={handleClearCart}
+            className="organic-shape bg-transparent text-destructive hover:bg-destructive hover:text-destructive-foreground"
+          >
+            <Trash2 className="h-4 w-4 mr-2" />
+            Clear Cart
+          </Button>
+        )}
+      </div>
 
       <div className="grid lg:grid-cols-3 gap-8">
         {/* Cart Items */}
@@ -95,7 +119,7 @@ export default function CartPage() {
                         <Button
                           variant="ghost"
                           size="icon"
-                          onClick={() => updateQuantity(item.id, -1)}
+                          onClick={() => updateQuantity(item.id, item.quantity - 1)}
                           className="h-8 w-8"
                         >
                           <Minus className="h-3 w-3" />
@@ -104,14 +128,14 @@ export default function CartPage() {
                         <Button
                           variant="ghost"
                           size="icon"
-                          onClick={() => updateQuantity(item.id, 1)}
+                          onClick={() => updateQuantity(item.id, item.quantity + 1)}
                           className="h-8 w-8"
                         >
                           <Plus className="h-3 w-3" />
                         </Button>
                       </div>
 
-                      <div className="font-bold">${(item.price * item.quantity).toFixed(2)}</div>
+                      <div className="font-bold">₦{(item.price * item.quantity).toLocaleString()}</div>
                     </div>
                   </div>
                 </div>
@@ -129,15 +153,15 @@ export default function CartPage() {
               <div className="space-y-3 mb-6">
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Subtotal</span>
-                  <span className="font-medium">${subtotal.toFixed(2)}</span>
+                  <span className="font-medium">₦{subtotal.toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Shipping</span>
-                  <span className="font-medium">{shipping === 0 ? "FREE" : `$${shipping.toFixed(2)}`}</span>
+                  <span className="font-medium">{shipping === 0 ? "FREE" : `₦${shipping.toLocaleString()}`}</span>
                 </div>
-                {subtotal < 75 && (
+                {subtotal < 50000 && (
                   <div className="text-xs text-muted-foreground">
-                    Add ${(75 - subtotal).toFixed(2)} more for free shipping!
+                    Add ₦{(50000 - subtotal).toLocaleString()} more for free shipping!
                   </div>
                 )}
               </div>
@@ -146,11 +170,32 @@ export default function CartPage() {
 
               <div className="flex justify-between mb-6">
                 <span className="font-bold text-lg">Total</span>
-                <span className="font-bold text-lg">${total.toFixed(2)}</span>
+                <span className="font-bold text-lg">₦{total.toLocaleString()}</span>
               </div>
 
-              <Button size="lg" className="w-full mb-3 organic-shape">
-                Proceed to Checkout
+              {/* Email Input */}
+              <div className="mb-6">
+                <Label htmlFor="email" className="text-sm font-medium mb-2 block">
+                  Email Address
+                </Label>
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="your@email.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="organic-shape"
+                />
+              </div>
+
+              <Button 
+                size="lg" 
+                className="w-full mb-3 organic-shape bg-green-600 hover:bg-green-700"
+                onClick={handlePaystackPayment}
+                disabled={isProcessing || !email}
+              >
+                <CreditCard className="mr-2 h-4 w-4" />
+                {isProcessing ? "Processing..." : "Pay with Paystack"}
               </Button>
 
               <Button variant="outline" size="lg" className="w-full organic-shape bg-transparent" asChild>
