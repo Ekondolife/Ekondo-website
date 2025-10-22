@@ -2,9 +2,10 @@ import type React from "react"
 import type { Metadata } from "next"
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
-import Navigation from "@/components/navigation"
+import ConditionalNavigation from "@/components/conditional-navigation"
 import Footer from "@/components/footer"
 import { CartProvider } from "@/components/cart-context"
+import { UserProvider } from "@/components/user-provider"
 import { Toaster } from "@/components/ui/toaster"
 import Script from "next/script"
 
@@ -52,14 +53,16 @@ export default function RootLayout({
 
       <body className="font-sans">
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
-          <CartProvider>
-            <div className="flex min-h-screen flex-col">
-              <Navigation />
-              <main className="flex-1">{children}</main>
-              <Footer />
-            </div>
-            <Toaster />
-          </CartProvider>
+          <UserProvider>
+            <CartProvider>
+              <div className="flex min-h-screen flex-col">
+                <ConditionalNavigation />
+                <main className="flex-1">{children}</main>
+                <Footer />
+              </div>
+              <Toaster />
+            </CartProvider>
+          </UserProvider>
         </ThemeProvider>
       </body>
     </html>

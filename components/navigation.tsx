@@ -30,9 +30,9 @@ export default function Navigation() {
   const { itemCount } = useCart()
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-16 items-center justify-between px-4 gap-4">
-        <div className="flex items-center gap-4">
+    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 overflow-x-hidden">
+      <div className="container flex h-16 items-center justify-between px-2 md:px-4 gap-2 md:gap-4">
+        <div className="flex items-center gap-2 md:gap-4">
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetTrigger asChild className="lg:hidden">
               <Button variant="ghost" size="icon" className="mr-2">
@@ -40,8 +40,8 @@ export default function Navigation() {
                 <span className="sr-only">Toggle menu</span>
               </Button>
             </SheetTrigger>
-            <SheetContent side="left" className="w-[300px] sm:w-[400px]">
-              <div className="flex items-center justify-between mb-8">
+            <SheetContent side="left" className="w-[85vw] max-w-xs sm:w-[400px] px-0">
+              <div className="flex items-center justify-between mb-8 px-4">
                 <Link href="/" className="text-2xl font-bold tracking-tight" onClick={() => setIsOpen(false)}>
                   <Image 
                     src="/images/ekondo logo.png" 
@@ -57,7 +57,7 @@ export default function Navigation() {
                 </Button>
               </div>
               <nav>
-                <ul className="flex flex-col space-y-4">
+                <ul className="flex flex-col space-y-4 px-4">
                   {routes.map((route) => (
                     <li key={route.path}>
                       <Link
@@ -80,14 +80,14 @@ export default function Navigation() {
             <Image 
               src="/images/ekondo logo.png" 
               alt="Ekondo Logo" 
-              width={150}
-              height={50}
-              className="h-10 w-auto max-w-[150px] object-contain"
+              width={120}
+              height={40}
+              className="h-8 w-auto max-w-[120px] object-contain"
             />
           </Link>
         </div>
-
-        <nav className="hidden lg:flex items-center space-x-6">
+        {/* Hide desktop nav on mobile */}
+        <nav className="hidden lg:flex items-center space-x-4">
           {routes.map((route) => (
             <Link
               key={route.path}
@@ -104,8 +104,7 @@ export default function Navigation() {
             </Link>
           ))}
         </nav>
-
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1 md:gap-2">
           <SearchDialog />
           <ModeToggle />
           <Button variant="ghost" size="icon" asChild>
