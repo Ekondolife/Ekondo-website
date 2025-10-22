@@ -20,7 +20,6 @@ export default function AccountPage() {
   const [formData, setFormData] = useState({
     fullName: "",
     phone: "",
-    profileImage: "",
   });
   const { toast } = useToast();
 
@@ -36,7 +35,6 @@ export default function AccountPage() {
           setFormData({
             fullName: profileData.fullName || "",
             phone: profileData.phone || "",
-            profileImage: profileData.profileImage || "",
           });
         }
       } else {
@@ -56,7 +54,6 @@ export default function AccountPage() {
       await updateUserProfile(user.uid, {
         fullName: formData.fullName,
         phone: formData.phone,
-        profileImage: formData.profileImage,
       });
       
       // Update local user state
@@ -64,7 +61,6 @@ export default function AccountPage() {
         ...prev,
         fullName: formData.fullName,
         phone: formData.phone,
-        profileImage: formData.profileImage,
       }) : null);
       
       toast({
@@ -136,25 +132,12 @@ export default function AccountPage() {
       {/* Profile Header */}
       <div className="flex items-center gap-6 mb-12">
         <div className="relative w-24 h-24 rounded-full overflow-hidden organic-shape">
-          {user.profileImage && user.profileImage.trim() !== "" ? (
-            <Image 
-              src={user.profileImage} 
-              alt={user.fullName || "User"} 
-              fill 
-              className="object-cover"
-              onError={(e) => {
-                // Fallback to avatar if image fails to load
-                e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(user.fullName || user.email || "User")}&background=random`;
-              }}
-            />
-          ) : (
-            <Image 
-              src={`https://ui-avatars.com/api/?name=${encodeURIComponent(user.fullName || user.email || "User")}&background=random`}
-              alt={user.fullName || "User"} 
-              fill 
-              className="object-cover" 
-            />
-          )}
+          <Image 
+            src={`https://ui-avatars.com/api/?name=${encodeURIComponent(user.fullName || user.email || "User")}&background=random`}
+            alt={user.fullName || "User"} 
+            fill 
+            className="object-cover" 
+          />
         </div>
         <div>
           <h1 className="font-serif text-3xl font-bold mb-1">{user.fullName || "Unnamed User"}</h1>
@@ -222,33 +205,6 @@ export default function AccountPage() {
                     onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
                     className="mt-1 organic-shape" 
                   />
-                </div>
-                <div>
-                  <Label htmlFor="profileImage">Profile Image URL</Label>
-                  <Input 
-                    id="profileImage" 
-                    type="url" 
-                    value={formData.profileImage} 
-                    onChange={(e) => setFormData(prev => ({ ...prev, profileImage: e.target.value }))}
-                    placeholder="https://example.com/photo.jpg"
-                    className="mt-1 organic-shape" 
-                  />
-                  {formData.profileImage && formData.profileImage.trim() !== "" && (
-                    <div className="mt-2">
-                      <Label className="text-sm text-muted-foreground">Preview:</Label>
-                      <div className="relative w-16 h-16 rounded-full overflow-hidden organic-shape mt-1">
-                        <Image 
-                          src={formData.profileImage} 
-                          alt="Preview" 
-                          fill 
-                          className="object-cover"
-                          onError={(e) => {
-                            e.currentTarget.src = "/placeholder.svg";
-                          }}
-                        />
-                      </div>
-                    </div>
-                  )}
                 </div>
                 <Button 
                   type="button"

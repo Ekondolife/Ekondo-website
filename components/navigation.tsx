@@ -3,13 +3,15 @@
 import { useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
-import { usePathname } from "next/navigation"
-import { Menu, ShoppingBag, User, X } from "lucide-react"
+import { usePathname, useRouter } from "next/navigation"
+import { Menu, ShoppingBag, User, X, LogOut, UserCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { cn } from "@/lib/utils"
 import { ModeToggle } from "./mode-toggle"
 import { useCart } from "./cart-context"
+import { useUser } from "./user-provider"
 import { Badge } from "@/components/ui/badge"
 import { SearchDialog } from "./search-dialog"
 
@@ -27,7 +29,18 @@ const routes = [
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false)
   const pathname = usePathname()
+  const router = useRouter()
   const { itemCount } = useCart()
+  const { uid, email, displayName, signOut, loading } = useUser()
+
+  const handleSignOut = async () => {
+    try {
+      await signOut()
+      router.push("/")
+    } catch (error) {
+      console.error("Error signing out:", error)
+    }
+  }
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 overflow-x-hidden">
@@ -107,12 +120,53 @@ export default function Navigation() {
         <div className="flex items-center gap-1 md:gap-2">
           <SearchDialog />
           <ModeToggle />
-          <Button variant="ghost" size="icon" asChild>
-            <Link href="/account">
-              <User className="h-5 w-5" />
-              <span className="sr-only">Account</span>
-            </Link>
-          </Button>
+          
+          {/* Profile Dropdown */}
+          {uid ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon" className="relative">
+                  <div className="relative w-8 h-8 rounded-full overflow-hidden">
+                    <Image 
+                      src={`https://ui-avatars.com/api/?name=${encodeURIComponent(displayName || email || "User")}&background=random`}
+                      alt="Profile" 
+                      width={32}
+                      height={32}
+                      className="object-cover"
+                    />
+                  </div>
+                  <span className="sr-only">Account</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56 organic-shape">
+                <div className="px-3 py-2 border-b">
+                  <p className="text-sm font-medium">{displayName || "User"}</p>
+                  <p className="text-xs text-muted-foreground">{email}</p>
+                </div>
+                <DropdownMenuItem asChild>
+                  <Link href="/account" className="flex items-center cursor-pointer">
+                    <UserCircle className="h-4 w-4 mr-2" />
+                    Account
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem 
+                  onClick={handleSignOut}
+                  className="flex items-center cursor-pointer text-destructive focus:text-destructive"
+                >
+                  <LogOut className="h-4 w-4 mr-2" />
+                  Sign Out
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <Button variant="ghost" size="icon" asChild>
+              <Link href="/login">
+                <User className="h-5 w-5" />
+                <span className="sr-only">Sign In</span>
+              </Link>
+            </Button>
+          )}
+          
           <Button variant="ghost" size="icon" className="relative" asChild>
             <Link href="/cart">
               <ShoppingBag className="h-5 w-5" />

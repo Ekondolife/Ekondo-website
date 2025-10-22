@@ -38,7 +38,7 @@ export async function getUserProfile(uid: string): Promise<UserProfile | null> {
   }
 }
 
-export async function updateUserProfile(uid: string, data: { fullName?: string; phone?: string; profileImage?: string }) {
+export async function updateUserProfile(uid: string, data: { fullName?: string; phone?: string }) {
   try {
     const userRef = doc(db, "users", uid);
     await updateDoc(userRef, data);
