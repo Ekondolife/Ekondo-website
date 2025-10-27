@@ -1,6 +1,5 @@
 "use client"
 
-import type React from "react"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -9,20 +8,36 @@ export default function NewsletterSignup() {
   const [email, setEmail] = useState("")
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState("")
+  const [error, setError] = useState("")
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
+    setError("")
+    setMessage("")
 
-    // Simulate API call
-    setTimeout(() => {
-      setMessage("Success! You've been subscribed to our newsletter.")
+    try {
+      const res = await fetch("/api/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      })
+
+      const data = await res.json()
+
+      if (!res.ok) throw new Error(data.error || "Subscription failed")
+
+      setMessage("🎉 Success! You've been subscribed to our newsletter.")
       setEmail("")
+    } catch (err: any) {
+      setError(err.message || "Something went wrong.")
+    } finally {
       setLoading(false)
-
-      // Clear message after 3 seconds
-      setTimeout(() => setMessage(""), 3000)
-    }, 1000)
+      setTimeout(() => {
+        setMessage("")
+        setError("")
+      }, 4000)
+    }
   }
 
   return (
@@ -41,6 +56,7 @@ export default function NewsletterSignup() {
         </Button>
       </form>
       {message && <p className="mt-3 text-sm text-center text-green-600 font-medium">{message}</p>}
+      {error && <p className="mt-3 text-sm text-center text-red-600 font-medium">{error}</p>}
     </div>
   )
 }

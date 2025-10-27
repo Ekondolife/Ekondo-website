@@ -2,19 +2,97 @@
 
 import Image from "next/image"
 import Link from "next/link"
-import { useMemo } from "react"
+import { useMemo, useState } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { Calendar, Clock, MapPin, Users, ArrowLeft, Check } from "lucide-react"
+import { Calendar, Clock, MapPin, Users, ArrowLeft, Check, CheckCircle } from "lucide-react"
 import { Separator } from "@/components/ui/separator"
 import { experiences } from "@/lib/experiences-data"
+import { useUser } from "@/components/user-provider"
+import { useToast } from "@/components/ui/use-toast"
 
 export default function ExperienceDetailPage({ params }: { params: { id: string } }) {
   const router = useRouter()
   const experienceId = Number(params.id)
 
   const experience = useMemo(() => experiences.find(exp => exp.id === experienceId), [experienceId])
+
+  // For Southside Festival, handle ticket types
+  const isSouthside = experience?.id === 5
+  const ticketTypes = isSouthside ? experience.ticketTypes : null
+  const [selectedTicket, setSelectedTicket] = useState(ticketTypes ? ticketTypes[0] : null)
+  const [isProcessing, setIsProcessing] = useState(false)
+  
+  const { uid, email, displayName } = useUser()
+  const { toast } = useToast()
+
+  const handleBookNow = async () => {
+    // Debug: Log user info
+    console.log("=== BOOKING DEBUG ===")
+    console.log("User ID:", uid)
+    console.log("Email:", email)
+    console.log("Display Name:", displayName)
+    console.log("Experience:", experience?.title)
+    console.log("Selected Ticket:", selectedTicket)
+    console.log("====================")
+
+    // Check if user is logged in
+    if (!uid || !email) {
+      toast({
+        title: "Please Sign In",
+        description: "You need to sign in to book an experience.",
+        variant: "destructive",
+      })
+      router.push("/login")
+      return
+    }
+
+    // Check if a ticket is selected (for Southside)
+    if (isSouthside && !selectedTicket) {
+      toast({
+        title: "Select a Ticket",
+        description: "Please select a ticket type before booking.",
+        variant: "destructive",
+      })
+      return
+    }
+
+    setIsProcessing(true)
+
+    try {
+      const price = isSouthside && selectedTicket ? selectedTicket.price : (experience?.price || 0)
+      const ticketTypeName = selectedTicket ? selectedTicket.name : ""
+
+      // Initialize Paystack payment
+      const response = await fetch("/api/paystack", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email,
+          amount: price,
+          experienceId: experience?.id,
+          experienceName: experience?.title,
+          ticketType: ticketTypeName,
+          userId: uid,
+        }),
+      })
+
+      const data = await response.json()
+
+      if (!data.ok) throw new Error(data.error || "Payment initialization failed")
+
+      // Redirect to Paystack checkout
+      window.location.href = data.data.data.authorization_url
+    } catch (error: any) {
+      toast({
+        title: "Booking Failed",
+        description: error.message || "Something went wrong. Please try again.",
+        variant: "destructive",
+      })
+      setIsProcessing(false)
+    }
+  }
 
   // Handle invalid or missing ID
   if (!experience) {
@@ -38,6 +116,7 @@ export default function ExperienceDetailPage({ params }: { params: { id: string 
           </Link>
         </Button>
       </div>
+
 
       {/* Hero Section */}
       <section className="container px-4 pb-12">
@@ -66,9 +145,34 @@ export default function ExperienceDetailPage({ params }: { params: { id: string 
 
               <h1 className="font-serif text-3xl font-bold mb-4">{experience.title}</h1>
 
-              <div className="text-3xl font-bold text-primary mb-6">
-                ₦{experience.price.toLocaleString()}
-              </div>
+              {/* Ticket Type Variants for Southside */}
+              {isSouthside && ticketTypes ? (
+                <div className="mb-6">
+                  <div className="font-semibold mb-2">Choose your ticket:</div>
+                  <div className="flex flex-col gap-2">
+                    {ticketTypes.map((ticket) => (
+                      <Button
+                        key={ticket.name}
+                        variant={selectedTicket?.name === ticket.name ? "default" : "outline"}
+                        className="justify-between w-full"
+                        onClick={() => setSelectedTicket(ticket)}
+                      >
+                        <span>
+                          {ticket.name} <span className="text-xs text-muted-foreground">({ticket.description})</span>
+                        </span>
+                        <span className="font-bold">₦{ticket.price.toLocaleString()}</span>
+                        {selectedTicket?.name === ticket.name && (
+                          <Check className="ml-2 h-4 w-4 text-primary" />
+                        )}
+                      </Button>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <div className="text-3xl font-bold text-primary mb-6">
+                  ₦{experience.price.toLocaleString()}
+                </div>
+              )}
 
               <div className="space-y-3 mb-6">
                 {experience.date && (
@@ -105,8 +209,10 @@ export default function ExperienceDetailPage({ params }: { params: { id: string 
                 </div>
               )}
 
-              <Button size="lg" className="w-full organic-shape mb-3">
-                Book Now - ₦{experience.price.toLocaleString()}
+              <Button size="lg" className="w-full organic-shape mb-3" onClick={handleBookNow} disabled={isProcessing}>
+                {isProcessing ? "Processing..." : isSouthside && selectedTicket
+                  ? `Book Now - ₦${selectedTicket.price.toLocaleString()}`
+                  : `Book Now - ₦${experience.price.toLocaleString()}`}
               </Button>
 
               <Button variant="outline" size="lg" className="w-full organic-shape bg-transparent">
@@ -129,7 +235,9 @@ export default function ExperienceDetailPage({ params }: { params: { id: string 
           <div className="max-w-3xl mx-auto">
             <h2 className="font-serif text-2xl md:text-3xl font-bold mb-6">About This Experience</h2>
             <p className="text-muted-foreground leading-relaxed">
-              {experience.description}
+              {isSouthside && experience.longDescription
+                ? experience.longDescription
+                : experience.description}
             </p>
           </div>
         </div>
@@ -144,8 +252,10 @@ export default function ExperienceDetailPage({ params }: { params: { id: string 
               Secure your spot in this popular experience. Limited spaces available!
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="organic-shape">
-                Book Now - ₦{experience.price.toLocaleString()}
+              <Button size="lg" className="organic-shape" onClick={handleBookNow} disabled={isProcessing}>
+                {isProcessing ? "Processing..." : isSouthside && selectedTicket
+                  ? `Book Now - ₦${selectedTicket.price.toLocaleString()}`
+                  : `Book Now - ₦${experience.price.toLocaleString()}`}
               </Button>
               <Button size="lg" variant="outline" asChild className="organic-shape bg-transparent">
                 <Link href="/experience">Browse More Experiences</Link>

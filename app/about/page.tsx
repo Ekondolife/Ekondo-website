@@ -79,20 +79,43 @@ export default function AboutPage() {
             <h2 className="font-serif text-3xl md:text-4xl font-bold text-center mb-8">Who We Are</h2>
             <div className="prose prose-lg max-w-none text-muted-foreground leading-relaxed">
               <p className="mb-6">
-                Ekondo was born from a simple observation: young urban Africans were craving connection with nature in
-                their increasingly concrete environments. In 2020, founder Ama Kofi started with a small pop-up shop in
-                Lagos, selling handcrafted planters and teaching plant care workshops.
+              In the Efik language (the 4th most popular language in Nigeria),
+              Ekondo means community—the cornerstone of our identity. We are a
+              lifestyle brand promoting environmental sustainability and wellness
+              through nature and community.              
+              Our vision is Nature for everyone. That’s why it’s our goal to make
+              Africans happier, kinder, and more creative by connecting them to
+              Nature, themselves, and other people. We are relentless about
+              bringing Nature into every space, transforming waste into wellness
+              products, and cultivating a passionate community around Nature.
               </p>
               <p className="mb-6">
-                What began as a passion project quickly grew into a movement. We realized that bringing nature into
-                urban spaces wasn't just about plants—it was about community, creativity, sustainability, and wellness.
-                Today, Ekondo serves thousands of customers across major African cities, offering products, experiences,
-                services, and spaces that help people live more connected, sustainable lives.
+              Our core values as a team and community are driven by The
+              Framework of Nature. Drawing inspiration from plants, Nature’s
+              Framework guides us to slow down, give gratitude, and take
+              responsibility.
+              It encourages us to be flexible, resilient, collaborative, and
+              communicative in our approach towards enhancing the mindset and
+              quality of life for Africans.
+              From artistic pots and wellness products to educational games, our
+              creations emerge from upcycled materials like plastics, bottles, and
+              tires. Customizable for different audiences and occasions, our
+              products bridge the gap between aesthetics and purpose.
+              Our diverse team of designers and engineers enables us to cater to
+              businesses, connecting people to Nature through plant installations
+              and unique bonding experiences.
               </p>
               <p>
-                Our name, "Ekondo," comes from the Efik word meaning "to plant" or "to cultivate." It represents not
-                just our work with plants, but our commitment to cultivating community, creativity, and a more
-                sustainable future for Africa.
+              Ekondo is a social impact company driven by a collective vision to build 
+              a greener, kinder, happier, and more creative Africa. we believe in the power
+              of conscious living, community, and sustainability as essential tools for shaping a better future. 
+              Our work is rooted in a deep commitment to the well-being of both people 
+              and the planet, with a focus on creating meaningful, lasting impact 
+              across the continent. At Ekondo, our mission is guided by 8 of the United 
+              Nations Sustainable Development Goals (SDGs), which shape our approach 
+              to economic empowerment, environmental stewardship, and social innovation. 
+              From promoting sustainable lifestyles to supporting local artisans and producers, 
+              we are passionate about nurturing a culture that thrives on responsibility, creativity, and connection.
               </p>
             </div>
           </div>
@@ -121,31 +144,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Team Section */}
-      {/* <section className="py-16 md:py-24">
-        <div className="container px-4">
-          <h2 className="font-serif text-3xl md:text-4xl font-bold text-center mb-12">Meet Our Team</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {team.map((member, index) => (
-              <Card key={index} className="border-none shadow-md organic-shape overflow-hidden">
-                <div className="relative aspect-square">
-                  <Image
-                    src={member.image || "/placeholder.svg"}
-                    alt={member.name}
-                    fill
-                    className="object-cover image-clean"
-                  />
-                </div>
-                <CardContent className="p-4 text-center">
-                  <h3 className="font-serif text-lg font-bold mb-1">{member.name}</h3>
-                  <p className="text-primary text-sm mb-2">{member.role}</p>
-                  <p className="text-muted-foreground text-sm">{member.bio}</p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section> */}
+   
 
       {/* Impact Section */}
       <section className="py-16 md:py-24 bg-primary/5 leaf-pattern">

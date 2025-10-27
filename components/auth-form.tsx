@@ -15,8 +15,8 @@ export default function AuthForm() {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [fullName, setFullName] = useState(""); // ✅ NEW FIELD
-  const [phone, setPhone] = useState(""); // ✅ NEW FIELD
+  const [fullName, setFullName] = useState(""); // 
+  const [phone, setPhone] = useState(""); // 
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -68,7 +68,7 @@ export default function AuthForm() {
   };
 
   return (
-    <Card className="w-full max-w-md border-none shadow-lg organic-shape">
+    <Card className="w-full max-w-md border-none shadow-lg organic-shape p-10">
       <CardHeader className="text-center pb-4">
         <CardTitle className="font-serif text-2xl font-bold text-primary">
           {isLogin ? "Welcome Back" : "Join Ekondo"}
@@ -91,7 +91,7 @@ export default function AuthForm() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="your@email.com"
-                className="pl-10 organic-shape"
+                className="pl-12 pr-4 py-3 h-12 text-base organic-shape"
                 required
               />
             </div>
@@ -108,7 +108,7 @@ export default function AuthForm() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Enter your password"
-                className="pl-10 pr-10 organic-shape"
+                className="pl-10 py-3 h-12 text-basepr-10 organic-shape"
                 required
               />
               <button

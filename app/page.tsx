@@ -12,6 +12,8 @@ import InstagramFeed from "@/components/instagram-feed"
 import { PlantDoctorChat } from "@/components/plant-doctor-chat"
 import { AddToCartButton } from "@/components/add-to-cart-button"
 import { getFeaturedExperiences } from "@/lib/experiences-data"
+import { experiences } from "@/lib/experiences-data"
+
 
 export default function Home() {
   return (
@@ -350,7 +352,7 @@ export default function Home() {
                   <h3 className="font-medium text-lg mb-1">{item.title}</h3>
                   <p className="text-muted-foreground text-sm mb-4">{item.description}</p>
                   <Button size="sm" className="w-full btn-gradient organic-shape">
-                    Book Now
+                    <Link href={`/experience/${item.id}`}>Book Now</Link>
                   </Button>
                 </CardContent>
               </Card>
@@ -372,8 +374,11 @@ export default function Home() {
         <div className="container px-4">
           <div className="flex flex-col md:flex-row md:items-center justify-between mb-12">
             <h2 className="font-serif text-3xl md:text-4xl font-bold">From Our Journal</h2>
-            <Link href="/journal" className="text-primary hover:underline mt-4 md:mt-0">
-              View all articles <ArrowRight className="inline-block ml-1 h-4 w-4" />
+            <Link
+              href="/journal"
+              className="btn-gradient organic-shape px-6 py-3 font-semibold text-white text-lg inline-block mt-6"
+            >
+              Read More
             </Link>
           </div>
           <BlogPreview />

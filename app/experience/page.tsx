@@ -104,7 +104,12 @@ export default function ExperiencePage() {
                 <div className="flex items-center justify-between">
                   <div className="text-2xl font-bold">₦{experience.price.toLocaleString()}</div>
                   <Button asChild>
-                    <Link href={`/experience/${experience.id}`}>Book Now</Link>
+                    <Link 
+                       href={`/experience/${experience.id}`}  
+                       className="btn-gradient organic-shape px-6 py-3 font-semibold text-white text-lg inline-block mt-6"
+                    >
+                      Book Now
+                    </Link>
                   </Button>
                 </div>
               </CardContent>
@@ -188,7 +193,12 @@ export default function ExperiencePage() {
                 <div className="flex items-center justify-between">
                   <div className="font-bold">₦{experience.price.toLocaleString()}</div>
                   <Button size="sm" asChild>
-                    <Link href={`/experience/${experience.id}`}>Book Now</Link>
+                    <Link 
+                      href={`/experience/${experience.id}`} 
+                      className="btn-gradient organic-shape px-6 py-3 font-semibold text-white text-lg inline-block mt-6"
+                    >
+                      Book Now
+                    </Link>
                   </Button>
                 </div>
               </CardContent>

@@ -71,7 +71,7 @@ export default function BlogPreview() {
               className="h-auto px-2 py-1 transition-all duration-300 rounded-md hover:px-3 hover:bg-primary/10 text-black dark:text-white hover:text-black dark:hover:text-white"
               asChild
             >
-             <Link href={`/journal/${post.slug}`}>
+             <Link href={`/journal/${post.slug}`}  className="btn-gradient organic-shape px-6 py-3 font-semibold text-white text-lg inline-block mt-6">
                Read more <ArrowRight className="ml-1 h-4 w-4" />
              </Link>
            </Button>

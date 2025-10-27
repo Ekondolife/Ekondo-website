@@ -147,10 +147,10 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
       authorBio: "Writer for Ekondo — exploring community, art, and wellness.",
       authorImage: "/placeholder-user.jpg",
       date: "August 20, 2025",
-      readTime: "8 min read",
+    readTime: "8 min read",
       category: "Community",
       image: "/images/two women.JPG",
-      content: `
+    content: `
         <p>This article was written by <strong>Eloho</strong> for Ekondo.</p>
 
         <p>The night is warm, despite the heavy downpour from the day before. The sky is starless but somehow giving light in its deep blueness. I am sat on one of two chairs on a balcony in a short-let apartment in Lekki, watching an empty plot of land with my friend, talking about the emptiness of a city I have lived in all my life. The same emptiness I sometimes feel in myself.</p>
@@ -207,7 +207,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
 
         <h2>4) Consistency Is Key</h2>
         <p>Establish a regular watering and maintenance routine. Create a schedule based on your plant’s needs and stick to it. Observe how your plant responds and adjust if necessary. Remember, it’s better to underwater than overwater—most plants recover from slight dehydration, but overwatering can lead to root rot.</p>
-        <div class="cta-center"><a class="cta-button"  style="background:#22c55e;" href="https://wa.me/2348176267792?text=Hi%20Ekondo%2C%20help%20me%20set%20a%20plant%20care%20reminder" target="_blank" rel="noopener noreferrer">⏰ Set a Reminder</a></div>
+        <div class="cta-center"><a class="cta-button"  style="background:#22c55e;"href="https://wa.me/2348176267792?text=Hi%20Ekondo%2C%20help%20me%20set%20a%20plant%20care%20reminder" target="_blank" rel="noopener noreferrer">⏰ Set a Reminder</a></div>
 
         <h2>5) Ask for Help On Time</h2>
         <p>Plants can be sensitive to changes and can deteriorate quickly if issues are left unaddressed. Seeking help from our plant doctor early lets you act promptly and protect your plants. Reaching out not only fixes problems; it also builds your plant‑care confidence.</p>
@@ -257,13 +257,13 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
           <Card className="border-none shadow-lg rounded-2xl max-w-4xl mx-auto bg-card">
             <CardContent className="p-6 md:p-10">
               {/* Category */}
-              <div className="flex justify-center mb-6">
+            <div className="flex justify-center mb-6">
                 <div className="bg-primary/10 text-primary text-xs font-semibold px-4 py-1 rounded-full">
-                  {post.category}
-                </div>
+                {post.category}
               </div>
+            </div>
 
-              {/* Title */}
+            {/* Title */}
               <h1 className="font-serif text-4xl md:text-5xl font-bold text-center mb-4 leading-tight">
                 {post.title}
               </h1>
@@ -271,11 +271,11 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
               {/* Meta */}
               <div className="flex flex-wrap items-center justify-center gap-4 text-xs md:text-sm text-muted-foreground mb-8">
                 <div className="flex items-center gap-2"><Calendar className="h-4 w-4" />{post.date}</div>
-                <span>•</span>
+              <span>•</span>
                 <div className="flex items-center gap-2"><Clock className="h-4 w-4" />{post.readTime}</div>
-                <span>•</span>
+              <span>•</span>
                 <div className="flex items-center gap-2"><User className="h-4 w-4" />{post.author}</div>
-              </div>
+            </div>
 
               <Separator className="mb-10" />
 
@@ -292,7 +292,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
                 prose-a:text-primary hover:prose-a:underline
                 prose-blockquote:border-l-4 prose-blockquote:border-primary/40 prose-blockquote:pl-4 prose-blockquote:italic
                 prose-img:rounded-xl"
-                dangerouslySetInnerHTML={{ __html: post.content }}
+              dangerouslySetInnerHTML={{ __html: post.content }}
               />
 
               <Separator className="my-12" />
@@ -301,14 +301,14 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
               <div className="flex flex-col sm:flex-row items-center gap-4">
                 <div className="relative w-16 h-16 rounded-full overflow-hidden">
                   <Image src={post.authorImage || "/placeholder.svg"} alt={post.author} fill className="object-cover" />
-                </div>
+                  </div>
                 <div className="text-center sm:text-left">
                   <h3 className="font-serif text-xl font-semibold">{post.author}</h3>
                   <p className="text-muted-foreground text-sm">{post.authorBio}</p>
+                  </div>
                 </div>
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
         </div>
       </article>
     </div>

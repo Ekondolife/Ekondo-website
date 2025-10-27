@@ -1,52 +1,33 @@
 "use client"
 
-import { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Minus, Plus, Trash2, ShoppingBag, CreditCard } from "lucide-react"
+import { Minus, Plus, Trash2, ShoppingBag, ArrowRight } from "lucide-react"
 import { useCart } from "@/components/cart-context"
+import { useSyncCart } from "@/components/sync-cart-button"
 
 export default function CartPage() {
   const { items: cartItems, updateQuantity, removeItem, subtotal, clearCart } = useCart()
-  const [email, setEmail] = useState("")
-  const [isProcessing, setIsProcessing] = useState(false)
+  const { syncRemoveItem, syncUpdateQuantity } = useSyncCart()
+
+  const handleRemoveItem = async (id: number) => {
+    removeItem(id)
+    await syncRemoveItem(id)
+  }
+
+  const handleUpdateQuantity = async (id: number, quantity: number) => {
+    updateQuantity(id, quantity)
+    await syncUpdateQuantity(id, quantity)
+  }
 
   const shipping = subtotal > 50000 ? 0 : 5000 // Free shipping over ₦50,000
   const total = subtotal + shipping
 
   // Debug: Log cart items to console
   console.log("Cart items:", cartItems)
-
-  const handlePaystackPayment = async () => {
-    if (!email) {
-      alert("Please enter your email address")
-      return
-    }
-
-    setIsProcessing(true)
-    try {
-      const res = await fetch("/api/paystack", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, amount: total }),
-      })
-      const data = await res.json()
-
-      if (!data.ok) throw new Error(data.error || "Payment init failed")
-
-      // Redirect user to Paystack checkout
-      window.location.href = data.data.data.authorization_url
-    } catch (err: any) {
-      alert("Payment failed: " + err.message)
-    } finally {
-      setIsProcessing(false)
-    }
-  }
 
   const handleClearCart = () => {
     if (confirm("Are you sure you want to clear your cart?")) {
@@ -107,7 +88,7 @@ export default function CartPage() {
                       <Button
                         variant="ghost"
                         size="icon"
-                        onClick={() => removeItem(item.id)}
+                        onClick={() => handleRemoveItem(item.id)}
                         className="text-destructive"
                       >
                         <Trash2 className="h-4 w-4" />
@@ -119,7 +100,7 @@ export default function CartPage() {
                         <Button
                           variant="ghost"
                           size="icon"
-                          onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                          onClick={() => handleUpdateQuantity(item.id, item.quantity - 1)}
                           className="h-8 w-8"
                         >
                           <Minus className="h-3 w-3" />
@@ -128,7 +109,7 @@ export default function CartPage() {
                         <Button
                           variant="ghost"
                           size="icon"
-                          onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                          onClick={() => handleUpdateQuantity(item.id, item.quantity + 1)}
                           className="h-8 w-8"
                         >
                           <Plus className="h-3 w-3" />
@@ -173,29 +154,14 @@ export default function CartPage() {
                 <span className="font-bold text-lg">₦{total.toLocaleString()}</span>
               </div>
 
-              {/* Email Input */}
-              <div className="mb-6">
-                <Label htmlFor="email" className="text-sm font-medium mb-2 block">
-                  Email Address
-                </Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="your@email.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="organic-shape"
-                />
-              </div>
-
               <Button 
                 size="lg" 
-                className="w-full mb-3 organic-shape bg-green-600 hover:bg-green-700"
-                onClick={handlePaystackPayment}
-                disabled={isProcessing || !email}
+                className="w-full mb-3 organic-shape btn-gradient"
+                asChild
               >
-                <CreditCard className="mr-2 h-4 w-4" />
-                {isProcessing ? "Processing..." : "Pay with Paystack"}
+                <Link href="/checkout">
+                  Proceed to Checkout <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
               </Button>
 
               <Button variant="outline" size="lg" className="w-full organic-shape bg-transparent" asChild>

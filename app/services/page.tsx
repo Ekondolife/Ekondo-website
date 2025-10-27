@@ -3,100 +3,9 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Check, MapPin, ArrowRight } from "lucide-react"
+import { services } from "@/lib/services-data"
 
 export default function ServicesPage() {
-  const services = [
-    {
-      id: 1,
-      title: "Plant Maintenance",
-      description: "Keep your plants healthy and thriving with our expert care services.",
-      image: "/images/guy working.jpg",
-      price: "From ₦25,000/month",
-      features: [
-        "Weekly or bi-weekly visits",
-        "Watering and feeding",
-        "Pruning and pest control",
-        "Health assessments",
-        "Replacement guarantee",
-      ],
-      popular: false,
-    },
-    {
-      id: 2,
-      title: "Landscape Design & Installation",
-      description: "Transform your outdoor space with custom landscape design tailored to African climates.",
-      image: "/images/Ekondo-14.JPG",
-      price: "From ₦150,000",
-      features: [
-        "Custom design consultation",
-        "Native plant selection",
-        "Professional installation",
-        "Irrigation systems",
-        "3-month maintenance included",
-      ],
-      popular: true,
-    },
-    {
-      id: 3,
-      title: "Indoor Plant Styling",
-      description: "Professional styling services to create stunning indoor green spaces.",
-      image: "/images/girl2.jpeg",
-      price: "From ₦75,000",
-      features: [
-        "Space assessment",
-        "Plant selection and sourcing",
-        "Pot and planter curation",
-        "Professional placement",
-        "Care instructions",
-      ],
-      popular: false,
-    },
-    {
-      id: 4,
-      title: "Corporate Green Spaces",
-      description: "Enhance your workplace with biophilic design that boosts productivity and wellness.",
-      image: "/images/ekondo event.jpg",
-      price: "Custom Quote",
-      features: [
-        "Workspace analysis",
-        "Biophilic design plan",
-        "Installation and setup",
-        "Ongoing maintenance",
-        "Employee wellness workshops",
-      ],
-      popular: false,
-    },
-    {
-      id: 5,
-      title: "Garden Consultation",
-      description: "Get expert advice on planning and maintaining your garden.",
-      image: "/images/fine plant image.webp",
-      price: "From ₦35,000/session",
-      features: [
-        "Site visit and assessment",
-        "Personalized recommendations",
-        "Plant and material suggestions",
-        "Maintenance schedule",
-        "Follow-up support",
-      ],
-      popular: false,
-    },
-    {
-      id: 6,
-      title: "Vertical Garden Installation",
-      description: "Maximize your space with beautiful living walls and vertical gardens.",
-      image: "/images/pot group.jpg",
-      price: "From ₦120,000",
-      features: [
-        "Custom design",
-        "Structural assessment",
-        "Irrigation system setup",
-        "Plant installation",
-        "Maintenance training",
-      ],
-      popular: false,
-    },
-  ]
 
   return (
     <div className="flex flex-col">
@@ -125,7 +34,7 @@ export default function ServicesPage() {
             {services.map((service) => (
               <Card
                 key={service.id}
-                className={`border-none shadow-md organic-shape overflow-hidden ${
+                className={`border-none shadow-md organic-shape p-10 overflow-hidden ${
                   service.popular ? "ring-2 ring-primary" : ""
                 }`}
               >

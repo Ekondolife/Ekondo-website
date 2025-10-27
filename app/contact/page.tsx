@@ -27,14 +27,32 @@ export default function ContactPage() {
     e.preventDefault()
     setLoading(true)
 
-    // Simulate form submission
-    setTimeout(() => {
+    try {
+      // Send to Brevo
+      const response = await fetch("/api/brevo-contact-form", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: formData.email,
+          name: formData.name,
+          phone: formData.phone,
+          message: `Subject: ${formData.subject}\n\n${formData.message}`,
+        }),
+      })
+
+      const data = await response.json()
+
+      if (!data.ok) throw new Error(data.error || "Failed to submit contact form")
+
       setSuccess(true)
-      setLoading(false)
       setFormData({ name: "", email: "", phone: "", subject: "", message: "" })
 
       setTimeout(() => setSuccess(false), 5000)
-    }, 1500)
+    } catch (error: any) {
+      alert("Failed to submit form: " + error.message)
+    } finally {
+      setLoading(false)
+    }
   }
 
   const locations = [
@@ -144,7 +162,7 @@ export default function ContactPage() {
                     onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                     required
                     rows={6}
-                    className="mt-1 organic-shape"
+                    className="mt-1"
                   />
                 </div>
 

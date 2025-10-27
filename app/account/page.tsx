@@ -12,11 +12,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { User, Package, Calendar, Heart, MapPin, Save, Loader2 } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
+import { supabase } from "@/lib/supabaseClient";
 
 export default function AccountPage() {
   const [user, setUser] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [orders, setOrders] = useState<any[]>([]);
+  const [ordersLoading, setOrdersLoading] = useState(false);
   const [formData, setFormData] = useState({
     fullName: "",
     phone: "",
@@ -36,15 +39,37 @@ export default function AccountPage() {
             fullName: profileData.fullName || "",
             phone: profileData.phone || "",
           });
+          
+          // Fetch user orders from Supabase
+          fetchUserOrders(firebaseUser.uid);
         }
       } else {
         setUser(null);
+        setOrders([]);
       }
       setLoading(false);
     });
 
     return () => unsubscribe();
   }, []);
+
+  const fetchUserOrders = async (uid: string) => {
+    setOrdersLoading(true);
+    try {
+      const { data, error } = await supabase
+        .from("orders")
+        .select("*")
+        .eq("user_uid", uid)
+        .order("created_at", { ascending: false });
+
+      if (error) throw error;
+      setOrders(data || []);
+    } catch (error) {
+      console.error("Error fetching orders:", error);
+    } finally {
+      setOrdersLoading(false);
+    }
+  };
 
   const handleSave = async () => {
     if (!user) return;
@@ -96,36 +121,6 @@ export default function AccountPage() {
     );
   }
 
-  // Dummy order/event/wishlist data for now
-  const orders = [
-    {
-      id: "ORD-001",
-      date: "June 1, 2025",
-      status: "Delivered",
-      total: 89.98,
-      items: 2,
-      image: "https://images.unsplash.com/photo-1485955900006-10f4d324d411?w=100&h=100&fit=crop&crop=center",
-    },
-  ];
-
-  const upcomingEvents = [
-    {
-      title: "Plant Styling Workshop",
-      date: "June 15, 2025",
-      time: "2:00 PM",
-      location: "Ekondo Park Lagos",
-      image: "https://images.unsplash.com/photo-1544717297-fa95b6ee9643?w=100&h=100&fit=crop&crop=center",
-    },
-  ];
-
-  const wishlist = [
-    {
-      id: 1,
-      name: "Bamboo Plant Stand",
-      price: 59.99,
-      image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=100&h=100&fit=crop&crop=center",
-    },
-  ];
 
   return (
     <div className="container px-4 py-12 md:py-16">
@@ -158,23 +153,48 @@ export default function AccountPage() {
         {/* Orders Tab */}
         <TabsContent value="orders">
           <h2 className="font-serif text-2xl font-bold mb-6">Order History</h2>
-          {orders.map((order) => (
-            <Card key={order.id} className="border-none shadow-md organic-shape mb-4">
-              <CardContent className="p-6 flex items-center gap-4">
-                <div className="relative w-20 h-20 rounded-lg overflow-hidden organic-shape flex-shrink-0">
-                  <Image src={order.image} alt="Order" fill className="object-cover" />
-                </div>
-                <div className="flex-1">
-                  <div className="flex justify-between items-start mb-2">
-                    <h3 className="font-medium">{order.id}</h3>
-                    <span className="text-sm bg-primary/10 text-primary px-3 py-1 rounded organic-shape">{order.status}</span>
-                  </div>
-                  <p className="text-sm text-muted-foreground">{order.date}</p>
-                  <p className="font-bold">${order.total.toFixed(2)}</p>
-                </div>
+          {ordersLoading ? (
+            <div className="flex justify-center py-8">
+              <Loader2 className="h-6 w-6 animate-spin text-primary" />
+            </div>
+          ) : orders.length === 0 ? (
+            <Card className="border-none shadow-md organic-shape">
+              <CardContent className="p-12 text-center">
+                <Package className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+                <p className="text-muted-foreground">No orders yet</p>
               </CardContent>
             </Card>
-          ))}
+          ) : (
+            orders.map((order, index) => (
+              <Card key={order.id || index} className="border-none shadow-md organic-shape mb-4">
+                <CardContent className="p-6 flex items-center gap-4">
+                  <div className="relative w-20 h-20 rounded-lg overflow-hidden organic-shape flex-shrink-0">
+                    <Image 
+                      src={order.product_image || "/placeholder.svg"} 
+                      alt={order.product_name || "Product"} 
+                      fill 
+                      className="object-cover" 
+                    />
+                  </div>
+                  <div className="flex-1">
+                    <div className="flex justify-between items-start mb-2">
+                      <h3 className="font-medium text-lg">{order.product_name}</h3>
+                      <span className={`text-sm px-3 py-1 rounded organic-shape ${
+                        order.status === "completed" ? "bg-green-100 text-green-700" : 
+                        order.status === "pending" ? "bg-yellow-100 text-yellow-700" : 
+                        "bg-gray-100 text-gray-700"
+                      }`}>{order.status}</span>
+                    </div>
+                    <p className="text-sm text-muted-foreground mb-1">Quantity: {order.quantity}</p>
+                    <p className="text-sm text-muted-foreground mb-1">
+                      {order.created_at ? new Date(order.created_at).toLocaleDateString() : "Date unknown"}
+                    </p>
+                    <p className="font-bold text-lg">₦{order.total_price.toLocaleString()}</p>
+                  </div>
+                </CardContent>
+              </Card>
+            ))
+          )}
         </TabsContent>
 
         {/* Profile Tab */}

@@ -1,9 +1,9 @@
 "use client"
 
-import { Filter } from "lucide-react"
+import { Filter, Loader2 } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -13,19 +13,49 @@ import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
 import { AddToCartButton } from "@/components/add-to-cart-button"
 import { Badge } from "@/components/ui/badge"
-import { products } from "@/data/products"
+import { supabase } from "@/lib/supabaseClient"
 
+const plantTypeOptions = [
+  "Air purifying plants",
+  "Low maintenance plants",
+  "Beginner friendly plants",
+  "Plants for gifting",
+]
 
 export default function RetailPage() {
+  const [products, setProducts] = useState<any[]>([])
+  const [loading, setLoading] = useState(true)
   const [selectedCategories, setSelectedCategories] = useState<string[]>([])
   const [selectedPriceRanges, setSelectedPriceRanges] = useState<string[]>([])
+  const [selectedPlantTypes, setSelectedPlantTypes] = useState<string[]>([])
   const [sortBy, setSortBy] = useState("featured")
- 
-  // Filter products based on selected categories and price ranges
+
+  useEffect(() => {
+    async function fetchProducts() {
+      try {
+        const { data, error } = await supabase
+          .from("products")
+          .select("*")
+          .order("id", { ascending: true })
+
+        if (error) throw error
+        console.log("Fetched products from Supabase:", data)
+        setProducts(data || [])
+      } catch (error) {
+        console.error("Error fetching products:", error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchProducts()
+  }, [])
+
+  // Filter products based on selected categories, price ranges, and plant types
   const filteredProducts = products.filter(product => {
     // Category filter
     const categoryMatch = selectedCategories.length === 0 || selectedCategories.includes(product.category)
-    
+
     // Price range filter
     const priceMatch = selectedPriceRanges.length === 0 || selectedPriceRanges.some(range => {
       switch (range) {
@@ -39,8 +69,40 @@ export default function RetailPage() {
           return true
       }
     })
+
+    // Plant type filter (only for plants)
+    // Handle both array format from Supabase and potential string format
+    let productPlantTypes = product.plant_type || product.plantType;
     
-    return categoryMatch && priceMatch
+    // If plantType is a string, try to parse it as JSON array
+    if (typeof productPlantTypes === 'string') {
+      try {
+        productPlantTypes = JSON.parse(productPlantTypes);
+      } catch {
+        productPlantTypes = [];
+      }
+    }
+    
+    // If still not an array, convert to empty array
+    if (!Array.isArray(productPlantTypes)) {
+      productPlantTypes = [];
+    }
+
+    const plantTypeMatch =
+      selectedPlantTypes.length === 0 ||
+      (product.category === "Plants" &&
+        productPlantTypes.length > 0 &&
+        selectedPlantTypes.some(type => productPlantTypes.includes(type)))
+
+    // Debug logging for plant type filtering
+    if (selectedPlantTypes.length > 0 && product.category === "Plants") {
+      console.log("Product:", product.name, "Plant Types:", productPlantTypes, "Selected:", selectedPlantTypes, "Match:", plantTypeMatch)
+    }
+
+    // For non-plants, ignore plantType filter
+    const isPlantOrNoPlantTypeFilter = product.category !== "Plants" || selectedPlantTypes.length === 0 || plantTypeMatch
+
+    return categoryMatch && priceMatch && isPlantOrNoPlantTypeFilter
   })
 
   // Sort products
@@ -75,6 +137,22 @@ export default function RetailPage() {
     }
   }
 
+  const handlePlantTypeChange = (type: string, checked: boolean) => {
+    if (checked) {
+      setSelectedPlantTypes(prev => [...prev, type])
+    } else {
+      setSelectedPlantTypes(prev => prev.filter(t => t !== type))
+    }
+  }
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    )
+  }
+
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
@@ -97,7 +175,7 @@ export default function RetailPage() {
                 Shop Best Sellers
               </Button>
               <Button size="lg" variant="outline" className="organic-shape bg-background">
-                View New Arrivals
+                View Gifts
               </Button>
             </div>
           </div>
@@ -156,6 +234,22 @@ export default function RetailPage() {
                         </div>
                       ))}
                     </div>
+
+                    {/* Plant Type Filter (Mobile) */}
+                    <Separator className="my-4" />
+                    <h3 className="font-medium mb-2">Plant Types</h3>
+                    <div className="space-y-2">
+                      {plantTypeOptions.map((type) => (
+                        <div key={type} className="flex items-center space-x-2">
+                          <Checkbox
+                            id={`planttype-mobile-${type}`}
+                            checked={selectedPlantTypes.includes(type)}
+                            onCheckedChange={(checked) => handlePlantTypeChange(type, checked as boolean)}
+                          />
+                          <Label htmlFor={`planttype-mobile-${type}`}>{type}</Label>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </SheetContent>
               </Sheet>
@@ -180,7 +274,7 @@ export default function RetailPage() {
             <div className="hidden md:block w-64 shrink-0">
               <div className="sticky top-24">
                 <Card className="border-none shadow-md organic-shape orange-gradient">
-                  <CardContent className="p-6">
+                  <CardContent className="p-16">
                     <h3 className="font-bold text-lg mb-4">Filters</h3>
 
                     <div className="space-y-6">
@@ -222,25 +316,27 @@ export default function RetailPage() {
                         </div>
                       </div>
 
+                      {/* Plant Type Filter (Desktop) */}
                       <Separator />
-
                       <div>
-                        <h4 className="font-medium mb-3">Special Offers</h4>
+                        <h4 className="font-medium mb-3">Plant Types</h4>
                         <div className="space-y-2">
-                          <div className="flex items-center space-x-2">
-                            <Checkbox id="on-sale" />
-                            <Label htmlFor="on-sale" className="text-sm">
-                              On Sale
+                          {plantTypeOptions.map((type) => (
+                            <div key={type} className="flex items-center space-x-2">
+                              <Checkbox
+                                id={`planttype-${type}`}
+                                checked={selectedPlantTypes.includes(type)}
+                                onCheckedChange={(checked) => handlePlantTypeChange(type, checked as boolean)}
+                              />
+                              <Label htmlFor={`planttype-${type}`} className="text-sm">
+                                {type}
                             </Label>
                           </div>
-                          <div className="flex items-center space-x-2">
-                            <Checkbox id="new-arrivals" />
-                            <Label htmlFor="new-arrivals" className="text-sm">
-                              New Arrivals
-                            </Label>
+                          ))}
                           </div>
                         </div>
-                      </div>
+
+                      <Separator />
                     </div>
                   </CardContent>
                 </Card>
@@ -344,7 +440,7 @@ export default function RetailPage() {
         <div className="container px-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
             {[
-              { label: "Free Shipping", value: "Orders ₦50,000+" },
+              { label: "Discount", value: "Orders ₦50,000+" },
               { label: "Secure Payment", value: "100% Protected" },
               { label: "Easy Returns", value: "30 Days" },
               { label: "Support", value: "24/7 Help" },

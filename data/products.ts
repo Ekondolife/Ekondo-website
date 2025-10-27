@@ -1,5 +1,3 @@
-
-
 export const products = [
   {
     id: 1,
@@ -9,6 +7,7 @@ export const products = [
     image: "/images/Ekondo Products/Size_B_Baby_Rubber_in_a_Purple_Chidi-scaled.webp",
     category: "Plants",
     featured: true,
+    plantType: ["Air purifying plants", "Beginner friendly plants", "Plants for gifting"],
   },
   {
     id: 2,
@@ -18,6 +17,7 @@ export const products = [
     image: "/images/Ekondo Products/Aglaonema__Blue_Mide-scaled.webp",
     category: "Plants",
     featured: true,
+    plantType: ["Air purifying plants", "Low maintenance plants", "Plants for gifting"],
   },
   {
     id: 3,
@@ -28,6 +28,7 @@ export const products = [
     category: "Plants",
     featured: false,
     newArrival: true,
+    plantType: ["Low maintenance plants", "Beginner friendly plants", "Air purifying plants"],
   },
   {
     id: 4,
@@ -36,6 +37,7 @@ export const products = [
     price: 25000,
     image: "/images/Ekondo Products/Size_B_Yellow_and_Green_san_in_a_Yellow_Mide-scaled.webp",
     category: "Plants",
+    plantType: ["Low maintenance plants", "Beginner friendly plants", "Air purifying plants"],
   },
   {
     id: 5,
@@ -44,6 +46,7 @@ export const products = [
     price: 25000,
     image: "/images/Ekondo Products/Size_B_Spider_Plant_in_a_Red_Chidi-scaled.webp",
     category: "Plants",
+    plantType: ["Air purifying plants", "Beginner friendly plants", "Plants for gifting"],
   },
   {
     id: 6,
@@ -53,6 +56,7 @@ export const products = [
     image: "/images/Ekondo Products/Syngonium__Brown_Murna-scaled.webp",
     category: "Plants",
     newArrival: true,
+    plantType: ["Plants for gifting", "Beginner friendly plants"],
   },
   {
     id: 7,
@@ -62,6 +66,7 @@ export const products = [
     image: "/images/Ekondo Products/Blue-Chidi.webp",
     category: "Pots",
     featured: true,
+    plantType: [],
   },
   {
     id: 8,
@@ -71,6 +76,7 @@ export const products = [
     image: "/images/Ekondo Products/Yellow-Edak-1-scaled.webp",
     category: "Pots",
     featured: true,
+    plantType: [],
   },
   {
     id: 9,
@@ -79,6 +85,7 @@ export const products = [
     price: 5000,
     image: "/images/Ekondo Products/Blue-Mini-Edak.webp",
     category: "Pots",
+    plantType: [],
   },
   {
     id: 10,
@@ -87,6 +94,7 @@ export const products = [
     price: 5000,
     image: "/images/Ekondo Products/Green-Mini-Murna-scaled.webp",
     category: "Pots",
+    plantType: [],
   },
   {
     id: 11,
@@ -96,6 +104,7 @@ export const products = [
     image: "/images/Ekondo Products/Orange-Mini-Mide-1-scaled.webp",
     category: "Pots",
     newArrival: true,
+    plantType: [],
   },
   {
     id: 12,
@@ -104,6 +113,7 @@ export const products = [
     price: 12000,
     image: "/images/Ekondo Products/Orange-Murna-1-scaled.webp",
     category: "Pots",
+    plantType: [],
   },
   {
     id: 13,
@@ -112,6 +122,7 @@ export const products = [
     price: 15000,
     image: "/images/Ekondo Products/Pink-Mide.webp",
     category: "Pots",
+    plantType: [],
   },
   {
     id: 14,
@@ -121,5 +132,6 @@ export const products = [
     image: "/images/Ekondo Products/Yellow-Nala-scaled.webp",
     category: "Accessories",
     newArrival: true,
+    plantType: [],
   },
 ]

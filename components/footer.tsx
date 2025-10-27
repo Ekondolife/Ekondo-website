@@ -87,8 +87,8 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/careers" className="text-muted-foreground hover:text-primary transition-colors">
-                  Careers
+                <Link href="/nature_host" className="text-muted-foreground hover:text-primary transition-colors">
+                  Become a nature host
                 </Link>
               </li>
             </ul>
