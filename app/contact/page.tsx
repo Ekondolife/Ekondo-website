@@ -1,7 +1,6 @@
 "use client"
 
 import type React from "react"
-
 import { useState } from "react"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
@@ -11,6 +10,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { MapPin, Phone, Mail, Clock } from "lucide-react"
+import UTMFormSync from "@/components/utm-form-sync"
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -27,9 +27,19 @@ export default function ContactPage() {
     e.preventDefault()
     setLoading(true)
 
+    // Get UTM values from hidden fields
+    const utm = {
+      utm_source: (document.getElementById("utm_source") as HTMLInputElement)?.value || "",
+      utm_medium: (document.getElementById("utm_medium") as HTMLInputElement)?.value || "",
+      utm_campaign: (document.getElementById("utm_campaign") as HTMLInputElement)?.value || "",
+      utm_term: (document.getElementById("utm_term") as HTMLInputElement)?.value || "",
+      utm_content: (document.getElementById("utm_content") as HTMLInputElement)?.value || "",
+      referrer: (document.getElementById("referrer") as HTMLInputElement)?.value || "",
+    }
+
     try {
-      // Send to Brevo
-      const response = await fetch("/api/brevo-contact-form", {
+      // 1️⃣ Send to Brevo first
+      const brevoResponse = await fetch("/api/brevo-contact-form", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -37,16 +47,34 @@ export default function ContactPage() {
           name: formData.name,
           phone: formData.phone,
           message: `Subject: ${formData.subject}\n\n${formData.message}`,
+          ...utm,
         }),
       })
 
-      const data = await response.json()
+      const brevoData = await brevoResponse.json()
+      if (!brevoResponse.ok || !brevoData.ok) {
+        console.warn("Brevo failed:", brevoData)
+      }
 
-      if (!data.ok) throw new Error(data.error || "Failed to submit contact form")
+      // 2️⃣ Also send via Formly
+      const formDataToSend = new FormData()
+      formDataToSend.append("access_key", process.env.NEXT_PUBLIC_FORMLY_KEY || "")
+      formDataToSend.append("name", formData.name)
+      formDataToSend.append("email", formData.email)
+      formDataToSend.append("phone", formData.phone)
+      formDataToSend.append("subject", formData.subject)
+      formDataToSend.append("message", formData.message)
+      formDataToSend.append("to", "hello@ekondolife.com")
+
+      const formlyResponse = await fetch("https://formly.email/submit", {
+        method: "POST",
+        body: formDataToSend,
+      })
+
+      if (!formlyResponse.ok) throw new Error("Formly submission failed")
 
       setSuccess(true)
       setFormData({ name: "", email: "", phone: "", subject: "", message: "" })
-
       setTimeout(() => setSuccess(false), 5000)
     } catch (error: any) {
       alert("Failed to submit form: " + error.message)
@@ -100,6 +128,14 @@ export default function ContactPage() {
             <div>
               <h2 className="font-serif text-3xl font-bold mb-6">Send Us a Message</h2>
               <form onSubmit={handleSubmit} className="space-y-6">
+                <UTMFormSync />
+                <input type="hidden" name="UTM_SOURCE" id="utm_source" />
+                <input type="hidden" name="UTM_MEDIUM" id="utm_medium" />
+                <input type="hidden" name="UTM_CAMPAIGN" id="utm_campaign" />
+                <input type="hidden" name="UTM_TERM" id="utm_term" />
+                <input type="hidden" name="UTM_CONTENT" id="utm_content" />
+                <input type="hidden" name="REFERRER" id="referrer" />
+
                 <div>
                   <Label htmlFor="name">Full Name *</Label>
                   <Input
@@ -231,46 +267,6 @@ export default function ContactPage() {
                   </div>
                 </CardContent>
               </Card>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* FAQ Section */}
-      <section className="py-16 md:py-24 leaf-pattern-dense">
-        <div className="container px-4">
-          <div className="max-w-3xl mx-auto">
-            <h2 className="font-serif text-3xl font-bold text-center mb-12">Frequently Asked Questions</h2>
-            <div className="space-y-6">
-              {[
-                {
-                  question: "Do you ship products internationally?",
-                  answer:
-                    "Currently, we ship within African countries where we operate. We're working on expanding our shipping to other regions soon.",
-                },
-                {
-                  question: "Can I visit your spaces without booking?",
-                  answer:
-                    "Yes! Our retail areas are open during business hours. However, we recommend booking for workshops and private events.",
-                },
-                {
-                  question: "Do you offer plant care consultations?",
-                  answer:
-                    "Yes, we offer both in-person and virtual plant care consultations. Book through our Services page or contact us directly.",
-                },
-                {
-                  question: "What payment methods do you accept?",
-                  answer:
-                    "We accept mobile money, bank transfers, and major credit/debit cards through our secure payment partners.",
-                },
-              ].map((faq, index) => (
-                <Card key={index} className="border-none shadow-md organic-shape">
-                  <CardContent className="p-6">
-                    <h3 className="font-medium mb-2">{faq.question}</h3>
-                    <p className="text-sm text-muted-foreground">{faq.answer}</p>
-                  </CardContent>
-                </Card>
-              ))}
             </div>
           </div>
         </div>

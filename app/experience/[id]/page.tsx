@@ -64,7 +64,28 @@ export default function ExperienceDetailPage({ params }: { params: { id: string 
       const price = isSouthside && selectedTicket ? selectedTicket.price : (experience?.price || 0)
       const ticketTypeName = selectedTicket ? selectedTicket.name : ""
 
-      // Initialize Paystack payment
+      // 1️⃣ Get UTM values from localStorage
+      let utm = {}
+      if (typeof window !== "undefined") {
+        try {
+          utm = JSON.parse(localStorage.getItem("ekondo_utm") || "{}")
+        } catch {}
+      }
+
+      // 2️⃣ Send to Brevo for tracking (await here)
+      await fetch("/api/brevo", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email, // from useUser()
+          firstName: displayName || "",
+          experienceName: experience?.title,
+          listId: isSouthside ? 15 : undefined,
+          ...utm,
+        }),
+      })
+
+      // 3️⃣ Initialize Paystack payment
       const response = await fetch("/api/paystack", {
         method: "POST",
         headers: { "Content-Type": "application/json" },

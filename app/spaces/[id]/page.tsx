@@ -9,11 +9,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { MapPin, Clock, Users, ArrowLeft, Check, Loader2, Calendar } from "lucide-react";
+import { MapPin, Clock, Users, ArrowLeft, Loader2 } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { getSpaceById } from "@/lib/spaces-data";
 import { useUser } from "@/components/user-provider";
 import { useToast } from "@/components/ui/use-toast";
+import UTMFormSync from "@/components/utm-form-sync";
 
 export default function SpaceDetailPage({ params }: { params: { id: string } }) {
   const router = useRouter();
@@ -73,6 +74,16 @@ export default function SpaceDetailPage({ params }: { params: { id: string } }) 
     }
 
     try {
+      // Get UTM values from hidden fields
+      const utm = {
+        utm_source: (document.getElementById("utm_source") as HTMLInputElement)?.value || "",
+        utm_medium: (document.getElementById("utm_medium") as HTMLInputElement)?.value || "",
+        utm_campaign: (document.getElementById("utm_campaign") as HTMLInputElement)?.value || "",
+        utm_term: (document.getElementById("utm_term") as HTMLInputElement)?.value || "",
+        utm_content: (document.getElementById("utm_content") as HTMLInputElement)?.value || "",
+        referrer: (document.getElementById("referrer") as HTMLInputElement)?.value || "",
+      };
+
       // Send booking details to Brevo
       const response = await fetch("/api/brevo-contact", {
         method: "POST",
@@ -88,6 +99,7 @@ Number of Guests: ${formData.numberOfGuests || "Not specified"}
 Additional Message: ${formData.message || "None"}`,
           location: space.name,
           bookingType: bookingType === "hourly" ? "Hourly Rental" : "Full Day Rental",
+          ...utm,
         }),
       });
 
@@ -225,6 +237,15 @@ Additional Message: ${formData.message || "None"}`,
               </CardHeader>
               <CardContent>
                 <form onSubmit={handleSubmit} className="space-y-6">
+                  {/* UTM Hidden Fields */}
+                  <UTMFormSync />
+                  <input type="hidden" name="UTM_SOURCE" id="utm_source" />
+                  <input type="hidden" name="UTM_MEDIUM" id="utm_medium" />
+                  <input type="hidden" name="UTM_CAMPAIGN" id="utm_campaign" />
+                  <input type="hidden" name="UTM_TERM" id="utm_term" />
+                  <input type="hidden" name="UTM_CONTENT" id="utm_content" />
+                  <input type="hidden" name="REFERRER" id="referrer" />
+
                   {/* Booking Type Selection */}
                   <div>
                     <Label>Rental Type *</Label>

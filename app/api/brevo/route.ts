@@ -2,7 +2,18 @@ import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
   try {
-    const { email, firstName, experienceName, listId } = await request.json();
+    const {
+      email,
+      firstName,
+      experienceName,
+      listId,
+      utm_source,
+      utm_medium,
+      utm_campaign,
+      utm_term,
+      utm_content,
+      referrer,
+    } = await request.json();
 
     if (!process.env.BREVO_API_KEY) {
       throw new Error("BREVO_API_KEY not set");
@@ -23,7 +34,7 @@ export async function POST(request: Request) {
       });
 
       const searchData = await searchResponse.json();
-      const existingList = searchData.lists?.find((list: any) => 
+      const existingList = searchData.lists?.find((list: any) =>
         list.name.toLowerCase() === experienceName.toLowerCase()
       );
 
@@ -51,7 +62,17 @@ export async function POST(request: Request) {
       }
     }
 
-    // Step 2: Add/update contact in the list
+    // Step 2: Add/update contact in the list, including UTM fields
+    const attributes: Record<string, string> = {
+      EXPERIENCE_NAME: experienceName || "",
+    };
+    if (utm_source) attributes.UTM_SOURCE = utm_source;
+    if (utm_medium) attributes.UTM_MEDIUM = utm_medium;
+    if (utm_campaign) attributes.UTM_CAMPAIGN = utm_campaign;
+    if (utm_term) attributes.UTM_TERM = utm_term;
+    if (utm_content) attributes.UTM_CONTENT = utm_content;
+    if (referrer) attributes.REFERRER = referrer;
+
     const response = await fetch("https://api.brevo.com/v3/contacts", {
       method: "POST",
       headers: {
@@ -61,33 +82,32 @@ export async function POST(request: Request) {
       body: JSON.stringify({
         email,
         firstName,
-        attributes: {
-          EXPERIENCE_NAME: experienceName,
-        },
+        attributes,
         listIds: finalListId ? [finalListId] : [],
       }),
     });
 
     const data = await response.json();
-    
+
     if (!response.ok) {
       // If contact already exists, update it to add to list
       if (data.code === "duplicate_parameter") {
-        // Update existing contact to add to list
-        const updateResponse = await fetch(`https://api.brevo.com/v3/contacts/${encodeURIComponent(email)}`, {
-          method: "PUT",
-          headers: {
-            "api-key": apiKey,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            listIds: finalListId ? [finalListId] : [],
-            attributes: {
-              EXPERIENCE_NAME: experienceName,
+        // Update existing contact to add to list and update attributes
+        const updateResponse = await fetch(
+          `https://api.brevo.com/v3/contacts/${encodeURIComponent(email)}`,
+          {
+            method: "PUT",
+            headers: {
+              "api-key": apiKey,
+              "Content-Type": "application/json",
             },
-          }),
-        });
-        
+            body: JSON.stringify({
+              listIds: finalListId ? [finalListId] : [],
+              attributes,
+            }),
+          }
+        );
+
         if (!updateResponse.ok) {
           throw new Error("Failed to update contact in Brevo");
         }

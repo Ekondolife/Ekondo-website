@@ -6,7 +6,10 @@ export async function POST(request: Request) {
       email,
       name,
       phone,
+      preferredDate,
       message,
+      serviceId,
+      serviceName,
       utm_source,
       utm_medium,
       utm_campaign,
@@ -20,13 +23,17 @@ export async function POST(request: Request) {
     }
 
     const apiKey = process.env.BREVO_API_KEY;
-    const listId = 18; // Contact form submissions list
+    const listId = 19; 
 
     // Prepare attributes for Brevo
     const attributes: Record<string, string> = {
+      NAME: name || "",
       PHONE: phone || "",
+      SERVICE_ID: String(serviceId || ""),
+      SERVICE_NAME: serviceName || "",
+      PREFERRED_DATE: preferredDate || "",
       MESSAGE: message || "",
-      SOURCE: "Contact Form",
+      SOURCE: "Service Booking",
     };
     if (utm_source) attributes.UTM_SOURCE = utm_source;
     if (utm_medium) attributes.UTM_MEDIUM = utm_medium;
@@ -44,9 +51,9 @@ export async function POST(request: Request) {
       },
       body: JSON.stringify({
         email,
-        firstName: name,
         attributes,
         listIds: [listId],
+        updateEnabled: true,
       }),
     });
 
@@ -80,8 +87,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ ok: true, data });
   } catch (error: any) {
-    console.error("💥 Brevo contact form error:", error);
+    console.error("💥 Brevo service booking error:", error);
     return NextResponse.json({ ok: false, error: error.message }, { status: 500 });
   }
 }
-

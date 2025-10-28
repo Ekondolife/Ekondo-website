@@ -8,11 +8,11 @@ import { CartProvider } from "@/components/cart-context"
 import { UserProvider } from "@/components/user-provider"
 import { Toaster } from "@/components/ui/toaster"
 import Script from "next/script"
+import UTMTracker from "@/components/utm-tracker"
 
 export const metadata: Metadata = {
   title: "Ekondo | Sustainability & Wellness",
   description: "Ekondo is a sustainability and wellness company rooted in Nature, creativity, and community.",
-  generator: "v0.app",
 }
 
 export default function RootLayout({
@@ -57,6 +57,7 @@ export default function RootLayout({
             <CartProvider>
               <div className="flex min-h-screen flex-col">
                 <ConditionalNavigation />
+                <UTMTracker />
                 <main className="flex-1">{children}</main>
                 <Footer />
               </div>

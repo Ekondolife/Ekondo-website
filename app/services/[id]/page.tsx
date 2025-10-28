@@ -15,6 +15,7 @@ import { getServiceById } from "@/lib/services-data";
 import { useUser } from "@/components/user-provider";
 import { useToast } from "@/components/ui/use-toast";
 import { Loader2 } from "lucide-react";
+import UTMFormSync from "@/components/utm-form-sync";
 
 export default function ServiceDetailPage({ params }: { params: { id: string } }) {
   const router = useRouter();
@@ -72,16 +73,37 @@ export default function ServiceDetailPage({ params }: { params: { id: string } }
 
     try {
       // Extract price from string (e.g., "From ₦25,000/month" -> 25000)
-      // Handle prices with commas like ₦150,000
       const priceMatch = service.price.match(/₦([\d,]+)/);
       let basePrice = 0;
       if (priceMatch) {
-        // Remove commas and convert to integer
         basePrice = parseInt(priceMatch[1].replace(/,/g, '')) || 0;
       }
 
-      console.log("Service price string:", service.price);
-      console.log("Extracted base price:", basePrice);
+      // Get UTM values from hidden fields
+      const utm = {
+        utm_source: (document.getElementById("utm_source") as HTMLInputElement)?.value || "",
+        utm_medium: (document.getElementById("utm_medium") as HTMLInputElement)?.value || "",
+        utm_campaign: (document.getElementById("utm_campaign") as HTMLInputElement)?.value || "",
+        utm_term: (document.getElementById("utm_term") as HTMLInputElement)?.value || "",
+        utm_content: (document.getElementById("utm_content") as HTMLInputElement)?.value || "",
+        referrer: (document.getElementById("referrer") as HTMLInputElement)?.value || "",
+      };
+
+      // Send to Brevo via API route
+      await fetch("/api/services", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: formData.email,
+          name: formData.name,
+          phone: formData.phone,
+          preferredDate: formData.preferredDate,
+          message: formData.message,
+          serviceId: service.id,
+          serviceName: service.title,
+          ...utm,
+        }),
+      });
 
       // Initialize Paystack payment
       const response = await fetch("/api/paystack", {
@@ -90,10 +112,14 @@ export default function ServiceDetailPage({ params }: { params: { id: string } }
         body: JSON.stringify({
           email: formData.email,
           amount: basePrice,
-          experienceId: null, // Not an experience
-          experienceName: service.title, // Use service name for Brevo
-          ticketType: "", // No ticket type for services
-          userId: uid || null,
+          metadata: {
+            name: formData.name,
+            phone: formData.phone,
+            serviceId: service.id,
+            serviceName: service.title,
+            preferredDate: formData.preferredDate,
+            message: formData.message,
+          },
         }),
       });
 
@@ -217,6 +243,14 @@ export default function ServiceDetailPage({ params }: { params: { id: string } }
               </CardHeader>
               <CardContent>
                 <form onSubmit={handleSubmit} className="space-y-6">
+                  <UTMFormSync />
+                  <input type="hidden" name="UTM_SOURCE" id="utm_source" />
+                  <input type="hidden" name="UTM_MEDIUM" id="utm_medium" />
+                  <input type="hidden" name="UTM_CAMPAIGN" id="utm_campaign" />
+                  <input type="hidden" name="UTM_TERM" id="utm_term" />
+                  <input type="hidden" name="UTM_CONTENT" id="utm_content" />
+                  <input type="hidden" name="REFERRER" id="referrer" />
+
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <Label htmlFor="name">Full Name *</Label>
