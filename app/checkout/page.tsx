@@ -2,7 +2,7 @@
 
 export const dynamic = "force-dynamic"
 import { useState, useEffect, useRef } from "react"
-import { useRouter, useSearchParams } from "next/navigation"
+import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -26,14 +26,21 @@ const nigerianStates = [
 export default function CheckoutPage() {
   const { items: cartItems, subtotal, addItem: addCartItem, clearCart } = useCart()
   const router = useRouter()
-  const searchParams = useSearchParams()
   const [tabValue, setTabValue] = useState("delivery")
   const [isProcessing, setIsProcessing] = useState(false)
-
-  const isGift = searchParams?.get("isGift") === "1" || searchParams?.get("isGift") === "true"
-  const productId = searchParams?.get("productId")
+  const [isGift, setIsGift] = useState(false)
+  const [productId, setProductId] = useState<string | null>(null)
   const [giftNote, setGiftNote] = useState("")
   const [giftProductAdded, setGiftProductAdded] = useState(false)
+
+  // Read query params on client only
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const sp = new URLSearchParams(window.location.search)
+      setIsGift(sp.get("isGift") === "1" || sp.get("isGift") === "true")
+      setProductId(sp.get("productId"))
+    }
+  }, [])
 
   useEffect(() => {
     // Add only if isGift && productId and NOT already added & no cart items
