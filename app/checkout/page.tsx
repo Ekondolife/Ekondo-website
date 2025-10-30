@@ -14,7 +14,7 @@ import { useCart } from "@/components/cart-context"
 import { CreditCard, ArrowLeft, Loader2 } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
-import { getProducts } from "@/lib/getProducts"
+// Note: getProducts dynamically imported client-side to avoid SSR eval of Supabase client
 
 const nigerianStates = [
   "Abuja FCT", "Abia", "Adamawa", "Akwa Ibom", "Anambra", "Bauchi", "Bayelsa", "Benue", "Borno", 
@@ -24,7 +24,7 @@ const nigerianStates = [
 ]
 
 export default function CheckoutPage() {
-  const { items: cartItems, subtotal, total: cartTotal, addItem: addCartItem, clearCart } = useCart()
+  const { items: cartItems, subtotal, addItem: addCartItem, clearCart } = useCart()
   const router = useRouter()
   const searchParams = useSearchParams()
   const [tabValue, setTabValue] = useState("delivery")
@@ -40,6 +40,7 @@ export default function CheckoutPage() {
     if (isGift && productId && !giftProductAdded && cartItems.length === 0) {
       (async () => {
         try {
+          const { getProducts } = await import("@/lib/getProducts")
           const products = await getProducts()
           const giftProduct = products.find(p => p.id === Number(productId))
           if (giftProduct) {
@@ -104,13 +105,13 @@ export default function CheckoutPage() {
 
   const isDeliveryFormValid = () => {
     return (
-      deliveryData.email &&
-      deliveryData.firstName &&
-      deliveryData.lastName &&
-      deliveryData.streetAddress &&
-      deliveryData.townCity &&
-      deliveryData.state &&
-      deliveryData.phone
+      !!deliveryData.email &&
+      !!deliveryData.firstName &&
+      !!deliveryData.lastName &&
+      !!deliveryData.streetAddress &&
+      !!deliveryData.townCity &&
+      !!deliveryData.state &&
+      !!deliveryData.phone
     )
   }
 
