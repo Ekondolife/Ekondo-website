@@ -43,6 +43,13 @@ export async function POST(req: Request) {
     const data = await response.json()
 
     if (!response.ok) {
+      const errorMsg = (data.message || '').toLowerCase()
+      if (errorMsg.includes("already exists") || errorMsg.includes("already added") || errorMsg.includes("already a contact")) {
+        return NextResponse.json(
+          { error: "Email is already subscribed!" },
+          { status: 400 }
+        )
+      }
       return NextResponse.json(
         { error: data.message || "Failed to subscribe" },
         { status: response.status }

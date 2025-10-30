@@ -1,10 +1,87 @@
+"use client"
+
+import { useEffect } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Leaf, Heart, Sprout } from "lucide-react"
+import gsap from "gsap"
+import { ScrollTrigger } from "gsap/ScrollTrigger"
+
+gsap.registerPlugin(ScrollTrigger)
 
 export default function AboutPage() {
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Hero load
+      gsap.from([".js-hero-title", ".js-hero-sub"], {
+        y: 20,
+        opacity: 0,
+        duration: 1,
+        ease: "power3.out",
+        stagger: 0.12,
+      })
+      gsap.fromTo(
+        ".js-hero-image",
+        { scale: 1.08 },
+        { scale: 1, duration: 1.4, ease: "power3.out" }
+      )
+
+      // Section titles
+      gsap.utils.toArray<HTMLElement>(".js-section-title").forEach((el) => {
+        gsap.from(el, {
+          scrollTrigger: { trigger: el, start: "top 85%" },
+          y: 20,
+          opacity: 0,
+          duration: 0.9,
+          ease: "power3.out",
+        })
+      })
+
+      // Cards / paragraphs
+      gsap.utils.toArray<HTMLElement>(".js-card, .js-paragraph").forEach((el) => {
+        gsap.fromTo(
+          el,
+          { y: 26, opacity: 0, filter: "blur(6px)" },
+          {
+            scrollTrigger: { trigger: el, start: "top 90%" },
+            y: 0,
+            opacity: 1,
+            filter: "blur(0px)",
+            duration: 0.9,
+            ease: "power2.out",
+          }
+        )
+      })
+
+      // Stats count-in (subtle fade-rise)
+      gsap.utils.toArray<HTMLElement>(".js-stat").forEach((el) => {
+        gsap.from(el, {
+          scrollTrigger: { trigger: el, start: "top 92%" },
+          y: 18,
+          opacity: 0,
+          duration: 0.8,
+          ease: "power2.out",
+        })
+      })
+
+      // Hover lift
+      const lift = (selector: string) => {
+        document.querySelectorAll(selector).forEach((el) => {
+          el.addEventListener("mouseenter", () => {
+            gsap.to(el, { y: -2, scale: 1.02, duration: 0.25, ease: "power2.out" })
+          })
+          el.addEventListener("mouseleave", () => {
+            gsap.to(el, { y: 0, scale: 1, duration: 0.25, ease: "power2.out" })
+          })
+        })
+      }
+      lift(".js-hover, .js-card")
+    })
+    return () => ctx.revert()
+  }, [])
+
   const values = [
     {
       icon: Leaf,
@@ -61,12 +138,12 @@ export default function AboutPage() {
           src="/images/group pic.JPG"
           alt="Ekondo team working with plants"
           fill
-          className="object-cover image-clean"
+          className="object-cover image-clean js-hero-image"
           priority
         />
         <div className="container relative z-20 flex h-full flex-col items-center justify-center text-center px-4">
-          <h1 className="font-serif text-4xl md:text-6xl font-bold text-primary mb-6">Our Story</h1>
-          <p className="text-lg md:text-xl max-w-2xl text-foreground/80">
+          <h1 className="font-serif text-4xl md:text-6xl font-bold text-primary mb-6 js-hero-title">Our Story</h1>
+          <p className="text-lg md:text-xl max-w-2xl text-foreground/80 js-hero-sub">
             Rooted in African creativity and growing towards a sustainable future
           </p>
         </div>
@@ -76,9 +153,9 @@ export default function AboutPage() {
       <section className="py-16 md:py-24">
         <div className="container px-4">
           <div className="max-w-4xl mx-auto">
-            <h2 className="font-serif text-3xl md:text-4xl font-bold text-center mb-8">Who We Are</h2>
+            <h2 className="font-serif text-3xl md:text-4xl font-bold text-center mb-8 js-section-title">Who We Are</h2>
             <div className="prose prose-lg max-w-none text-muted-foreground leading-relaxed">
-              <p className="mb-6">
+              <p className="mb-6 js-paragraph">
               In the Efik language (the 4th most popular language in Nigeria),
               Ekondo means community—the cornerstone of our identity. We are a
               lifestyle brand promoting environmental sustainability and wellness
@@ -89,7 +166,7 @@ export default function AboutPage() {
               bringing Nature into every space, transforming waste into wellness
               products, and cultivating a passionate community around Nature.
               </p>
-              <p className="mb-6">
+              <p className="mb-6 js-paragraph">
               Our core values as a team and community are driven by The
               Framework of Nature. Drawing inspiration from plants, Nature’s
               Framework guides us to slow down, give gratitude, and take
@@ -105,7 +182,7 @@ export default function AboutPage() {
               businesses, connecting people to Nature through plant installations
               and unique bonding experiences.
               </p>
-              <p>
+              <p className="js-paragraph">
               Ekondo is a social impact company driven by a collective vision to build 
               a greener, kinder, happier, and more creative Africa. we believe in the power
               of conscious living, community, and sustainability as essential tools for shaping a better future. 
@@ -125,12 +202,12 @@ export default function AboutPage() {
       {/* Values Section */}
       <section className="py-16 md:py-24 leaf-pattern-dense">
         <div className="container px-4">
-          <h2 className="font-serif text-3xl md:text-4xl font-bold text-center mb-12">
+          <h2 className="font-serif text-3xl md:text-4xl font-bold text-center mb-12 js-section-title">
             Nature's Framework of Intention
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {values.map((value, index) => (
-              <Card key={index} className="border-none shadow-md organic-shape text-center">
+              <Card key={index} className="border-none shadow-md organic-shape text-center js-card js-hover">
                 <CardContent className="p-6">
                   <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-full mb-4 organic-shape">
                     <value.icon className="h-8 w-8 text-primary" />
@@ -144,12 +221,10 @@ export default function AboutPage() {
         </div>
       </section>
 
-   
-
       {/* Impact Section */}
       <section className="py-16 md:py-24 bg-primary/5 leaf-pattern">
         <div className="container px-4">
-          <h2 className="font-serif text-3xl md:text-4xl font-bold text-center mb-12">Our Impact</h2>
+          <h2 className="font-serif text-3xl md:text-4xl font-bold text-center mb-12 js-section-title">Our Impact</h2>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             {[
               { number: "10,000+", label: "Plants Adopted" },
@@ -157,7 +232,7 @@ export default function AboutPage() {
               { number: "200+", label: "Spaces Transformed" },
               { number: "15", label: "Cities Served" },
             ].map((stat, index) => (
-              <div key={index} className="text-center">
+              <div key={index} className="text-center js-stat">
                 <div className="font-serif text-4xl md:text-5xl font-bold text-primary mb-2">{stat.number}</div>
                 <div className="text-muted-foreground">{stat.label}</div>
               </div>
@@ -170,16 +245,16 @@ export default function AboutPage() {
       <section className="py-16 md:py-24">
         <div className="container px-4">
           <div className="max-w-3xl mx-auto text-center">
-            <h2 className="font-serif text-3xl md:text-4xl font-bold mb-4">Join Our Journey</h2>
-            <p className="text-muted-foreground mb-8">
+            <h2 className="font-serif text-3xl md:text-4xl font-bold mb-4 js-section-title">Join Our Journey</h2>
+            <p className="text-muted-foreground mb-8 js-paragraph">
               Whether you're looking to green your space, learn new skills, or connect with like-minded people, we'd
               love to have you as part of the Ekondo community.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" asChild className="btn-gradient organic-shape">
+              <Button size="lg" asChild className="btn-gradient organic-shape js-hover">
                 <Link href="/retail">Shop Products</Link>
               </Button>
-              <Button size="lg" variant="outline" asChild className="btn-gradient bg-transparent organic-shape">
+              <Button size="lg" variant="outline" asChild className="btn-gradient bg-transparent organic-shape js-hover">
                 <Link href="/experience">Join an Experience</Link>
               </Button>
             </div>

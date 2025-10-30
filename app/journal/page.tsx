@@ -1,14 +1,73 @@
 "use client"
 
+import { useEffect, useMemo, useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { useMemo, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { ArrowRight, Calendar, Clock } from "lucide-react"
 import { Input } from "@/components/ui/input"
+import NewsletterSignup from "@/components/newsletter-signup"
+import gsap from "gsap"
+import { ScrollTrigger } from "gsap/ScrollTrigger"
+
+gsap.registerPlugin(ScrollTrigger)
 
 export default function JournalPage() {
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Hero intro
+      gsap.from([".js-hero-title", ".js-hero-sub"], {
+        y: 20,
+        opacity: 0,
+        duration: 1,
+        ease: "power3.out",
+        stagger: 0.12,
+      })
+
+      // Section titles
+      gsap.utils.toArray<HTMLElement>(".js-section-title").forEach((el) => {
+        gsap.from(el, {
+          scrollTrigger: { trigger: el, start: "top 85%" },
+          y: 20,
+          opacity: 0,
+          duration: 0.9,
+          ease: "power3.out",
+        })
+      })
+
+      // Cards
+      gsap.utils.toArray<HTMLElement>(".js-card").forEach((el) => {
+        gsap.fromTo(
+          el,
+          { y: 26, opacity: 0, filter: "blur(6px)" },
+          {
+            scrollTrigger: { trigger: el, start: "top 92%" },
+            y: 0,
+            opacity: 1,
+            filter: "blur(0px)",
+            duration: 0.9,
+            ease: "power2.out",
+          }
+        )
+      })
+
+      // Hover lift
+      const lift = (selector: string) => {
+        document.querySelectorAll(selector).forEach((el) => {
+          el.addEventListener("mouseenter", () => {
+            gsap.to(el, { y: -2, scale: 1.02, duration: 0.25, ease: "power2.out" })
+          })
+          el.addEventListener("mouseleave", () => {
+            gsap.to(el, { y: 0, scale: 1, duration: 0.25, ease: "power2.out" })
+          })
+        })
+      }
+      lift(".js-hover, .js-card")
+    })
+    return () => ctx.revert()
+  }, [])
+
   const featuredPost = {
     title: "10 Low-Maintenance Indoor Plants You Can Buy in Lagos (Under ₦20,000)",
     excerpt:
@@ -59,12 +118,23 @@ export default function JournalPage() {
 
   const categories = ["All", "Plant Care", "Community", "Urban Farming", "Design", "Wellness", "Sustainability"]
 
+  const [searchQuery, setSearchQuery] = useState("")
   const [activeCategory, setActiveCategory] = useState<string>("All")
 
   const filteredPosts = useMemo(() => {
-    if (activeCategory === "All") return posts
-    return posts.filter((p) => p.category === activeCategory)
-  }, [posts, activeCategory])
+    let result = posts
+    if (activeCategory !== "All") result = result.filter((p) => p.category === activeCategory)
+    if (searchQuery.trim()) {
+      const q = searchQuery.trim().toLowerCase()
+      result = result.filter(
+        (p) =>
+          p.title.toLowerCase().includes(q) ||
+          (p.excerpt && p.excerpt.toLowerCase().includes(q)) ||
+          (p.author && p.author.toLowerCase().includes(q))
+      )
+    }
+    return result
+  }, [posts, activeCategory, searchQuery])
 
   return (
     <div className="flex flex-col">
@@ -72,14 +142,14 @@ export default function JournalPage() {
       <section className="py-16 md:py-24 leaf-pattern">
         <div className="container px-4">
           <div className="max-w-4xl mx-auto text-center mb-12">
-            <h1 className="font-serif text-4xl md:text-6xl font-bold text-primary mb-6">The Ekondo Journal</h1>
-            <p className="text-lg md:text-xl text-muted-foreground">
+            <h1 className="font-serif text-4xl md:text-6xl font-bold text-primary mb-6 js-hero-title">The Ekondo Journal</h1>
+            <p className="text-lg md:text-xl text-muted-foreground js-hero-sub">
               Stories, insights, and inspiration for sustainable living in urban Africa
             </p>
           </div>
 
           {/* Featured Post */}
-          <Card className="border-none shadow-lg organic-shape overflow-hidden max-w-5xl mx-auto">
+          <Card className="border-none shadow-lg organic-shape overflow-hidden max-w-5xl mx-auto js-card">
             <div className="grid md:grid-cols-2 gap-0">
               <div className="relative h-64 md:h-auto">
                 <Image
@@ -89,7 +159,7 @@ export default function JournalPage() {
                   className="object-cover"
                 />
               </div>
-              <CardContent className="p-8 flex flex-col justify-center">
+              <CardContent className="p-16 flex flex-col justify-center">
                 <div className="flex items-center gap-2 mb-4">
                   <div className="bg-primary/10 text-primary text-xs font-medium px-3 py-1 rounded organic-shape">
                     Featured
@@ -107,7 +177,7 @@ export default function JournalPage() {
                   <span>•</span>
                   <span>{featuredPost.readTime}</span>
                 </div>
-                <Button asChild className="organic-shape">
+                <Button asChild className="organic-shape js-hover">
                   <Link href={`/journal/${featuredPost.slug}`}>
                     Read Article <ArrowRight className="ml-2 h-4 w-4" />
                   </Link>
@@ -123,7 +193,7 @@ export default function JournalPage() {
         <div className="container px-4">
           <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
             <div className="w-full md:w-96">
-              <Input placeholder="Search articles..." className="organic-shape" />
+              <Input placeholder="Search articles..." className="organic-shape" value={searchQuery} onChange={e => setSearchQuery(e.target.value)} />
             </div>
             <div className="flex flex-wrap gap-2">
               {categories.map((category) => (
@@ -131,7 +201,7 @@ export default function JournalPage() {
                   key={category}
                   variant={activeCategory === category ? "default" : "outline"}
                   size="sm"
-                  className="organic-shape"
+                  className="organic-shape js-hover"
                   onClick={() => setActiveCategory(category)}
                 >
                   {category}
@@ -145,10 +215,10 @@ export default function JournalPage() {
       {/* All Posts */}
       <section className="py-16 md:py-24">
         <div className="container px-4">
-          <h2 className="font-serif text-2xl md:text-3xl font-bold mb-12">Latest Articles</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <h2 className="font-serif text-2xl md:text-3xl font-bold mb-12 js-section-title">Latest Articles</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredPosts.map((post) => (
-              <Card key={post.slug} className="border-none shadow-md organic-shape overflow-hidden group h-full">
+              <Card key={post.slug} className="border-none shadow-md organic-shape overflow-hidden group h-full max-w-[95vw] w-full mx-auto p-3 md:p-6 js-card js-hover">
                 <Link href={`/journal/${post.slug}`}>
                   <div className="relative h-48 overflow-hidden">
                     <Image
@@ -183,7 +253,7 @@ export default function JournalPage() {
                     </div>
                   </div>
                   <div>
-                    <Button variant="ghost" size="sm" className="p-0 h-auto" asChild>
+                    <Button variant="ghost" size="sm" className="p-0 h-auto js-hover" asChild>
                       <Link href={`/journal/${post.slug}`}>
                         Read more <ArrowRight className="ml-1 h-4 w-4" />
                       </Link>
@@ -197,19 +267,19 @@ export default function JournalPage() {
           {/* Pagination */}
           <div className="flex justify-center mt-12">
             <div className="flex items-center gap-2">
-              <Button variant="outline" size="sm" disabled className="organic-shape bg-transparent">
+              <Button variant="outline" size="sm" disabled className="organic-shape bg-transparent js-hover">
                 Previous
               </Button>
-              <Button variant="default" size="sm" className="organic-shape">
+              <Button variant="default" size="sm" className="organic-shape js-hover">
                 1
               </Button>
-              <Button variant="outline" size="sm" className="organic-shape bg-transparent">
+              <Button variant="outline" size="sm" className="organic-shape bg-transparent js-hover">
                 2
               </Button>
-              <Button variant="outline" size="sm" className="organic-shape bg-transparent">
+              <Button variant="outline" size="sm" className="organic-shape bg-transparent js-hover">
                 3
               </Button>
-              <Button variant="outline" size="sm" className="organic-shape bg-transparent">
+              <Button variant="outline" size="sm" className="organic-shape bg-transparent js-hover">
                 Next
               </Button>
             </div>
@@ -221,14 +291,11 @@ export default function JournalPage() {
       <section className="py-16 md:py-24 bg-primary/5 leaf-pattern">
         <div className="container px-4">
           <div className="max-w-2xl mx-auto text-center">
-            <h2 className="font-serif text-3xl md:text-4xl font-bold mb-4">Stay Updated</h2>
+            <h2 className="font-serif text-3xl md:text-4xl font-bold mb-4 js-section-title">Stay Updated</h2>
             <p className="text-muted-foreground mb-8">
               Get the latest articles, tips, and inspiration delivered to your inbox
             </p>
-            <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
-              <Input type="email" placeholder="Enter your email" className="bg-background organic-shape" />
-              <Button className="organic-shape">Subscribe</Button>
-            </div>
+            <NewsletterSignup />
           </div>
         </div>
       </section>

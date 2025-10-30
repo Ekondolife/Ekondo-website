@@ -3,17 +3,25 @@
 import { Calendar, Clock, MapPin, Users } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
-import { useMemo, useState } from "react"
+import { useMemo, useState, useEffect, useRef } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { experiences, getFeaturedExperiences } from "@/lib/experiences-data"
+import { gsap } from "gsap"
+import { ScrollTrigger } from "gsap/ScrollTrigger"
+
+gsap.registerPlugin(ScrollTrigger)
 
 export default function ExperiencePage() {
-
   const [typeFilter, setTypeFilter] = useState<string>("all")
   const [dateSort, setDateSort] = useState<string>("date")
+
+  // Refs for animations
+  const heroRef = useRef<HTMLDivElement>(null)
+  const featuredSectionRef = useRef<HTMLElement>(null)
+  const allExperiencesSectionRef = useRef<HTMLElement>(null)
 
   const featuredExperiences = getFeaturedExperiences()
 
@@ -41,39 +49,258 @@ export default function ExperiencePage() {
     })
 
     return sorted
-  }, [experiences, typeFilter, dateSort])
+  }, [typeFilter, dateSort])
+
+  // Hero section animations - more dramatic entrance
+  useEffect(() => {
+    if (heroRef.current) {
+      const ctx = gsap.context(() => {
+        const tl = gsap.timeline({ defaults: { ease: "power4.out" } })
+        
+        tl.from(".hero-title", {
+          y: 80,
+          opacity: 0,
+          duration: 1,
+          ease: "back.out(1.7)",
+        })
+        .from(".hero-description", {
+          y: 50,
+          opacity: 0,
+          duration: 0.8,
+        }, "-=0.5")
+
+        // Pulse animation for hero text
+        gsap.to(".hero-title", {
+          scale: 1.02,
+          duration: 2.5,
+          repeat: -1,
+          yoyo: true,
+          ease: "sine.inOut",
+        })
+      }, heroRef)
+
+      return () => ctx.revert()
+    }
+  }, [])
+
+  // Featured experiences animations - dramatic reveal
+  useEffect(() => {
+    if (featuredSectionRef.current && featuredExperiences.length > 0) {
+      const ctx = gsap.context(() => {
+        // Section title animation
+        gsap.from(".featured-title", {
+          scrollTrigger: {
+            trigger: ".featured-title",
+            start: "top 85%",
+          },
+          x: -100,
+          opacity: 0,
+          duration: 0.8,
+          ease: "power3.out",
+        })
+
+        // Featured cards with dramatic entrance
+        gsap.from(".featured-card", {
+          scrollTrigger: {
+            trigger: featuredSectionRef.current,
+            start: "top 70%",
+          },
+          scale: 0.8,
+          opacity: 0,
+          y: 100,
+          rotation: -5,
+          duration: 1,
+          stagger: 0.3,
+          ease: "back.out(1.5)",
+        })
+
+        // Continuous subtle animation for featured cards
+        const featuredCards = gsap.utils.toArray<HTMLElement>(".featured-card")
+        featuredCards.forEach((card, index) => {
+          // Floating effect with different delays
+          gsap.to(card, {
+            y: -15,
+            duration: 2.5 + index * 0.3,
+            repeat: -1,
+            yoyo: true,
+            ease: "sine.inOut",
+            delay: index * 0.2,
+          })
+
+          // Enhanced hover effect
+          card.addEventListener("mouseenter", () => {
+            gsap.to(card, {
+              scale: 1.05,
+              y: -20,
+              rotation: 2,
+              duration: 0.4,
+              ease: "power2.out",
+            })
+          })
+
+          card.addEventListener("mouseleave", () => {
+            gsap.to(card, {
+              scale: 1,
+              y: 0,
+              rotation: 0,
+              duration: 0.4,
+              ease: "power2.out",
+            })
+          })
+        })
+      }, featuredSectionRef)
+
+      return () => ctx.revert()
+    }
+  }, [featuredExperiences])
+
+  // All experiences animations - wave effect
+  useEffect(() => {
+    if (allExperiencesSectionRef.current) {
+      const ctx = gsap.context(() => {
+        // Section header animation
+        gsap.from(".all-experiences-header", {
+          scrollTrigger: {
+            trigger: ".all-experiences-header",
+            start: "top 85%",
+          },
+          y: 60,
+          opacity: 0,
+          duration: 0.8,
+          ease: "power3.out",
+        })
+
+        // Filter controls slide in
+        gsap.from(".filter-controls", {
+          scrollTrigger: {
+            trigger: ".filter-controls",
+            start: "top 85%",
+          },
+          x: 100,
+          opacity: 0,
+          duration: 0.8,
+          ease: "power3.out",
+        })
+
+        // Experience cards with wave stagger
+        gsap.from(".experience-card", {
+          scrollTrigger: {
+            trigger: allExperiencesSectionRef.current,
+            start: "top 75%",
+            invalidateOnRefresh: true,
+          },
+          y: 80,
+          opacity: 0,
+          scale: 0.9,
+          duration: 0.7,
+          stagger: {
+            amount: 0.6,
+            from: "start",
+          },
+          ease: "power3.out",
+        })
+
+        // Hover effects for all experience cards
+        const cards = gsap.utils.toArray<HTMLElement>(".experience-card")
+        cards.forEach((card) => {
+          card.addEventListener("mouseenter", () => {
+            gsap.to(card, {
+              y: -12,
+              scale: 1.03,
+              boxShadow: "0 20px 40px rgba(0,0,0,0.15)",
+              duration: 0.3,
+              ease: "power2.out",
+            })
+
+            // Animate the image inside
+            const img = card.querySelector("img")
+            if (img) {
+              gsap.to(img, {
+                scale: 1.1,
+                duration: 0.5,
+                ease: "power2.out",
+              })
+            }
+          })
+
+          card.addEventListener("mouseleave", () => {
+            gsap.to(card, {
+              y: 0,
+              scale: 1,
+              boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
+              duration: 0.3,
+              ease: "power2.out",
+            })
+
+            const img = card.querySelector("img")
+            if (img) {
+              gsap.to(img, {
+                scale: 1,
+                duration: 0.5,
+                ease: "power2.out",
+              })
+            }
+          })
+        })
+
+        // Animate badges on hover
+        const badges = gsap.utils.toArray<HTMLElement>(".experience-card .badge-animate")
+        badges.forEach((badge) => {
+          badge.addEventListener("mouseenter", () => {
+            gsap.to(badge, {
+              scale: 1.15,
+              rotation: 5,
+              duration: 0.2,
+              ease: "back.out(2)",
+            })
+          })
+
+          badge.addEventListener("mouseleave", () => {
+            gsap.to(badge, {
+              scale: 1,
+              rotation: 0,
+              duration: 0.2,
+              ease: "power2.out",
+            })
+          })
+        })
+      }, allExperiencesSectionRef)
+
+      return () => ctx.revert()
+    }
+  }, [allExperiences, typeFilter, dateSort])
 
   return (
     <div className="container px-4 py-8 md:py-12">
       {/* Hero Section */}
-      <div className="text-center mb-12">
-        <h1 className="font-serif text-3xl md:text-4xl font-bold mb-4">Ekondo Experiences</h1>
-        <p className="text-muted-foreground max-w-2xl mx-auto">
+      <div ref={heroRef} className="text-center mb-12">
+        <h1 className="hero-title font-serif text-3xl md:text-4xl font-bold mb-4">Ekondo Experiences</h1>
+        <p className="hero-description text-muted-foreground max-w-2xl mx-auto">
           Looking to connect with your friends, family, colleagues, or community?
           Join our nature-inspired experiences, designed to spark joy and meaningful connection.
         </p>
       </div>
 
       {/* Featured Experiences */}
-      <section className="mb-16">
-        <h2 className="font-serif text-2xl font-bold mb-8">Featured Experiences</h2>
+      <section ref={featuredSectionRef} className="mb-16">
+        <h2 className="featured-title font-serif text-2xl font-bold mb-8">Featured Experiences</h2>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {featuredExperiences.map((experience) => (
-            <Card key={experience.id} className="overflow-hidden border-none shadow-lg">
-              <div className="relative h-64">
+            <Card key={experience.id} className="featured-card overflow-hidden border-none shadow-lg">
+              <div className="relative h-64 overflow-hidden">
                 <Image
                   src={experience.image || "/placeholder.svg"}
                   alt={experience.title}
                   fill
-                  className="object-cover"
+                  className="object-cover transition-transform duration-500"
                 />
                 <div className="absolute top-4 left-4">
-                  <Badge variant="secondary" className="bg-primary text-primary-foreground">
+                  <Badge variant="secondary" className="badge-animate bg-primary text-primary-foreground">
                     Featured
                   </Badge>
                 </div>
                 <div className="absolute top-4 right-4">
-                  <Badge variant="outline" className="bg-background/90">
+                  <Badge variant="outline" className="badge-animate bg-background/90">
                     {experience.type}
                   </Badge>
                 </div>
@@ -119,11 +346,11 @@ export default function ExperiencePage() {
       </section>
 
       {/* All Experiences */}
-      <section>
+      <section ref={allExperiencesSectionRef}>
         <div className="flex flex-col md:flex-row items-start justify-between mb-8 gap-4">
-          <h2 className="font-serif text-2xl font-bold">All Experiences</h2>
+          <h2 className="all-experiences-header font-serif text-2xl font-bold">All Experiences</h2>
 
-          <div className="flex items-center gap-4 w-full md:w-auto">
+          <div className="filter-controls flex items-center gap-4 w-full md:w-auto">
             <Select value={typeFilter} onValueChange={setTypeFilter}>
               <SelectTrigger className="w-full md:w-[180px]">
                 <SelectValue placeholder="Filter by type" />
@@ -152,22 +379,24 @@ export default function ExperiencePage() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {allExperiences.map((experience) => (
-            <Card key={experience.id} className="overflow-hidden border-none shadow-md">
-              <div className="relative h-48">
+            <Card key={experience.id} className="experience-card overflow-hidden border-none shadow-md transition-shadow duration-300">
+              <div className="relative h-48 overflow-hidden">
                 <Image
                   src={experience.image || "/placeholder.svg"}
                   alt={experience.title}
                   fill
-                  className="object-cover"
+                  className="object-cover transition-transform duration-500"
                 />
                 <div className="absolute top-4 right-4">
-                  <Badge variant="outline" className="bg-background/90">
+                  <Badge variant="outline" className="badge-animate bg-background/90">
                     {experience.type}
                   </Badge>
                 </div>
                 {experience.spotsLeft <= 3 && (
                   <div className="absolute bottom-4 left-4">
-                    <Badge variant="destructive">Only {experience.spotsLeft} spots left!</Badge>
+                    <Badge variant="destructive" className="badge-animate">
+                      Only {experience.spotsLeft} spots left!
+                    </Badge>
                   </div>
                 )}
               </div>

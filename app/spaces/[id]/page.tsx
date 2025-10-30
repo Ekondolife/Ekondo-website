@@ -229,8 +229,8 @@ Additional Message: ${formData.message || "None"}`,
       {/* Booking Form Section */}
       <section className="py-12 md:py-16 bg-primary/5 leaf-pattern">
         <div className="container px-4">
-          <div className="max-w-2xl mx-auto">
-            <Card className="border-none shadow-lg organic-shape p-24">
+          <div className="w-full max-w-[90vw] sm:max-w-2xl mx-auto">
+            <Card className="border-none shadow-lg organic-shape p-6 sm:p-24 w-full max-w-[90vw] sm:max-w-2xl mx-auto">
               <CardHeader>
                 <CardTitle className="font-serif text-2xl font-bold">Book {space.name}</CardTitle>
                 <p className="text-muted-foreground">Fill in your details and we'll get back to you within 24 hours</p>

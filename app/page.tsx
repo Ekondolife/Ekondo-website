@@ -1,3 +1,6 @@
+"use client"
+
+import { useEffect } from "react"
 import { ArrowRight } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
@@ -13,9 +16,83 @@ import { PlantDoctorChat } from "@/components/plant-doctor-chat"
 import { AddToCartButton } from "@/components/add-to-cart-button"
 import { getFeaturedExperiences } from "@/lib/experiences-data"
 import { experiences } from "@/lib/experiences-data"
+import gsap from "gsap"
+import { ScrollTrigger } from "gsap/ScrollTrigger"
 
+gsap.registerPlugin(ScrollTrigger)
 
 export default function Home() {
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // On-load hero text
+      gsap.from(".js-hero-title, .js-hero-sub, .js-hero-ctas", {
+        y: 24,
+        opacity: 0,
+        duration: 1.1,
+        ease: "power3.out",
+        stagger: 0.12,
+        delay: 0.1,
+      })
+
+      // Hero image soft scale reveal
+      gsap.fromTo(
+        ".js-hero-image",
+        { scale: 1.08, transformOrigin: "center center" },
+        { scale: 1, duration: 1.6, ease: "power3.out" }
+      )
+
+      // Section headers fade-up on scroll
+      gsap.utils.toArray<HTMLElement>(".js-section-title").forEach((el) => {
+        gsap.from(el, {
+          scrollTrigger: { trigger: el, start: "top 85%" },
+          y: 20,
+          opacity: 0,
+          duration: 0.9,
+          ease: "power3.out",
+        })
+      })
+
+      // Cards smooth rise + blur fade on scroll
+      gsap.utils.toArray<HTMLElement>(".js-card").forEach((el) => {
+        gsap.fromTo(
+          el,
+          { y: 26, opacity: 0, filter: "blur(6px)" },
+          {
+            scrollTrigger: { trigger: el, start: "top 90%" },
+            y: 0,
+            opacity: 1,
+            filter: "blur(0px)",
+            duration: 0.9,
+            ease: "power2.out",
+          }
+        )
+      })
+
+      // Parallax subtle image motion
+      gsap.utils.toArray<HTMLElement>(".js-parallax").forEach((el) => {
+        gsap.to(el, {
+          yPercent: 8,
+          ease: "none",
+          scrollTrigger: { trigger: el, start: "top bottom", scrub: 0.3 },
+        })
+      })
+
+      // Hover micro-interactions for buttons and cards
+      const lift = (selector: string) => {
+        document.querySelectorAll(selector).forEach((el) => {
+          el.addEventListener("mouseenter", () => {
+            gsap.to(el, { y: -2, scale: 1.02, duration: 0.25, ease: "power2.out" })
+          })
+          el.addEventListener("mouseleave", () => {
+            gsap.to(el, { y: 0, scale: 1, duration: 0.25, ease: "power2.out" })
+          })
+        })
+      }
+      lift(".js-hover, .js-card")
+    })
+    return () => ctx.revert()
+  }, [])
+
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
@@ -25,23 +102,23 @@ export default function Home() {
           src="./images/Ekondo-14.JPG"
           alt="Young African woman tending to plants in urban setting"
           fill
-          className="object-cover"
+          className="object-cover js-hero-image js-parallax"
           priority
         />
         <div className="container relative z-20 flex h-full flex-col items-center justify-center text-center px-4">
-          <h1 className="font-sans text-4xl md:text-6xl lg:text-7xl font-bold text-primary mb-6">
+          <h1 className="font-sans text-4xl md:text-6xl lg:text-7xl font-bold text-primary mb-6 js-hero-title">
             Connect to Nature <br className="hidden md:block" />
             and Community
           </h1>
-          <p className="text-lg md:text-xl max-w-2xl mb-8 text-foreground/80">
+          <p className="text-lg md:text-xl max-w-2xl mb-8 text-foreground/80 js-hero-sub">
             Ekondo brings sustainability and wellness through our retail products, immersive experiences, professional
             services, and community spaces.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4">
-            <Button size="lg" asChild className="btn-gradient organic-shape">
+          <div className="flex flex-col sm:flex-row gap-4 js-hero-ctas">
+            <Button size="lg" asChild className="btn-gradient organic-shape js-hover">
               <Link href="/retail">Explore Our Products</Link>
             </Button>
-            <Button size="lg" variant="outline" asChild className="btn-gradient bg-transparent organic-shape">
+            <Button size="lg" variant="outline" asChild className="btn-gradient bg-transparent organic-shape js-hover">
               <Link href="/about">Our Story</Link>
             </Button>
           </div>
@@ -51,26 +128,26 @@ export default function Home() {
       {/* Four Branches Section */}
       <section className="py-16 md:py-24 leaf-pattern-dense">
         <div className="container px-4">
-          <h2 className="font-serif text-3xl md:text-4xl font-bold text-center mb-12">Discover Our Four Branches</h2>
+          <h2 className="font-serif text-3xl md:text-4xl font-bold text-center mb-12 js-section-title">Discover Our Four Branches</h2>
 
           <Tabs defaultValue="retail" className="w-full">
             <TabsList className="grid grid-cols-2 md:grid-cols-4 h-auto mb-8 bg-primary/5">
-              <TabsTrigger value="retail" className="py-3 data-[state=active]:bg-primary/20 btn-gradient organic-shape">
+              <TabsTrigger value="retail" className="py-3 data-[state=active]:bg-primary/20 btn-gradient organic-shape js-hover">
                 Retail
               </TabsTrigger>
               <TabsTrigger
                 value="experience"
-                className="py-3 data-[state=active]:bg-primary/20 btn-gradient organic-shape"
+                className="py-3 data-[state=active]:bg-primary/20 btn-gradient organic-shape js-hover"
               >
                 Experience
               </TabsTrigger>
               <TabsTrigger
                 value="services"
-                className="py-3 data-[state=active]:bg-primary/20 btn-gradient organic-shape"
+                className="py-3 data-[state=active]:bg-primary/20 btn-gradient organic-shape js-hover"
               >
                 Services
               </TabsTrigger>
-              <TabsTrigger value="spaces" className="py-3 data-[state=active]:bg-primary/20 btn-gradient organic-shape">
+              <TabsTrigger value="spaces" className="py-3 data-[state=active]:bg-primary/20 btn-gradient organic-shape js-hover">
                 Spaces
               </TabsTrigger>
             </TabsList>
@@ -83,36 +160,30 @@ export default function Home() {
                     alt="Young African woman with beautiful plants"
                     width={800}
                     height={600}
-                    className="object-cover aspect-[4/3] image-clean"
+                    className="object-cover aspect-[4/3] image-clean js-parallax"
                   />
                 </div>
                 <div>
-                  <h3 className="font-serif text-2xl md:text-3xl font-bold mb-4">Handcrafted Products</h3>
+                  <h3 className="font-serif text-2xl md:text-3xl font-bold mb-4 js-section-title">Handcrafted Products</h3>
                   <p className="mb-6 text-muted-foreground">
                     Discover our collection of handcrafted pots, plants, lighting, tools, and accessories. Each piece is
                     thoughtfully designed to bring nature into your space while supporting sustainable practices.
                   </p>
                   <ul className="space-y-2 mb-6">
                     <li className="flex items-center gap-2">
-                      <div className="h-2 w-2 rounded-full bg-primary animate-float"></div>
+                      <div className="h-2 w-2 rounded-full bg-primary"></div>
                       <span>Ethically sourced materials</span>
                     </li>
                     <li className="flex items-center gap-2">
-                      <div
-                        className="h-2 w-2 rounded-full bg-primary animate-float"
-                        style={{ animationDelay: "1s" }}
-                      ></div>
+                      <div className="h-2 w-2 rounded-full bg-primary"></div>
                       <span>Plant and pot pairing suggestions</span>
                     </li>
                     <li className="flex items-center gap-2">
-                      <div
-                        className="h-2 w-2 rounded-full bg-primary animate-float"
-                        style={{ animationDelay: "2s" }}
-                      ></div>
+                      <div className="h-2 w-2 rounded-full bg-primary"></div>
                       <span>Monthly subscription options</span>
                     </li>
                   </ul>
-                  <Button asChild className="btn-gradient organic-shape">
+                  <Button asChild className="btn-gradient organic-shape js-hover">
                     <Link href="/retail">
                       Shop Now <ArrowRight className="ml-2 h-4 w-4" />
                     </Link>
@@ -129,36 +200,30 @@ export default function Home() {
                     alt="Young African people participating in plant workshop"
                     width={800}
                     height={600}
-                    className="object-cover aspect-[4/3] image-clean"
+                    className="object-cover aspect-[4/3] image-clean js-parallax"
                   />
                 </div>
                 <div>
-                  <h3 className="font-serif text-2xl md:text-3xl font-bold mb-4">Immersive Experiences</h3>
+                  <h3 className="font-serif text-2xl md:text-3xl font-bold mb-4 js-section-title">Immersive Experiences</h3>
                   <p className="mb-6 text-muted-foreground">
                     Join our plant games, workshops, creative events, and collaborations. Our experiences are designed
                     to connect you with nature and community through hands-on learning and creative expression.
                   </p>
                   <ul className="space-y-2 mb-6">
                     <li className="flex items-center gap-2">
-                      <div className="h-2 w-2 rounded-full bg-primary animate-float"></div>
+                      <div className="h-2 w-2 rounded-full bg-primary"></div>
                       <span>Workshops and creative events</span>
                     </li>
                     <li className="flex items-center gap-2">
-                      <div
-                        className="h-2 w-2 rounded-full bg-primary animate-float"
-                        style={{ animationDelay: "1s" }}
-                      ></div>
+                      <div className="h-2 w-2 rounded-full bg-primary"></div>
                       <span>Plant care and styling classes</span>
                     </li>
                     <li className="flex items-center gap-2">
-                      <div
-                        className="h-2 w-2 rounded-full bg-primary animate-float"
-                        style={{ animationDelay: "2s" }}
-                      ></div>
+                      <div className="h-2 w-2 rounded-full bg-primary"></div>
                       <span>Community gatherings</span>
                     </li>
                   </ul>
-                  <Button asChild className="btn-gradient organic-shape">
+                  <Button asChild className="btn-gradient organic-shape js-hover">
                     <Link href="/experience">
                       Explore Experiences <ArrowRight className="ml-2 h-4 w-4" />
                     </Link>
@@ -175,36 +240,30 @@ export default function Home() {
                     alt="Professional working on plants maintenance"
                     width={800}
                     height={600}
-                    className="object-cover aspect-[4/3] image-clean"
+                    className="object-cover aspect-[4/3] image-clean js-parallax"
                   />
                 </div>
                 <div>
-                  <h3 className="font-serif text-2xl md:text-3xl font-bold mb-4">Professional Services</h3>
+                  <h3 className="font-serif text-2xl md:text-3xl font-bold mb-4 js-section-title">Professional Services</h3>
                   <p className="mb-6 text-muted-foreground">
                     Our expert team offers plant maintenance, landscaping, installations, and home styling services. We
                     bring our knowledge and passion to transform your spaces with the beauty and benefits of nature.
                   </p>
                   <ul className="space-y-2 mb-6">
                     <li className="flex items-center gap-2">
-                      <div className="h-2 w-2 rounded-full bg-primary animate-float"></div>
+                      <div className="h-2 w-2 rounded-full bg-primary"></div>
                       <span>Plant maintenance and care</span>
                     </li>
                     <li className="flex items-center gap-2">
-                      <div
-                        className="h-2 w-2 rounded-full bg-primary animate-float"
-                        style={{ animationDelay: "1s" }}
-                      ></div>
+                      <div className="h-2 w-2 rounded-full bg-primary"></div>
                       <span>Landscape design and installation</span>
                     </li>
                     <li className="flex items-center gap-2">
-                      <div
-                        className="h-2 w-2 rounded-full bg-primary animate-float"
-                        style={{ animationDelay: "2s" }}
-                      ></div>
+                      <div className="h-2 w-2 rounded-full bg-primary"></div>
                       <span>Biophilic space styling</span>
                     </li>
                   </ul>
-                  <Button asChild className="btn-gradient organic-shape">
+                  <Button asChild className="btn-gradient organic-shape js-hover">
                     <Link href="/services">
                       Book a Service <ArrowRight className="ml-2 h-4 w-4" />
                     </Link>
@@ -221,36 +280,30 @@ export default function Home() {
                     alt="Ekondo Park Event"
                     width={800}
                     height={600}
-                    className="object-cover aspect-[4/3] image-clean"
+                    className="object-cover aspect-[4/3] image-clean js-parallax"
                   />
                 </div>
                 <div>
-                  <h3 className="font-serif text-2xl md:text-3xl font-bold mb-4">Community Spaces</h3>
+                  <h3 className="font-serif text-2xl md:text-3xl font-bold mb-4 js-section-title">Community Spaces</h3>
                   <p className="mb-6 text-muted-foreground">
                     Visit our physical locations including Ekondo Park, pop-up shops, and wellness sanctuaries. Our
                     spaces are designed to foster community, creativity, and connection with nature.
                   </p>
                   <ul className="space-y-2 mb-6">
                     <li className="flex items-center gap-2">
-                      <div className="h-2 w-2 rounded-full bg-primary animate-float"></div>
+                      <div className="h-2 w-2 rounded-full bg-primary"></div>
                       <span>Ekondo Park - our flagship location</span>
                     </li>
                     <li className="flex items-center gap-2">
-                      <div
-                        className="h-2 w-2 rounded-full bg-primary animate-float"
-                        style={{ animationDelay: "1s" }}
-                      ></div>
+                      <div className="h-2 w-2 rounded-full bg-primary"></div>
                       <span>Pop-up shops and installations</span>
                     </li>
                     <li className="flex items-center gap-2">
-                      <div
-                        className="h-2 w-2 rounded-full bg-primary animate-float"
-                        style={{ animationDelay: "2s" }}
-                      ></div>
+                      <div className="h-2 w-2 rounded-full bg-primary"></div>
                       <span>Rentable community spaces</span>
                     </li>
                   </ul>
-                  <Button asChild className="btn-gradient organic-shape">
+                  <Button asChild className="btn-gradient organic-shape js-hover">
                     <Link href="/spaces">
                       Discover Our Spaces <ArrowRight className="ml-2 h-4 w-4" />
                     </Link>
@@ -266,8 +319,8 @@ export default function Home() {
       <section className="py-16 md:py-24">
         <div className="container px-4">
           <div className="flex flex-col md:flex-row md:items-center justify-between mb-12">
-            <h2 className="font-serif text-3xl md:text-4xl font-bold">Featured Products</h2>
-            <Link href="/retail" className="text-primary hover:underline mt-4 md:mt-0">
+            <h2 className="font-serif text-3xl md:text-4xl font-bold js-section-title">Featured Products</h2>
+            <Link href="/retail" className="text-primary hover:underline mt-4 md:mt-0 js-hover">
               View all products <ArrowRight className="inline-block ml-1 h-4 w-4" />
             </Link>
           </div>
@@ -303,7 +356,7 @@ export default function Home() {
                 price: 9000,
               },
             ].map((item) => (
-              <Card key={item.id} className="overflow-hidden border-none shadow-md card-organic">
+              <Card key={item.id} className="overflow-hidden border-none shadow-md card-organic js-card js-hover">
                 <div className="relative aspect-square">
                   <Image src={item.image || "/placeholder.svg"} alt={item.name} fill className="object-cover" />
                 </div>
@@ -330,15 +383,15 @@ export default function Home() {
       <section className="py-16 md:py-24 leaf-pattern-dense">
         <div className="container px-4">
           <div className="flex flex-col md:flex-row md:items-center justify-between mb-12">
-            <h2 className="font-serif text-3xl md:text-4xl font-bold">Upcoming Experiences</h2>
-            <Link href="/experience" className="text-primary hover:underline mt-4 md:mt-0">
+            <h2 className="font-serif text-3xl md:text-4xl font-bold js-section-title">Upcoming Experiences</h2>
+            <Link href="/experience" className="text-primary hover:underline mt-4 md:mt-0 js-hover">
               View all experiences <ArrowRight className="inline-block ml-1 h-4 w-4" />
             </Link>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {getFeaturedExperiences().slice(0, 3).map((item) => (
-              <Card key={item.id} className="overflow-hidden border-none shadow-md card-organic">
+              <Card key={item.id} className="overflow-hidden border-none shadow-md card-organic js-card js-hover">
                 <div className="relative h-48">
                   <Image src={item.image || "/placeholder.svg"} alt={item.title} fill className="object-cover" />
                 </div>
@@ -351,7 +404,7 @@ export default function Home() {
                   </div>
                   <h3 className="font-medium text-lg mb-1">{item.title}</h3>
                   <p className="text-muted-foreground text-sm mb-4">{item.description}</p>
-                  <Button size="sm" className="w-full btn-gradient organic-shape">
+                  <Button size="sm" className="w-full btn-gradient organic-shape js-hover">
                     <Link href={`/experience/${item.id}`}>Book Now</Link>
                   </Button>
                 </CardContent>
@@ -364,7 +417,7 @@ export default function Home() {
       {/* Testimonials Section */}
       <section className="py-16 md:py-24">
         <div className="container px-4">
-          <h2 className="font-serif text-3xl md:text-4xl font-bold text-center mb-12">What Our Community Says</h2>
+          <h2 className="font-serif text-3xl md:text-4xl font-bold text-center mb-12 js-section-title">What Our Community Says</h2>
           <TestimonialCarousel />
         </div>
       </section>
@@ -372,15 +425,20 @@ export default function Home() {
       {/* Blog Preview Section */}
       <section className="py-16 md:py-24 leaf-pattern-dense">
         <div className="container px-4">
-          <div className="flex flex-col md:flex-row md:items-center justify-between mb-12">
-            <h2 className="font-serif text-3xl md:text-4xl font-bold">From Our Journal</h2>
-            <Link
-              href="/journal"
-              className="btn-gradient organic-shape px-6 py-3 font-semibold text-white text-lg inline-block mt-6"
-            >
-              Read More
-            </Link>
-          </div>
+        <div className="flex md:flex-row items-center md:items-center justify-between mb-12">
+          <h2 className="font-serif text-2xl md:text-4xl font-bold js-section-title">From Our Journal</h2>
+          <Link
+            href="/journal"
+            className="
+              btn-gradient organic-shape px-6 py-3 font-semibold text-white text-lg
+              inline-block js-hover
+              w-auto max-w-[160px] mx-auto md:mx-0
+            "
+          >
+            Read More
+          </Link>
+        </div>
+
           <BlogPreview />
         </div>
       </section>
@@ -388,13 +446,13 @@ export default function Home() {
       {/* Instagram Feed Section */}
       <section className="py-16 md:py-24">
         <div className="container px-4">
-          <h2 className="font-serif text-3xl md:text-4xl font-bold text-center mb-4">Follow Our Journey</h2>
+          <h2 className="font-serif text-3xl md:text-4xl font-bold text-center mb-4 js-section-title">Follow Our Journey</h2>
           <p className="text-center text-muted-foreground mb-12 max-w-2xl mx-auto">
             Join our community on Instagram and share your Ekondo experiences with us.
           </p>
           <InstagramFeed />
           <div className="text-center mt-8">
-            <Button variant="outline" size="lg" asChild className="btn-gradient bg-transparent organic-shape">
+            <Button variant="outline" size="lg" asChild className="btn-gradient bg-transparent organic-shape js-hover">
               <a href="https://www.instagram.com/ekondolife/" target="_blank" rel="noopener noreferrer">
                 Follow @ekondo
               </a>
@@ -410,7 +468,7 @@ export default function Home() {
       <section className="py-16 md:py-24 bg-primary/5 leaf-pattern">
         <div className="container px-4">
           <div className="max-w-2xl mx-auto text-center">
-            <h2 className="font-serif text-3xl md:text-4xl font-bold mb-4">Stay Connected</h2>
+            <h2 className="font-serif text-3xl md:text-4xl font-bold mb-4 js-section-title">Stay Connected</h2>
             <p className="text-muted-foreground mb-8">
               Subscribe to our newsletter for exclusive offers, events, and sustainability tips.
             </p>

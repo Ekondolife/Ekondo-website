@@ -14,7 +14,7 @@ Ticket Types:
     ticketTypes: [
       { name: "Early Bird", price: 5000, description: "Limited discount for the fastest hands." },
       { name: "Entry Token", price: 8000, description: "Basic access + starter tokens." },
-      { name: "Experience Pass", price: 20000, description: "More tokens to dive into pottery, tie & dye, painting etc." },
+      { name: "Experience Pass", price: 20000, description: "More tokens to dive into pottery." },
     ],
     date: "December 2025",
     time: "3:00PM",

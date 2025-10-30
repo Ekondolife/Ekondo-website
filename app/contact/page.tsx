@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -11,6 +11,10 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { MapPin, Phone, Mail, Clock } from "lucide-react"
 import UTMFormSync from "@/components/utm-form-sync"
+import gsap from "gsap"
+import { ScrollTrigger } from "gsap/ScrollTrigger"
+
+gsap.registerPlugin(ScrollTrigger)
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -22,6 +26,65 @@ export default function ContactPage() {
   })
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Hero load
+      gsap.from([".js-hero-title", ".js-hero-sub"], {
+        y: 20,
+        opacity: 0,
+        duration: 1,
+        ease: "power3.out",
+        stagger: 0.12,
+      })
+      gsap.fromTo(
+        ".js-hero-image",
+        { scale: 1.08 },
+        { scale: 1, duration: 1.4, ease: "power3.out" }
+      )
+
+      // Section titles
+      gsap.utils.toArray<HTMLElement>(".js-section-title").forEach((el) => {
+        gsap.from(el, {
+          scrollTrigger: { trigger: el, start: "top 85%" },
+          y: 20,
+          opacity: 0,
+          duration: 0.9,
+          ease: "power3.out",
+        })
+      })
+
+      // Cards and form container
+      gsap.utils.toArray<HTMLElement>(".js-card").forEach((el) => {
+        gsap.fromTo(
+          el,
+          { y: 26, opacity: 0, filter: "blur(6px)" },
+          {
+            scrollTrigger: { trigger: el, start: "top 92%" },
+            y: 0,
+            opacity: 1,
+            filter: "blur(0px)",
+            duration: 0.9,
+            ease: "power2.out",
+          }
+        )
+      })
+
+      // Hover micro-lift
+      const lift = (selector: string) => {
+        document.querySelectorAll(selector).forEach((el) => {
+          el.addEventListener("mouseenter", () => {
+            gsap.to(el, { y: -2, scale: 1.02, duration: 0.25, ease: "power2.out" })
+          })
+          el.addEventListener("mouseleave", () => {
+            gsap.to(el, { y: 0, scale: 1, duration: 0.25, ease: "power2.out" })
+          })
+        })
+      }
+      lift(".js-hover, .js-card")
+    })
+    return () => ctx.revert()
+  }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -109,12 +172,12 @@ export default function ContactPage() {
           src="/images/two women.JPG"
           alt="Contact Ekondo"
           fill
-          className="object-cover"
+          className="object-cover js-hero-image"
           priority
         />
         <div className="container relative z-20 flex h-full flex-col items-center justify-center text-center px-4">
-          <h1 className="font-serif text-4xl md:text-6xl font-bold text-primary mb-6">Get in Touch</h1>
-          <p className="text-lg md:text-xl max-w-2xl text-foreground/80">
+          <h1 className="font-serif text-4xl md:text-6xl font-bold text-primary mb-6 js-hero-title">Get in Touch</h1>
+          <p className="text-lg md:text-xl max-w-2xl text-foreground/80 js-hero-sub">
             We'd love to hear from you. Let's grow something beautiful together.
           </p>
         </div>
@@ -125,8 +188,8 @@ export default function ContactPage() {
         <div className="container px-4">
           <div className="grid lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
             {/* Contact Form */}
-            <div>
-              <h2 className="font-serif text-3xl font-bold mb-6">Send Us a Message</h2>
+            <div className="js-card">
+              <h2 className="font-serif text-3xl font-bold mb-6 js-section-title">Send Us a Message</h2>
               <form onSubmit={handleSubmit} className="space-y-6">
                 <UTMFormSync />
                 <input type="hidden" name="UTM_SOURCE" id="utm_source" />
@@ -208,7 +271,7 @@ export default function ContactPage() {
                   </div>
                 )}
 
-                <Button type="submit" disabled={loading} className="w-full organic-shape" size="lg">
+                <Button type="submit" disabled={loading} className="w-full organic-shape js-hover" size="lg">
                   {loading ? "Sending..." : "Send Message"}
                 </Button>
               </form>
@@ -217,10 +280,10 @@ export default function ContactPage() {
             {/* Contact Info */}
             <div className="space-y-8">
               <div>
-                <h2 className="font-serif text-3xl font-bold mb-6">Our Locations</h2>
+                <h2 className="font-serif text-3xl font-bold mb-6 js-section-title">Our Locations</h2>
                 <div className="space-y-6">
                   {locations.map((location, index) => (
-                    <Card key={index} className="border-none shadow-md organic-shape">
+                    <Card key={index} className="border-none shadow-md organic-shape js-card">
                       <CardContent className="p-6">
                         <h3 className="font-serif text-xl font-bold mb-4">{location.city}</h3>
                         <div className="space-y-3 text-sm">
@@ -247,7 +310,7 @@ export default function ContactPage() {
                 </div>
               </div>
 
-              <Card className="border-none shadow-md organic-shape bg-primary/5">
+              <Card className="border-none shadow-md organic-shape bg-primary/5 js-card js-hover">
                 <CardContent className="p-6">
                   <h3 className="font-serif text-xl font-bold mb-4">Quick Response</h3>
                   <p className="text-sm text-muted-foreground mb-4">

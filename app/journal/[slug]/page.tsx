@@ -23,6 +23,11 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
         <p>Living in Lagos can feel fast-paced and hectic, but adding plants to your apartment or office is one of the simplest ways to create calm, beauty, and fresh air. 
         At Ekondo Life, we specialize in low-maintenance indoor plants for Nigeria, carefully chosen for their ability to adapt to Lagos’s humidity, heat, and small living spaces.</p>
 
+        <figure>
+          <img src="/images/fine plant image.webp" alt="Lush indoor greenery" />
+          <figcaption>Bring calm to your space with resilient, low-maintenance plants.</figcaption>
+        </figure>
+
         <h2 className="text-2xl font-bold m-32">Why Low-Maintenance Plants Are Ideal for Lagos Apartments</h2>
         <ul>
           <li>Adaptable to Nigeria’s climate — handle humidity, heat, and dusty harmattan air.</li>
@@ -42,6 +47,11 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
         <p><strong>Light & Placement:</strong> Medium to bright indirect light.<br/>
         <strong>Care Tips:</strong> Water when topsoil feels dry; leaves store water.<br/>
         <strong>Price at Ekondo Life:</strong> ₦15,000 – ₦25,000</p>
+
+        <figure>
+          <img src="/images/sans img.jpg" alt="Stylish pots and indoor plants" />
+          <figcaption>Style your plants with our handcrafted pots.</figcaption>
+        </figure>
 
         <h3>3. Peace Lily (Spathiphyllum)</h3>
         <p><strong>Light & Placement:</strong> Bright, indirect light.<br/>
@@ -97,6 +107,11 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
 
         <p>Anyway, as a quick refresher, <strong>photosynthesis</strong> is the process by which plants use sunlight, water, and oxygen to make their food so that they can have energy, keep growing, and not die.</p>
 
+        <figure>
+          <img src="/images/Ekondo Products/Size_B_Spider_Plant_in_a_Red_Chidi-scaled.webp" alt="Spider plant soaking up light" />
+          <figcaption>Right light makes all the difference.</figcaption>
+        </figure>
+
         <p>Therefore, before ordering your lovely plants from Ekondo and starting your journey to becoming an awesome plant parent, we recommend that you first learn how to give plants the necessary amount of light they need for survival.</p>
 
         <h2>Why do plants need light?</h2>
@@ -107,13 +122,17 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
           <li>Begin to drop their leaves.</li>
           <li>Get sunburnt if the light is too much.</li>
         </ul>
-        <p>So, if you’ve never been able to keep a plant alive, chances are you’re either giving it too little light or too much light. Knowing what type and quantity of light you have in your space is requisite for being a good plant parent. If you don’t know how to do that or are confused, don’t worry — it’s not as tricky as it sounds. Besides, you’ve got an excellent instructor. 😉</p>
 
         <h2>What are the types of light?</h2>
         <p>We all live in different settings. Some people live in spaces with bright light and lots of windows, while others may live in places with a lot less light. To make it easier, we group light into two categories: <strong>Direct Light</strong> and <strong>Indirect Light</strong>.</p>
 
         <h3>Direct Light</h3>
         <p>This type of light literally touches the place you want to keep your plant. An easy way to tell is by putting your hand in between the window and your plant (or any object) during the hottest time of the day. If you can feel the sun’s rays directly on your skin, it’s direct light.</p>
+
+        <figure>
+          <img src="/images/plant lighting.JPEG" alt="Soft light through a window and plants" />
+          <figcaption>Observe how light moves across your space.</figcaption>
+        </figure>
 
         <h3>Indirect Light</h3>
         <p>This is reflected light — bright light even though no direct sunlight hits anything in that space. Most houseplants prefer indirect light, which is why they’re great for indoors. Indirect light can be divided into two extra categories:</p>
@@ -195,7 +214,11 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
 
         <h2>1) Light Matters a Lot</h2>
         <p>Determining if your plant is receiving the right amount of light is crucial for its overall health and growth. Each plant is unique, and the ideal lighting conditions can vary. By observing your plant’s response and adjusting its placement you can ensure that it receives the optimal amount of light. Place your plant where diffused rays reach it when your curtains or blinds are opened. Experiment with various spots until you find the best fit for each plant.</p>
-        <div class="cta-center"><a class="cta-button" style="background:#22c55e;" href="https://wa.me/2348176267792?text=Hi%20Ekondo%2C%20I%20want%20to%20determine%20the%20light%20in%20my%20space" target="_blank" rel="noopener noreferrer">🌱 Determine Your Light</a></div>
+
+        <figure>
+          <img src="/images/fine plant image.webp" alt="Cozy desk with plants" />
+          <figcaption>Create small rituals with plants on your desk or shelf.</figcaption>
+        </figure>
 
         <h2>2) Water Wisely</h2>
         <p>Overwatering is one of the most common mistakes new plant parents make. It’s essential to find the right balance. Before watering, check the soil moisture level by inserting your finger about an inch deep. If it feels dry, it’s time to water; if it’s still moist, wait a little longer. Use a bottle or a cup and gradually pour water in a circular motion into the soil until water drains from underneath. Avoid pouring too quickly or forcefully, as water may run through the pot without fully hydrating the soil.</p>
@@ -203,7 +226,11 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
 
         <h2>3) Let Us Spray</h2>
         <p>Ekondo essential mix is a versatile tool in plant care, providing effective pest control, healthier leaves and fragrance. Spraying your plants with Ekondo essential mix can boost their overall health and vitality. It contains compounds that act as growth stimulants, promoting healthy foliage, root development, and overall growth. Mist in the morning so leaves dry before evening. Adjust the nozzle to produce a fine mist; stand a few inches away and cover both sides of the leaves—especially undersides where pests hide.</p>
-        <div class="cta-center"><a class="cta-button" style="background:#22c55e;" href="https://wa.me/2348176267792?text=Hi%20Ekondo%2C%20I%20want%20to%20buy%20a%20spray%20bottle%20%2F%20essential%20mix" target="_blank" rel="noopener noreferrer">✨ Shop Spray Bottle</a></div>
+
+        <figure>
+          <img src="/images/Ekondo Products/Size_B_Spider_Plant_in_a_Red_Chidi-scaled.webp" alt="Healthy plant on window sill" />
+          <figcaption>Small, consistent care goes a long way.</figcaption>
+        </figure>
 
         <h2>4) Consistency Is Key</h2>
         <p>Establish a regular watering and maintenance routine. Create a schedule based on your plant’s needs and stick to it. Observe how your plant responds and adjust if necessary. Remember, it’s better to underwater than overwater—most plants recover from slight dehydration, but overwatering can lead to root rot.</p>
@@ -309,6 +336,29 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
                 </div>
               </CardContent>
             </Card>
+        </div>
+        {/* Recommendations */}
+        <div className="mt-16">
+          <h2 className="text-2xl font-bold mb-6 text-center font-serif">Recommended Articles</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+            {Object.entries(postsBySlug)
+              .filter(([slug]) => slug !== params.slug)
+              .slice(0, 2)
+              .map(([slug, rec]) => (
+                <Card key={slug} className="border-none shadow-md organic-shape overflow-hidden group">
+                  <Link href={`/journal/${slug}`}>
+                    <div className="relative h-56 w-full overflow-hidden">
+                      <Image src={rec.image || "/placeholder.svg"} alt={rec.title} fill className="object-cover group-hover:scale-105 transition-transform duration-300" />
+                    </div>
+                    <CardContent className="p-6 flex flex-col justify-center items-center">
+                      <h3 className="font-serif text-lg font-bold mb-2 group-hover:text-primary transition-colors text-center">{rec.title}</h3>
+                      <p className="text-muted-foreground text-sm mb-2 line-clamp-2">{rec.excerpt}</p>
+                      <span className="text-xs text-muted-foreground">{rec.author}</span>
+                    </CardContent>
+                  </Link>
+                </Card>
+              ))}
+          </div>
         </div>
       </article>
     </div>

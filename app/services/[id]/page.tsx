@@ -235,8 +235,8 @@ export default function ServiceDetailPage({ params }: { params: { id: string } }
       {/* Booking Form Section */}
       <section className="py-12 md:py-16 bg-primary/5 leaf-pattern">
         <div className="container px-4">
-          <div className="max-w-2xl mx-auto">
-            <Card className="border-none shadow-lg organic-shape p-24">
+          <div className="w-full max-w-[90vw] sm:max-w-2xl mx-auto">
+            <Card className="border-none shadow-lg organic-shape p-6 sm:p-24 w-full max-w-[90vw] sm:max-w-2xl mx-auto">
               <CardHeader>
                 <CardTitle className="font-serif text-xl font-bold">Book {service.title}</CardTitle>
                 <p className="text-muted-foreground">Fill in your details to schedule your consultation</p>

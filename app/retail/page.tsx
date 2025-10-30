@@ -3,7 +3,7 @@
 import { Filter, Loader2 } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -14,6 +14,10 @@ import { Separator } from "@/components/ui/separator"
 import { AddToCartButton } from "@/components/add-to-cart-button"
 import { Badge } from "@/components/ui/badge"
 import { supabase } from "@/lib/supabaseClient"
+import { gsap } from "gsap"
+import { ScrollTrigger } from "gsap/ScrollTrigger"
+
+gsap.registerPlugin(ScrollTrigger)
 
 const plantTypeOptions = [
   "Air purifying plants",
@@ -29,6 +33,13 @@ export default function RetailPage() {
   const [selectedPriceRanges, setSelectedPriceRanges] = useState<string[]>([])
   const [selectedPlantTypes, setSelectedPlantTypes] = useState<string[]>([])
   const [sortBy, setSortBy] = useState("featured")
+
+  // Refs for GSAP animations
+  const heroRef = useRef<HTMLDivElement>(null)
+  const heroContentRef = useRef<HTMLDivElement>(null)
+  const filterSidebarRef = useRef<HTMLDivElement>(null)
+  const productGridRef = useRef<HTMLDivElement>(null)
+  const trustBadgesRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     async function fetchProducts() {
@@ -51,12 +62,136 @@ export default function RetailPage() {
     fetchProducts()
   }, [])
 
+  // Hero section animations
+  useEffect(() => {
+    if (heroContentRef.current) {
+      const ctx = gsap.context(() => {
+        const tl = gsap.timeline({ defaults: { ease: "power3.out" } })
+        
+        tl.from(".hero-badge", {
+          opacity: 0,
+          y: 30,
+          duration: 0.6,
+        })
+        .from(".hero-title", {
+          opacity: 0,
+          y: 40,
+          duration: 0.8,
+        }, "-=0.3")
+        .from(".hero-description", {
+          opacity: 0,
+          y: 30,
+          duration: 0.6,
+        }, "-=0.4")
+        .from(".hero-buttons", {
+          opacity: 0,
+          y: 20,
+          duration: 0.6,
+        }, "-=0.3")
+
+        // Floating animation for hero section
+        gsap.to(heroRef.current, {
+          y: -10,
+          duration: 2,
+          repeat: -1,
+          yoyo: true,
+          ease: "power1.inOut",
+        })
+      }, heroContentRef)
+
+      return () => ctx.revert()
+    }
+  }, [])
+
+  // Filter sidebar animation
+  useEffect(() => {
+    if (filterSidebarRef.current && !loading) {
+      const ctx = gsap.context(() => {
+        gsap.from(filterSidebarRef.current, {
+          scrollTrigger: {
+            trigger: filterSidebarRef.current,
+            start: "top 80%",
+          },
+          x: -50,
+          opacity: 0,
+          duration: 0.8,
+          ease: "power3.out",
+        })
+      }, filterSidebarRef)
+
+      return () => ctx.revert()
+    }
+  }, [loading])
+
+  // Product grid animations
+  useEffect(() => {
+    if (productGridRef.current && !loading && products.length > 0) {
+      const ctx = gsap.context(() => {
+        gsap.from(".product-card", {
+          scrollTrigger: {
+            trigger: productGridRef.current,
+            start: "top 80%",
+            invalidateOnRefresh: true,
+          },
+          y: 60,
+          opacity: 0,
+          duration: 0.6,
+          stagger: 0.1,
+          ease: "power3.out",
+        })
+
+        // Hover animations for product cards
+        const cards = gsap.utils.toArray<HTMLElement>(".product-card")
+        cards.forEach((card) => {
+          card.addEventListener("mouseenter", () => {
+            gsap.to(card, {
+              y: -8,
+              scale: 1.02,
+              duration: 0.3,
+              ease: "power2.out",
+            })
+          })
+
+          card.addEventListener("mouseleave", () => {
+            gsap.to(card, {
+              y: 0,
+              scale: 1,
+              duration: 0.3,
+              ease: "power2.out",
+            })
+          })
+        })
+      }, productGridRef)
+
+      return () => ctx.revert()
+    }
+  }, [loading, products, selectedCategories, selectedPriceRanges, selectedPlantTypes, sortBy])
+
+  // Trust badges animation
+  useEffect(() => {
+    if (trustBadgesRef.current) {
+      const ctx = gsap.context(() => {
+        gsap.from(".trust-badge", {
+          scrollTrigger: {
+            trigger: trustBadgesRef.current,
+            start: "top 90%",
+          },
+          y: 30,
+          opacity: 0,
+          duration: 0.6,
+          stagger: 0.15,
+          ease: "power3.out",
+        })
+      }, trustBadgesRef)
+
+      return () => ctx.revert()
+    }
+  }, [])
+
   // Filter products based on selected categories, price ranges, and plant types
   const filteredProducts = products.filter(product => {
-    // Category filter
     const categoryMatch = selectedCategories.length === 0 || selectedCategories.includes(product.category)
 
-    // Price range filter
     const priceMatch = selectedPriceRanges.length === 0 || selectedPriceRanges.some(range => {
       switch (range) {
         case "Under ₦10,000":
@@ -70,11 +205,8 @@ export default function RetailPage() {
       }
     })
 
-    // Plant type filter (only for plants)
-    // Handle both array format from Supabase and potential string format
     let productPlantTypes = product.plant_type || product.plantType;
     
-    // If plantType is a string, try to parse it as JSON array
     if (typeof productPlantTypes === 'string') {
       try {
         productPlantTypes = JSON.parse(productPlantTypes);
@@ -83,7 +215,6 @@ export default function RetailPage() {
       }
     }
     
-    // If still not an array, convert to empty array
     if (!Array.isArray(productPlantTypes)) {
       productPlantTypes = [];
     }
@@ -94,12 +225,10 @@ export default function RetailPage() {
         productPlantTypes.length > 0 &&
         selectedPlantTypes.some(type => productPlantTypes.includes(type)))
 
-    // Debug logging for plant type filtering
     if (selectedPlantTypes.length > 0 && product.category === "Plants") {
       console.log("Product:", product.name, "Plant Types:", productPlantTypes, "Selected:", selectedPlantTypes, "Match:", plantTypeMatch)
     }
 
-    // For non-plants, ignore plantType filter
     const isPlantOrNoPlantTypeFilter = product.category !== "Plants" || selectedPlantTypes.length === 0 || plantTypeMatch
 
     return categoryMatch && priceMatch && isPlantOrNoPlantTypeFilter
@@ -116,7 +245,7 @@ export default function RetailPage() {
         return b.price - a.price
       case "popular":
         return (b.featured ? 1 : 0) - (a.featured ? 1 : 0)
-      default: // featured
+      default:
         return (b.featured ? 1 : 0) - (a.featured ? 1 : 0)
     }
   })
@@ -156,26 +285,26 @@ export default function RetailPage() {
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
-      <section className="relative py-16 md:py-20 orange-gradient-strong overflow-hidden">
+      <section ref={heroRef} className="relative py-16 md:py-20 orange-gradient-strong overflow-hidden">
         <div className="absolute inset-0 leaf-pattern opacity-50"></div>
         <div className="container px-4 relative z-10">
-          <div className="max-w-3xl">
-            <Badge className="mb-4 organic-shape-soft bg-orange/20 text-orange-foreground border-orange">
+          <div ref={heroContentRef} className="max-w-3xl">
+            <Badge className="hero-badge mb-4 organic-shape-soft bg-orange/20 text-orange-foreground border-orange">
               New Collection
             </Badge>
-            <h1 className="text-4xl md:text-6xl font-bold mb-4">
+            <h1 className="hero-title text-4xl md:text-6xl font-bold mb-4">
               Handcrafted for <span className="text-primary">Nature</span> Lovers
             </h1>
-            <p className="text-lg md:text-xl text-muted-foreground mb-8">
+            <p className="hero-description text-lg md:text-xl text-muted-foreground mb-8">
               Discover our curated collection of sustainable planters, tools, and accessories handmade by African
               artisans.
             </p>
-            <div className="flex flex-wrap gap-3">
+            <div className="hero-buttons flex flex-wrap gap-3">
               <Button size="lg" className="organic-shape btn-gradient">
                 Shop Best Sellers
               </Button>
-              <Button size="lg" variant="outline" className="organic-shape bg-background">
-                View Gifts
+              <Button size="lg" variant="outline" asChild className="organic-shape bg-background">
+                <Link href="/gifting">View Gifts</Link>
               </Button>
             </div>
           </div>
@@ -235,7 +364,6 @@ export default function RetailPage() {
                       ))}
                     </div>
 
-                    {/* Plant Type Filter (Mobile) */}
                     <Separator className="my-4" />
                     <h3 className="font-medium mb-2">Plant Types</h3>
                     <div className="space-y-2">
@@ -271,10 +399,10 @@ export default function RetailPage() {
 
           <div className="flex flex-col md:flex-row gap-8">
             {/* Desktop Filters Sidebar */}
-            <div className="hidden md:block w-64 shrink-0">
+            <div ref={filterSidebarRef} className="hidden md:block w-64 shrink-0">
               <div className="sticky top-24">
                 <Card className="border-none shadow-md organic-shape orange-gradient">
-                  <CardContent className="p-16">
+                  <CardContent className="p-6">
                     <h3 className="font-bold text-lg mb-4">Filters</h3>
 
                     <div className="space-y-6">
@@ -316,7 +444,6 @@ export default function RetailPage() {
                         </div>
                       </div>
 
-                      {/* Plant Type Filter (Desktop) */}
                       <Separator />
                       <div>
                         <h4 className="font-medium mb-3">Plant Types</h4>
@@ -330,11 +457,11 @@ export default function RetailPage() {
                               />
                               <Label htmlFor={`planttype-${type}`} className="text-sm">
                                 {type}
-                            </Label>
-                          </div>
+                              </Label>
+                            </div>
                           ))}
-                          </div>
                         </div>
+                      </div>
 
                       <Separator />
                     </div>
@@ -345,15 +472,15 @@ export default function RetailPage() {
 
             {/* Product Grid */}
             <div className="flex-1">
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div ref={productGridRef} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {sortedProducts.map((product) => (
-                  <Card key={product.id} className="overflow-hidden border-none shadow-md card-organic organic-shape">
+                  <Card key={product.id} className="product-card overflow-hidden border-none shadow-md card-organic organic-shape">
                     <Link href={`/retail/product/${product.id}`} className="relative block aspect-square">
                       <Image
                         src={product.image || "/placeholder.svg"}
                         alt={product.name}
                         fill
-                        className="object-cover image-clean transition-transform duration-300 group-hover:scale-105"
+                        className="object-cover image-clean transition-transform duration-300"
                       />
                       {product.discount && (
                         <Badge className="absolute top-3 right-3 bg-destructive text-destructive-foreground organic-shape-soft">
@@ -436,7 +563,7 @@ export default function RetailPage() {
       </section>
 
       {/* Trust Badges */}
-      <section className="py-12 border-t orange-gradient">
+      <section ref={trustBadgesRef} className="py-12 border-t orange-gradient">
         <div className="container px-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
             {[
@@ -445,7 +572,7 @@ export default function RetailPage() {
               { label: "Easy Returns", value: "30 Days" },
               { label: "Support", value: "24/7 Help" },
             ].map((item, index) => (
-              <div key={index}>
+              <div key={index} className="trust-badge">
                 <div className="font-bold text-lg mb-1">{item.label}</div>
                 <div className="text-sm text-muted-foreground">{item.value}</div>
               </div>

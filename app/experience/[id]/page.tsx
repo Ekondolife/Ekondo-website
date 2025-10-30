@@ -127,7 +127,7 @@ export default function ExperienceDetailPage({ params }: { params: { id: string 
   }
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col overflow-x-hidden">
       {/* Back Button */}
       <div className="container px-4 py-8">
         <Button variant="ghost" asChild className="organic-shape">
@@ -141,9 +141,9 @@ export default function ExperienceDetailPage({ params }: { params: { id: string 
 
       {/* Hero Section */}
       <section className="container px-4 pb-12">
-        <div className="grid lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
           {/* Main Image */}
-          <div className="relative h-[400px] lg:h-[500px] rounded-lg overflow-hidden organic-shape">
+          <div className="relative w-full h-48 xs:h-56 sm:h-[360px] lg:h-[500px] rounded-lg overflow-hidden organic-shape max-w-[100vw] mx-auto">
             <Image
               src={experience.image || "/placeholder.svg"}
               alt={experience.title}
@@ -153,8 +153,8 @@ export default function ExperienceDetailPage({ params }: { params: { id: string 
           </div>
 
           {/* Booking Card */}
-          <Card className="border-none shadow-lg organic-shape h-fit sticky top-24">
-            <CardContent className="p-6">
+          <Card className="border-none shadow-lg organic-shape h-fit sticky top-24 w-full max-w-[100vw] lg:max-w-none mx-auto">
+            <CardContent className="p-6 w-full">
               <div className="flex items-center gap-2 mb-4">
                 <div className="bg-primary/10 text-primary text-sm font-medium px-3 py-1 rounded organic-shape">
                   {experience.type}
@@ -236,15 +236,8 @@ export default function ExperienceDetailPage({ params }: { params: { id: string 
                   : `Book Now - ₦${experience.price.toLocaleString()}`}
               </Button>
 
-              <Button variant="outline" size="lg" className="w-full organic-shape bg-transparent">
-                Gift This Experience
-              </Button>
-
               <Separator className="my-6" />
 
-              <div className="text-sm text-muted-foreground text-center">
-                Free cancellation up to 24 hours before the event
-              </div>
             </CardContent>
           </Card>
         </div>

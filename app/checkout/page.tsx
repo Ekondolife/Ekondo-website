@@ -1,7 +1,7 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import { useRouter } from "next/navigation"
+import { useState, useEffect, useRef } from "react"
+import { useRouter, useSearchParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -13,6 +13,7 @@ import { useCart } from "@/components/cart-context"
 import { CreditCard, ArrowLeft, Loader2 } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
+import { getProducts } from "@/lib/getProducts"
 
 const nigerianStates = [
   "Abuja FCT", "Abia", "Adamawa", "Akwa Ibom", "Anambra", "Bauchi", "Bayelsa", "Benue", "Borno", 
@@ -22,10 +23,48 @@ const nigerianStates = [
 ]
 
 export default function CheckoutPage() {
-  const { items: cartItems, subtotal, total: cartTotal } = useCart()
+  const { items: cartItems, subtotal, total: cartTotal, addItem: addCartItem, clearCart } = useCart()
   const router = useRouter()
+  const searchParams = useSearchParams()
   const [tabValue, setTabValue] = useState("delivery")
   const [isProcessing, setIsProcessing] = useState(false)
+
+  const isGift = searchParams?.get("isGift") === "1" || searchParams?.get("isGift") === "true"
+  const productId = searchParams?.get("productId")
+  const [giftNote, setGiftNote] = useState("")
+  const [giftProductAdded, setGiftProductAdded] = useState(false)
+
+  useEffect(() => {
+    // Add only if isGift && productId and NOT already added & no cart items
+    if (isGift && productId && !giftProductAdded && cartItems.length === 0) {
+      (async () => {
+        try {
+          const products = await getProducts()
+          const giftProduct = products.find(p => p.id === Number(productId))
+          if (giftProduct) {
+            clearCart();
+            addCartItem({
+              id: giftProduct.id,
+              name: giftProduct.name,
+              description: giftProduct.description,
+              price: giftProduct.price,
+              image: giftProduct.image,
+              category: giftProduct.category,
+            })
+            setGiftProductAdded(true)
+          } else {
+            alert("Sorry, this gift product could not be loaded.");
+            router.push("/gifting")
+          }
+        } catch (e) {
+          alert("Error loading product for gift checkout.");
+          router.push("/gifting")
+        }
+      })()
+    }
+  }, [isGift, productId, giftProductAdded, cartItems.length, addCartItem, clearCart, router])
+
+  // TODO: if (isGift && productId) { clear cart, fetch product by id, add to cart }
 
   // Delivery form state
   const [deliveryData, setDeliveryData] = useState({
@@ -126,6 +165,7 @@ export default function CheckoutPage() {
           email: tabValue === "delivery" ? deliveryData.email : "pickup@ekondolife.com",
           amount: total,
           ...customerData,
+          ...(isGift ? { giftNote } : {}),
         }),
       })
       const data = await res.json()
@@ -142,10 +182,14 @@ export default function CheckoutPage() {
   }
 
   useEffect(() => {
-    if (cartItems.length === 0) {
+    // Only redirect if not in the middle of gift-product-adding
+    if (
+      cartItems.length === 0 &&
+      !(isGift && productId && !giftProductAdded)
+    ) {
       router.push("/cart")
     }
-  }, [cartItems.length, router])
+  }, [cartItems.length, router, isGift, productId, giftProductAdded])
 
   if (cartItems.length === 0) {
     return null
@@ -166,6 +210,19 @@ export default function CheckoutPage() {
           <div className="lg:col-span-2">
             <Card className="border-none shadow-md organic-shape">
               <CardContent className="p-6">
+                {isGift && (
+                  <div className="mb-6">
+                    <Label htmlFor="giftNote" className="font-medium text-md text-primary">Gift Note</Label>
+                    <textarea
+                      id="giftNote"
+                      value={giftNote}
+                      onChange={e => setGiftNote(e.target.value)}
+                      className="w-full p-4 mt-1 min-h-[80px]  border border-orange-200 rounded"
+                      placeholder="Add a sweet message for your recipient, and we'll print it with the order!"
+                      maxLength={250}
+                    />
+                  </div>
+                )}
                 <Tabs value={tabValue} onValueChange={setTabValue}>
                   <TabsList className="grid w-full grid-cols-2 mb-6">
                     <TabsTrigger value="delivery">Delivery</TabsTrigger>
@@ -357,6 +414,12 @@ export default function CheckoutPage() {
                     </div>
                   ))}
                 </div>
+
+                {isGift && !!giftNote && (
+                  <div className="mb-3 p-3 rounded bg-orange-50 border border-orange-100 text-sm text-orange-800">
+                    <span className="font-semibold">Gift Note:</span> {giftNote}
+                  </div>
+                )}
 
                 <Separator className="my-6" />
 
