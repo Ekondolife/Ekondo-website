@@ -65,6 +65,11 @@ export default function Footer() {
                   Spaces
                 </Link>
               </li>
+              <li>
+                <Link href="/gifting" className="text-muted-foreground hover:text-primary transition-colors">
+                  Gifting
+                </Link>
+              </li>
             </ul>
           </div>
 

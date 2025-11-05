@@ -390,7 +390,7 @@ export default function Home() {
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
             {getFeaturedExperiences().slice(0, 3).map((item) => (
               <Card key={item.id} className="overflow-hidden border-none shadow-md card-organic js-card js-hover">
                 <div className="relative h-48">
