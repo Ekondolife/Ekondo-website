@@ -454,7 +454,7 @@ export default function CheckoutPage() {
 
                 <Button
                   size="lg"
-                  className="w-full organic-shape btn-gradient"
+                  className="w-full btn-gradient-clean"
                   onClick={handleCheckout}
                   disabled={isProcessing || (tabValue === "delivery" ? !isDeliveryFormValid() : !isPickupFormValid())}
                 >

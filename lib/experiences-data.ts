@@ -3,7 +3,7 @@ export const experiences = [
   {
     id: 5,
     title: "Southside Festival",
-    description: "Southside Festival is a vibrant celebration of art, nature, and self-expression. From hands-on workshops to live music and games, every moment invites you to unwind, create, and celebrate the joy of expression.",
+    description: "Southside Festival celebrates art, nature, and self-expression. Enjoy hands-on workshops, live music, and games, a joyful space to unwind and create.",
     longDescription: `Southside Festival is a vibrant celebration of art, nature, and self-expression. From hands-on workshops to live music and games, every moment invites you to unwind, create, and celebrate the joy of expression.
 
 Ticket Types:
@@ -29,7 +29,7 @@ Ticket Types:
   {
     id: 1,
     title: "Paint & Plant Pottery Experience",
-    description: "Step away from the daily hustle and reconnect through creativity. Paint and Plant offers a calming, hands-on experience where you'll decorate your own pot and plant something meaningful inside.",
+    description: "Step away from the hustle and unwind creatively. Paint and Plant lets you decorate a pot and plant something meaningful — a calm, hands-on escape.",
     date: "On-Demand",
     time: "6:00PM",
     location: "Ekondo Park",

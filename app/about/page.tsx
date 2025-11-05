@@ -251,10 +251,10 @@ export default function AboutPage() {
               love to have you as part of the Ekondo community.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" asChild className="btn-gradient organic-shape js-hover">
+              <Button size="lg" asChild className="btn-gradient-clean js-hover">
                 <Link href="/retail">Shop Products</Link>
               </Button>
-              <Button size="lg" variant="outline" asChild className="btn-gradient bg-transparent organic-shape js-hover">
+              <Button size="lg" variant="outline" asChild className="btn-gradient-clean js-hover">
                 <Link href="/experience">Join an Experience</Link>
               </Button>
             </div>

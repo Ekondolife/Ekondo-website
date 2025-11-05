@@ -285,25 +285,34 @@ export default function RetailPage() {
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
-      <section ref={heroRef} className="relative py-16 md:py-20 orange-gradient-strong overflow-hidden">
+      <section
+        ref={heroRef}
+        className="relative py-16 md:py-20 orange-gradient-strong overflow-hidden"
+        style={{
+          backgroundImage: "url('/images/Ekondo-110 2.webp')",
+          backgroundSize: "cover",
+          backgroundPosition: "center bottom",
+          backgroundRepeat: "no-repeat",
+        }}
+      >
         <div className="absolute inset-0 leaf-pattern opacity-50"></div>
         <div className="container px-4 relative z-10">
           <div ref={heroContentRef} className="max-w-3xl">
-            <Badge className="hero-badge mb-4 organic-shape-soft bg-orange/20 text-orange-foreground border-orange">
+            <Badge className="hero-badge mb-4 organic-shape-soft bg-orange/20 text-white border-orange">
               New Collection
             </Badge>
-            <h1 className="hero-title text-4xl md:text-6xl font-bold mb-4">
+            <h1 className="hero-title text-4xl md:text-6xl font-bold mb-4 text-white">
               Handcrafted for <span className="text-primary">Nature</span> Lovers
             </h1>
-            <p className="hero-description text-lg md:text-xl text-muted-foreground mb-8">
+            <p className="hero-description text-lg md:text-xl text-white dark:text-foreground mb-8 drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)]">
               Discover our curated collection of sustainable planters, tools, and accessories handmade by African
               artisans.
             </p>
             <div className="hero-buttons flex flex-wrap gap-3">
-              <Button size="lg" className="organic-shape btn-gradient">
+              <Button size="lg" className="btn-gradient-clean">
                 Shop Best Sellers
               </Button>
-              <Button size="lg" variant="outline" asChild className="organic-shape bg-background">
+              <Button size="lg" variant="outline" asChild className="bg-background">
                 <Link href="/gifting">View Gifts</Link>
               </Button>
             </div>
@@ -383,7 +392,7 @@ export default function RetailPage() {
               </Sheet>
 
               <Select value={sortBy} onValueChange={setSortBy}>
-                <SelectTrigger className="w-full md:w-[180px] organic-shape">
+                <SelectTrigger className="w-full md:w-[180px]">
                   <SelectValue placeholder="Sort by" />
                 </SelectTrigger>
                 <SelectContent>
@@ -474,7 +483,7 @@ export default function RetailPage() {
             <div className="flex-1">
               <div ref={productGridRef} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {sortedProducts.map((product) => (
-                  <Card key={product.id} className="product-card overflow-hidden border-none shadow-md card-organic organic-shape">
+                  <Card key={product.id} className="product-card overflow-hidden border-none shadow-md card-organic">
                     <Link href={`/retail/product/${product.id}`} className="relative block aspect-square">
                       <Image
                         src={product.image || "/placeholder.svg"}
@@ -529,7 +538,7 @@ export default function RetailPage() {
                           product={product}
                           size="sm"
                           variant="outline"
-                          className="organic-shape btn-gradient"
+                          className="btn-gradient-clean"
                         />
                       </div>
                     </CardContent>
@@ -540,19 +549,19 @@ export default function RetailPage() {
               {/* Pagination */}
               <div className="flex justify-center mt-12">
                 <div className="flex items-center gap-2">
-                  <Button variant="outline" size="sm" disabled className="organic-shape bg-transparent">
+                  <Button variant="outline" size="sm" disabled className="bg-transparent">
                     Previous
                   </Button>
-                  <Button size="sm" className="organic-shape btn-gradient">
+                  <Button size="sm" className="btn-gradient-clean">
                     1
                   </Button>
-                  <Button variant="outline" size="sm" className="organic-shape bg-transparent">
+                  <Button variant="outline" size="sm" className="bg-transparent">
                     2
                   </Button>
-                  <Button variant="outline" size="sm" className="organic-shape bg-transparent">
+                  <Button variant="outline" size="sm" className="bg-transparent">
                     3
                   </Button>
-                  <Button variant="outline" size="sm" className="organic-shape bg-transparent">
+                  <Button variant="outline" size="sm" className="bg-transparent">
                     Next
                   </Button>
                 </div>

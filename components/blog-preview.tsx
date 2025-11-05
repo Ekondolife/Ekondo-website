@@ -64,18 +64,14 @@ export default function BlogPreview() {
          </div>
          <h3 className="font-medium text-lg mb-2">{post.title}</h3>
          <p className="text-muted-foreground text-sm mb-4 flex-1">{post.excerpt}</p>
-          <div className="mt-auto">
-            <Button
-              variant="ghost"
-              size="sm"
-              className="h-auto px-2 py-1 transition-all duration-300 rounded-md hover:px-3 hover:bg-primary/10 text-black dark:text-white hover:text-black dark:hover:text-white"
-              asChild
-            >
-             <Link href={`/journal/${post.slug}`}  className="btn-gradient organic-shape px-6 py-3 font-semibold text-white text-lg inline-block mt-6">
-               Read more <ArrowRight className="ml-1 h-4 w-4" />
-             </Link>
-           </Button>
-         </div>
+        <div className="mt-auto">
+          <Link
+            href={`/journal/${post.slug}`}
+            className="btn-gradient-clean rounded-md px-6 py-3 font-semibold text-white text-sm inline-block mt-6"
+          >
+            Read more <ArrowRight className="ml-1 h-4 w-4 inline" />
+          </Link>
+        </div>
        </CardContent>
      </Card>
      

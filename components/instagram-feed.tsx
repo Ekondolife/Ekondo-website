@@ -49,7 +49,7 @@ export default function InstagramFeed() {
           href={post.link}
           target="_blank"
           rel="noopener noreferrer"
-          className="relative aspect-square overflow-hidden organic-shape group"
+          className="relative aspect-square overflow-hidden group rounded-lg"
         >
           <Image
             src={post.image || "/placeholder.svg"}

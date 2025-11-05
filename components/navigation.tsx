@@ -18,7 +18,7 @@ import { SearchDialog } from "./search-dialog"
 const routes = [
   { name: "Home", path: "/" },
   { name: "Retail", path: "/retail" },
-  { name: "Experience", path: "/experience" },
+  { name: "Experiences", path: "/experience" },
   { name: "Services", path: "/services" },
   { name: "Spaces", path: "/spaces" },
   { name: "About", path: "/about" },
@@ -61,8 +61,8 @@ export default function Navigation() {
                   <Image
                     src="/images/ekondo logo.png"
                     alt="Ekondo Logo"
-                    width={100}
-                    height={30}
+                    width={80}
+                    height={20}
                     className="h-8 w-auto max-w-[100px] object-contain"
                   />
                 </Link>
@@ -137,7 +137,7 @@ export default function Navigation() {
               alt="Ekondo Logo"
               width={120}
               height={40}
-              className="h-8 w-auto md:h-10 object-contain"
+              className="h-8 w-24 md:h-10 object-contain"
             />
           </Link>
         </div>

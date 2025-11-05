@@ -87,7 +87,8 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/nature_host" className="text-muted-foreground hover:text-primary transition-colors">
+                <Link href="https://docs.google.com/forms/d/1qdVx572VlBkgZg8-VTUgPuuZINzqMKyyfjThUBJTRcg/preview"
+                 target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors">
                   Become a nature host
                 </Link>
               </li>

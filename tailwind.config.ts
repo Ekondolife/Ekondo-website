@@ -93,7 +93,8 @@ const config = {
         shimmer: "shimmer 2s linear infinite",
       },
       fontFamily: {
-        sans: ["Museo Sans Rounded", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "sans-serif"],
+        sans: ["Mona-Sans", "Mona Sans", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "system-ui", "sans-serif"],
+        serif: ["Mona-Sans", "Mona Sans", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "system-ui", "sans-serif"],
       },
     },
   },

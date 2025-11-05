@@ -69,7 +69,7 @@ export default function NewsletterSignup() {
         <input type="hidden" name="UTM_CONTENT" id="utm_content" />
         <input type="hidden" name="REFERRER" id="referrer" />
 
-        <Button type="submit" disabled={loading} className="btn-gradient bg-transparent organic-shape">
+        <Button type="submit" disabled={loading} className="btn-gradient-clean">
           {loading ? "Subscribing..." : "Subscribe"}
         </Button>
       </form>

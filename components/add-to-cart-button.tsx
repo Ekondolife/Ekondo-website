@@ -68,7 +68,7 @@ export function AddToCartButton({ product, size = "default", variant = "default"
       {...props}
       size={size}
       variant={variant}
-      className={`btn-gradient organic-shape ${className}`}
+      className={`btn-gradient-clean ${className || ""}`}
       onClick={handleAddToCart}
       disabled={syncing}
     >

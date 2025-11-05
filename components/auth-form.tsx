@@ -174,7 +174,7 @@ export default function AuthForm() {
             </div>
           )}
 
-          <Button type="submit" className="w-full btn-gradient organic-shape" disabled={loading}>
+          <Button type="submit" className="w-full btn-gradient-clean" disabled={loading}>
             {loading ? "Processing..." : isLogin ? "Sign In" : "Create Account"}
           </Button>
         </form>
@@ -185,7 +185,7 @@ export default function AuthForm() {
         <Button
           type="button"
           variant="outline"
-          className="w-full organic-shape bg-transparent border-gray-300 hover:bg-gray-50"
+          className="w-full bg-transparent border-gray-300 hover:bg-gray-50"
           onClick={handleGoogleSignIn}
           disabled={loading}
         >

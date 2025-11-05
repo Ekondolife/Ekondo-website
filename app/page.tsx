@@ -12,6 +12,7 @@ import NewsletterSignup from "@/components/newsletter-signup"
 import TestimonialCarousel from "@/components/testimonial-carousel"
 import BlogPreview from "@/components/blog-preview"
 import InstagramFeed from "@/components/instagram-feed"
+import PartnersCarousel from "@/components/partners-carousel"
 import { PlantDoctorChat } from "@/components/plant-doctor-chat"
 import { AddToCartButton } from "@/components/add-to-cart-button"
 import { getFeaturedExperiences } from "@/lib/experiences-data"
@@ -96,29 +97,29 @@ export default function Home() {
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
-      <section className="relative h-[80vh] min-h-[600px] w-full overflow-hidden leaf-pattern">
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-background/90 z-10"></div>
+      <section className="relative h-[80vh] min-h-[600px] w-full overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-b  z-10"></div>
         <Image
-          src="./images/Ekondo-14.JPG"
+          src="./images/ekondo event 2.jpg"
           alt="Young African woman tending to plants in urban setting"
           fill
           className="object-cover js-hero-image js-parallax"
           priority
         />
         <div className="container relative z-20 flex h-full flex-col items-center justify-center text-center px-4">
-          <h1 className="font-sans text-4xl md:text-6xl lg:text-7xl font-bold text-primary mb-6 js-hero-title">
+          <h1 className="font-sans text-xl md:text-4xl lg:text-6xl font-bold text-primary mb-6 js-hero-title">
             Connect to Nature <br className="hidden md:block" />
             and Community
           </h1>
-          <p className="text-lg md:text-xl max-w-2xl mb-8 text-foreground/80 js-hero-sub">
+          <p className="text-lg md:text-xl max-w-2xl mb-8 text-white dark:text-foreground/80 drop-shadow-xl js-hero-sub">
             Ekondo brings sustainability and wellness through our retail products, immersive experiences, professional
             services, and community spaces.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 js-hero-ctas">
-            <Button size="lg" asChild className="btn-gradient organic-shape js-hover">
+            <Button size="lg" asChild className="btn-gradient-clean js-hover">
               <Link href="/retail">Explore Our Products</Link>
             </Button>
-            <Button size="lg" variant="outline" asChild className="btn-gradient bg-transparent organic-shape js-hover">
+            <Button size="lg" variant="outline" asChild className="btn-gradient-clean js-hover">
               <Link href="/about">Our Story</Link>
             </Button>
           </div>
@@ -126,28 +127,28 @@ export default function Home() {
       </section>
 
       {/* Four Branches Section */}
-      <section className="py-16 md:py-24 leaf-pattern-dense">
+      <section className="py-16 md:py-24">
         <div className="container px-4">
           <h2 className="font-serif text-3xl md:text-4xl font-bold text-center mb-12 js-section-title">Discover Our Four Branches</h2>
 
           <Tabs defaultValue="retail" className="w-full">
             <TabsList className="grid grid-cols-2 md:grid-cols-4 h-auto mb-8 bg-primary/5">
-              <TabsTrigger value="retail" className="py-3 data-[state=active]:bg-primary/20 btn-gradient organic-shape js-hover">
+              <TabsTrigger value="retail" className="py-3 data-[state=active]:bg-primary/20 btn-gradient-clean js-hover m-4">
                 Retail
               </TabsTrigger>
               <TabsTrigger
                 value="experience"
-                className="py-3 data-[state=active]:bg-primary/20 btn-gradient organic-shape js-hover"
+                className="py-3 data-[state=active]:bg-primary/20 btn-gradient-clean js-hover m-4"
               >
                 Experience
               </TabsTrigger>
               <TabsTrigger
                 value="services"
-                className="py-3 data-[state=active]:bg-primary/20 btn-gradient organic-shape js-hover"
+                className="py-3 data-[state=active]:bg-primary/20 btn-gradient-clean js-hover m-4" m-4
               >
                 Services
               </TabsTrigger>
-              <TabsTrigger value="spaces" className="py-3 data-[state=active]:bg-primary/20 btn-gradient organic-shape js-hover">
+              <TabsTrigger value="spaces" className="py-3 data-[state=active]:bg-primary/20 btn-gradient-clean js-hover m-4">
                 Spaces
               </TabsTrigger>
             </TabsList>
@@ -183,7 +184,7 @@ export default function Home() {
                       <span>Monthly subscription options</span>
                     </li>
                   </ul>
-                  <Button asChild className="btn-gradient organic-shape js-hover">
+                  <Button asChild className="btn-gradient-clean js-hover">
                     <Link href="/retail">
                       Shop Now <ArrowRight className="ml-2 h-4 w-4" />
                     </Link>
@@ -223,7 +224,7 @@ export default function Home() {
                       <span>Community gatherings</span>
                     </li>
                   </ul>
-                  <Button asChild className="btn-gradient organic-shape js-hover">
+                  <Button asChild className="btn-gradient-clean js-hover">
                     <Link href="/experience">
                       Explore Experiences <ArrowRight className="ml-2 h-4 w-4" />
                     </Link>
@@ -263,7 +264,7 @@ export default function Home() {
                       <span>Biophilic space styling</span>
                     </li>
                   </ul>
-                  <Button asChild className="btn-gradient organic-shape js-hover">
+                  <Button asChild className="btn-gradient-clean js-hover">
                     <Link href="/services">
                       Book a Service <ArrowRight className="ml-2 h-4 w-4" />
                     </Link>
@@ -303,7 +304,7 @@ export default function Home() {
                       <span>Rentable community spaces</span>
                     </li>
                   </ul>
-                  <Button asChild className="btn-gradient organic-shape js-hover">
+                  <Button asChild className="btn-gradient-clean js-hover">
                     <Link href="/spaces">
                       Discover Our Spaces <ArrowRight className="ml-2 h-4 w-4" />
                     </Link>
@@ -380,7 +381,7 @@ export default function Home() {
       </section>
 
       {/* Upcoming Experiences Section */}
-      <section className="py-16 md:py-24 leaf-pattern-dense">
+      <section className="py-16 md:py-24">
         <div className="container px-4">
           <div className="flex flex-col md:flex-row md:items-center justify-between mb-12">
             <h2 className="font-serif text-3xl md:text-4xl font-bold js-section-title">Upcoming Experiences</h2>
@@ -404,7 +405,7 @@ export default function Home() {
                   </div>
                   <h3 className="font-medium text-lg mb-1">{item.title}</h3>
                   <p className="text-muted-foreground text-sm mb-4">{item.description}</p>
-                  <Button size="sm" className="w-full btn-gradient organic-shape js-hover">
+                  <Button size="sm" className="w-full btn-gradient-clean js-hover">
                     <Link href={`/experience/${item.id}`}>Book Now</Link>
                   </Button>
                 </CardContent>
@@ -423,14 +424,14 @@ export default function Home() {
       </section>
 
       {/* Blog Preview Section */}
-      <section className="py-16 md:py-24 leaf-pattern-dense">
+      <section className="py-16 md:py-24">
         <div className="container px-4">
         <div className="flex md:flex-row items-center md:items-center justify-between mb-12">
           <h2 className="font-serif text-2xl md:text-4xl font-bold js-section-title">From Our Journal</h2>
           <Link
             href="/journal"
             className="
-              btn-gradient organic-shape px-6 py-3 font-semibold text-white text-lg
+              btn-gradient-clean rounded-lg px-6 py-3 font-semibold text-white text-lg
               inline-block js-hover
               w-auto max-w-[160px] mx-auto md:mx-0
             "
@@ -438,7 +439,6 @@ export default function Home() {
             Read More
           </Link>
         </div>
-
           <BlogPreview />
         </div>
       </section>
@@ -452,7 +452,7 @@ export default function Home() {
           </p>
           <InstagramFeed />
           <div className="text-center mt-8">
-            <Button variant="outline" size="lg" asChild className="btn-gradient bg-transparent organic-shape js-hover">
+            <Button variant="outline" size="lg" asChild className="btn-gradient-clean js-hover">
               <a href="https://www.instagram.com/ekondolife/" target="_blank" rel="noopener noreferrer">
                 Follow @ekondo
               </a>
@@ -461,11 +461,19 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Partners Section */}
+      <section className="py-16 md:py-24">
+        <div className="container px-4">
+          <h2 className="font-serif text-3xl md:text-4xl font-bold text-center mb-12 js-section-title">Meet Our Partners</h2>
+          <PartnersCarousel />
+        </div>
+      </section>
+
       {/* Plant Doctor Chat */}
       <PlantDoctorChat />
 
       {/* Newsletter Section */}
-      <section className="py-16 md:py-24 bg-primary/5 leaf-pattern">
+      <section className="py-16 md:py-24 bg-primary/5 ">
         <div className="container px-4">
           <div className="max-w-2xl mx-auto text-center">
             <h2 className="font-serif text-3xl md:text-4xl font-bold mb-4 js-section-title">Stay Connected</h2>
