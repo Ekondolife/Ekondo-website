@@ -196,7 +196,7 @@ export default function ServicesPage() {
     <div className="flex flex-col">
       {/* Hero Section */}
       <section ref={heroRef} className="relative h-[60vh] min-h-[500px] w-full overflow-hidden leaf-pattern">
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-background/90 z-10"></div>
+        <div className="absolute inset-0  z-10"></div>
         <Image
           src="/images/guy working.jpg"
           alt="Professional landscaping services"
@@ -208,7 +208,7 @@ export default function ServicesPage() {
           <h1 className="hero-title font-serif text-4xl md:text-6xl font-bold text-primary mb-6">
             Professional Services
           </h1>
-          <p className="hero-description text-lg md:text-xl max-w-2xl text-foreground/80">
+          <p className="hero-description text-lg md:text-xl max-w-2xl text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)]">
             Transform your spaces with expert plant care, design, and landscaping services
           </p>
         </div>

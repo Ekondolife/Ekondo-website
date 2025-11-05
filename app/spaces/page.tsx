@@ -81,7 +81,7 @@ export default function SpacesPage() {
     <div className="flex flex-col">
       {/* Hero Section */}
       <section className="relative h-[60vh] min-h-[500px] w-full overflow-hidden leaf-pattern">
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-background/90 z-10"></div>
+        <div className="absolute inset-0 z-10"></div>
         <Image
           src="/images/ekondo event.jpg"
           alt="Ekondo spaces community area"
@@ -91,7 +91,7 @@ export default function SpacesPage() {
         />
         <div className="container relative z-20 flex h-full flex-col items-center justify-center text-center px-4">
           <h1 className="font-serif text-4xl md:text-6xl font-bold text-primary mb-6 js-hero-title">Our Spaces</h1>
-          <p className="text-lg md:text-xl max-w-2xl text-foreground/80 js-hero-sub">
+          <p className="text-lg md:text-xl max-w-2xl  text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)] js-hero-sub">
             Community hubs where nature, creativity, and wellness come together
           </p>
         </div>
