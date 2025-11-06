@@ -107,7 +107,7 @@ export default function Home() {
           priority
         />
         <div className="container relative z-20 flex h-full flex-col items-center justify-center text-center px-4">
-          <h1 className="font-sans text-xl md:text-4xl lg:text-6xl font-bold text-primary mb-6 js-hero-title">
+          <h1 className="text-xl md:text-4xl lg:text-6xl font-bold text-primary mb-6 js-hero-title">
             Connect to Nature <br className="hidden md:block" />
             and Community
           </h1>
@@ -129,7 +129,7 @@ export default function Home() {
       {/* Four Branches Section */}
       <section className="py-16 md:py-24">
         <div className="container px-4">
-          <h2 className="font-serif text-3xl md:text-4xl font-bold text-center mb-12 js-section-title">Discover Our Four Branches</h2>
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 js-section-title">Discover Our Four Branches</h2>
 
           <Tabs defaultValue="retail" className="w-full">
             <TabsList className="grid grid-cols-2 md:grid-cols-4 h-auto mb-8 bg-primary/5">
@@ -165,7 +165,7 @@ export default function Home() {
                   />
                 </div>
                 <div>
-                  <h3 className="font-serif text-2xl md:text-3xl font-bold mb-4 js-section-title">Handcrafted Products</h3>
+                  <h3 className="text-2xl md:text-3xl font-bold mb-4 js-section-title">Handcrafted Products</h3>
                   <p className="mb-6 text-muted-foreground">
                     Discover our collection of handcrafted pots, plants, lighting, tools, and accessories. Each piece is
                     thoughtfully designed to bring nature into your space while supporting sustainable practices.
@@ -205,7 +205,7 @@ export default function Home() {
                   />
                 </div>
                 <div>
-                  <h3 className="font-serif text-2xl md:text-3xl font-bold mb-4 js-section-title">Immersive Experiences</h3>
+                  <h3 className="text-2xl md:text-3xl font-bold mb-4 js-section-title">Immersive Experiences</h3>
                   <p className="mb-6 text-muted-foreground">
                     Join our plant games, workshops, creative events, and collaborations. Our experiences are designed
                     to connect you with nature and community through hands-on learning and creative expression.
@@ -245,7 +245,7 @@ export default function Home() {
                   />
                 </div>
                 <div>
-                  <h3 className="font-serif text-2xl md:text-3xl font-bold mb-4 js-section-title">Professional Services</h3>
+                  <h3 className="text-2xl md:text-3xl font-bold mb-4 js-section-title">Professional Services</h3>
                   <p className="mb-6 text-muted-foreground">
                     Our expert team offers plant maintenance, landscaping, installations, and home styling services. We
                     bring our knowledge and passion to transform your spaces with the beauty and benefits of nature.
@@ -285,7 +285,7 @@ export default function Home() {
                   />
                 </div>
                 <div>
-                  <h3 className="font-serif text-2xl md:text-3xl font-bold mb-4 js-section-title">Community Spaces</h3>
+                  <h3 className="text-2xl md:text-3xl font-bold mb-4 js-section-title">Community Spaces</h3>
                   <p className="mb-6 text-muted-foreground">
                     Visit our physical locations including Ekondo Park, pop-up shops, and wellness sanctuaries. Our
                     spaces are designed to foster community, creativity, and connection with nature.
@@ -320,7 +320,7 @@ export default function Home() {
       <section className="py-16 md:py-24">
         <div className="container px-4">
           <div className="flex flex-col md:flex-row md:items-center justify-between mb-12">
-            <h2 className="font-serif text-3xl md:text-4xl font-bold js-section-title">Featured Products</h2>
+            <h2 className="text-3xl md:text-4xl font-bold js-section-title">Featured Products</h2>
             <Link href="/retail" className="text-primary hover:underline mt-4 md:mt-0 js-hover">
               View all products <ArrowRight className="inline-block ml-1 h-4 w-4" />
             </Link>
@@ -384,7 +384,7 @@ export default function Home() {
       <section className="py-16 md:py-24">
         <div className="container px-4">
           <div className="flex flex-col md:flex-row md:items-center justify-between mb-12">
-            <h2 className="font-serif text-3xl md:text-4xl font-bold js-section-title">Upcoming Experiences</h2>
+            <h2 className="text-3xl md:text-4xl font-bold js-section-title">Upcoming Experiences</h2>
             <Link href="/experience" className="text-primary hover:underline mt-4 md:mt-0 js-hover">
               View all experiences <ArrowRight className="inline-block ml-1 h-4 w-4" />
             </Link>
@@ -418,7 +418,7 @@ export default function Home() {
       {/* Testimonials Section */}
       <section className="py-16 md:py-24">
         <div className="container px-4">
-          <h2 className="font-serif text-3xl md:text-4xl font-bold text-center mb-12 js-section-title">What Our Community Says</h2>
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 js-section-title">What Our Community Says</h2>
           <TestimonialCarousel />
         </div>
       </section>
@@ -427,7 +427,7 @@ export default function Home() {
       <section className="py-16 md:py-24">
         <div className="container px-4">
         <div className="flex md:flex-row items-center md:items-center justify-between mb-12">
-          <h2 className="font-serif text-2xl md:text-4xl font-bold js-section-title">From Our Journal</h2>
+          <h2 className="text-2xl md:text-4xl font-bold js-section-title">From Our Journal</h2>
           <Link
             href="/journal"
             className="
@@ -446,7 +446,7 @@ export default function Home() {
       {/* Instagram Feed Section */}
       <section className="py-16 md:py-24">
         <div className="container px-4">
-          <h2 className="font-serif text-3xl md:text-4xl font-bold text-center mb-4 js-section-title">Follow Our Journey</h2>
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-4 js-section-title">Follow Our Journey</h2>
           <p className="text-center text-muted-foreground mb-12 max-w-2xl mx-auto">
             Join our community on Instagram and share your Ekondo experiences with us.
           </p>
@@ -464,7 +464,7 @@ export default function Home() {
       {/* Partners Section */}
       <section className="py-16 md:py-24">
         <div className="container px-4">
-          <h2 className="font-serif text-3xl md:text-4xl font-bold text-center mb-12 js-section-title">Meet Our Partners</h2>
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 js-section-title">Meet Our Partners</h2>
           <PartnersCarousel />
         </div>
       </section>
@@ -476,7 +476,7 @@ export default function Home() {
       <section className="py-16 md:py-24 bg-primary/5 ">
         <div className="container px-4">
           <div className="max-w-2xl mx-auto text-center">
-            <h2 className="font-serif text-3xl md:text-4xl font-bold mb-4 js-section-title">Stay Connected</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 js-section-title">Stay Connected</h2>
             <p className="text-muted-foreground mb-8">
               Subscribe to our newsletter for exclusive offers, events, and sustainability tips.
             </p>

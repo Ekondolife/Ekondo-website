@@ -9,6 +9,24 @@ import { UserProvider } from "@/components/user-provider"
 import { Toaster } from "@/components/ui/toaster"
 import Script from "next/script"
 import UTMTracker from "@/components/utm-tracker"
+import localFont from 'next/font/local'
+
+// Configure Museo font
+const museo = localFont({
+  src: [
+    {
+      path: '../public/fonts/Museo300-Regular.otf',
+      weight: '300',
+      style: 'normal',
+    },
+    {
+      path: '../public/fonts/Museo700-Regular.otf',
+      weight: '700',
+      style: 'normal',
+    },
+  ],
+  variable: '--font-museo',
+})
 
 export const metadata: Metadata = {
   title: "Ekondo | Sustainability & Wellness",
@@ -21,7 +39,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning className={museo.variable}>
       <head>
         {/* ✅ Microsoft Clarity */}
         <Script id="clarity-script" strategy="afterInteractive">

@@ -16,6 +16,7 @@ import { Badge } from "@/components/ui/badge"
 import { supabase } from "@/lib/supabaseClient"
 import { gsap } from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
+import RetailShowcaseCarousel from "@/components/retail-showcase-carousel"
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -568,6 +569,14 @@ export default function RetailPage() {
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Retail Showcase Carousel */}
+      <section className="py-16 md:py-24">
+        <div className="container px-4">
+          <h2 className="font-serif text-3xl md:text-4xl font-bold text-center mb-12">More from Ekondo Retail</h2>
+          <RetailShowcaseCarousel />
         </div>
       </section>
 
