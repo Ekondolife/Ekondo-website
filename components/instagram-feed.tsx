@@ -11,7 +11,7 @@ export default function InstagramFeed() {
     },
     {
       id: 2,
-      image: "./images/ekondo event 2.jpg",
+      image: "./images/ekondo event 2.JPG",
       alt: "African hands planting seeds",
       link: "https://www.instagram.com/ekondolife/",
     },
@@ -23,7 +23,7 @@ export default function InstagramFeed() {
     },
     {
       id: 4,
-      image: "./images/girl3.jpg",
+      image: "./images/girl3.JPG",
       alt: "Modern African home with plants",
       link: "https://www.instagram.com/ekondolife/",
     },
