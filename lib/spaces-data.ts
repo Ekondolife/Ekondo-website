@@ -34,7 +34,7 @@ export const spaces: Space[] = [
     id: 2,
     name: "Locale Lagos",
     description: "An intimate creative space for workshops and private events, surrounded by tropical plants and natural light.",
-    image: "/images/two girls.jpg",
+    image: "/images/two girls.WEBP",
     location: "2 Saka Jojo Street, VI, Lagos.",
     hours: "Tue-Sat: 10AM-11PM",
     capacity: "Up to 25 people",
@@ -50,7 +50,7 @@ export const spaces: Space[] = [
   name: "Living Room",
   description:
     "A cozy, plant-filled nook for creativity and connection — where sunlight, greenery, and good ideas meet in harmony.",
-  image: "/images/living room.jpg",
+  image: "/images/living room.WEBP",
   location: "19 Thaba Tseka St, Wuse 2, Abuja.",
   hours: "Tue-Sat: 10AM-11PM",
   capacity: "Up to 25 people",
@@ -66,7 +66,7 @@ export const spaces: Space[] = [
   name: "TBC Concierge",
   description:
     "A refined mini-haven blending nature with lifestyle — discover our curated plants and décor inside Wuye’s stylish TBC Concierge.",
-  image: "/images/TBC.jpg",
+  image: "/images/TBC.WEBP",
   location: "Suite 18, Birgi Plaza, Wuye, Abuja.",
   hours: "Tue-Sat: 10AM-11PM",
   capacity: "Up to 25 people",

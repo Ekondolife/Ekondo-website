@@ -143,7 +143,7 @@ export default function AboutPage() {
       <section ref={heroRef} className="relative h-[60vh] min-h-[500px] w-full overflow-hidden bg-muted">
         <div className="absolute inset-0 z-10"></div>
         <Image
-          src="/images/img_4455.jpg"
+          src="/images/img_4455.JPG"
           alt="Ekondo team working with plants"
           fill
           className="object-cover image-clean js-hero-image"
@@ -240,7 +240,7 @@ export default function AboutPage() {
       <section 
         className="py-16 md:py-24 bg-primary/5 relative" 
         style={{
-          backgroundImage: "url('/images/impact ekondo.JPG')",
+          backgroundImage: "url('/images/impact_ekondo.JPG')",
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
