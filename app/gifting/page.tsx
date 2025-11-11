@@ -65,7 +65,7 @@ export default function GiftingPage() {
           <p className="text-center text-lg md:text-xl text-muted-foreground mb-10 max-w-2xl mx-auto">Treat someone to a beautiful plant surprise, delivered with your custom note. Perfect for birthdays, thank-yous, celebrations, or just because.</p>
           <div className="flex flex-wrap items-center justify-center gap-3 mb-12">
             {FILTERS.map(f => (
-              <Button key={f.value} variant={activeFilter === f.value ? "default" : "outline"} className="organic-shape" onClick={() => setActiveFilter(f.value)}>{f.label}</Button>
+              <Button key={f.value} variant={activeFilter === f.value ? "default" : "outline"} onClick={() => setActiveFilter(f.value)}>{f.label}</Button>
             ))}
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -75,7 +75,7 @@ export default function GiftingPage() {
                   <div key={i} className="h-96 bg-background rounded-lg animate-pulse" />
                 ))
               : filteredProducts.map((product, i) => (
-                  <div ref={el => { cardRefs.current[i] = el }} key={product.id} className="rounded-2xl border-none shadow-xl organic-shape bg-card overflow-hidden flex flex-col transition duration-300 hover:shadow-2xl hover:-translate-y-1 hover:scale-105">
+                  <div ref={el => { cardRefs.current[i] = el }} key={product.id} className="rounded-2xl border-none shadow-xl bg-card overflow-hidden flex flex-col transition duration-300 hover:shadow-2xl hover:-translate-y-1 hover:scale-105">
                     <div className="relative w-full h-64 overflow-hidden">
                       <Image src={product.image || "/placeholder.svg"} alt={product.name} fill className="object-cover transition-transform duration-300 group-hover:scale-105" />
                     </div>
@@ -83,7 +83,7 @@ export default function GiftingPage() {
                       <h2 className="font-serif text-xl font-bold mb-1 text-primary">{product.name}</h2>
                       <p className="text-sm text-muted-foreground mb-2 line-clamp-2">{product.description}</p>
                       <span className="block font-semibold text-lg mb-4">₦{product.price?.toLocaleString()}</span>
-                      <Button asChild size="lg" className="organic-shape btn-gradient mt-auto w-full" >
+                      <Button asChild size="lg" className="btn-gradient-clean mt-auto w-full" >
                         <Link href={{ pathname: "/checkout", query: { productId: product.id, isGift: 1 }}}>Gift This</Link>
                       </Button>
                     </CardContent>
@@ -91,7 +91,7 @@ export default function GiftingPage() {
                 ))}
           </div>
         </div>
-        <div className="absolute left-0 right-0 top-0 h-40 leaf-pattern opacity-40"></div>
+        <div className="absolute left-0 right-0 top-0 h-40 opacity-40"></div>
       </section>
     </div>
   );

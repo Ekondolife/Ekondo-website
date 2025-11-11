@@ -80,7 +80,7 @@ export default function SpacesPage() {
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
-      <section className="relative h-[60vh] min-h-[500px] w-full overflow-hidden leaf-pattern">
+      <section className="relative h-[60vh] min-h-[500px] w-full overflow-hidden">
         <div className="absolute inset-0 z-10"></div>
         <Image
           src="/images/ekondo event.jpg"
@@ -113,13 +113,13 @@ export default function SpacesPage() {
                     alt={space.name}
                     width={800}
                     height={600}
-                    className="rounded-lg object-cover aspect-[4/3] organic-shape js-card"
+                    className="rounded-lg object-cover aspect-[4/3] js-card"
                   />
                 </div>
                 <div className={index % 2 === 1 ? "md:col-start-1 md:row-start-1" : ""}>
                   {space.featured && (
                     <div className="inline-block bg-primary/10 text-primary text-sm font-medium px-3 py-1 rounded organic-shape mb-4 js-card">
-                      Flagship Location
+                      Retail outlet
                     </div>
                   )}
                   <h2 className="font-serif text-3xl md:text-4xl font-bold mb-4 js-section-title">{space.name}</h2>
@@ -141,10 +141,10 @@ export default function SpacesPage() {
                   </div>
 
                   <div className="flex flex-col sm:flex-row gap-3">
-                    <Button asChild className="organic-shape js-hover">
+                    <Button asChild className="js-hover">
                       <Link href={`/spaces/${space.id}`}>Book This Space</Link>
                     </Button>
-                    <Button variant="outline" asChild className="organic-shape bg-transparent js-hover">
+                    <Button variant="outline" asChild className="bg-transparent js-hover">
                       <Link href="/contact">
                         <Phone className="h-4 w-4 mr-2" />
                         Contact
@@ -158,51 +158,7 @@ export default function SpacesPage() {
         </div>
       </section>
 
-      {/* Upcoming Events */}
-      <section className="py-16 md:py-24 leaf-pattern-dense">
-        <div className="container px-4">
-          <h2 className="font-serif text-3xl md:text-4xl font-bold text-center mb-12 js-section-title">
-            Recurring Events at Our Spaces
-          </h2>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {upcomingEvents.map((event, index) => (
-              <Card key={index} className="border-none shadow-md organic-shape overflow-hidden js-card js-hover">
-                <div className="relative h-48">
-                  <Image src={event.image || "/placeholder.svg"} alt={event.title} fill className="object-cover" />
-                </div>
-                <CardContent className="p-6">
-                  <div className="flex items-center justify-between mb-2">
-                    <h3 className="font-serif text-xl font-bold">{event.title}</h3>
-                    <div className="text-sm font-bold text-primary">₦{event.price.toLocaleString()}</div>
-                  </div>
-                  <div className="space-y-2 text-sm text-muted-foreground mb-4">
-                    <div className="flex items-center gap-2">
-                      <MapPin className="h-4 w-4 text-primary" />
-                      <span>{event.location}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Calendar className="h-4 w-4 text-primary" />
-                      <span>{event.date}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Clock className="h-4 w-4 text-primary" />
-                      <span>{event.time}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Users className="h-4 w-4 text-primary" />
-                      <span>{event.spotsLeft} spots left</span>
-                    </div>
-                  </div>
-                  <Button variant="outline" className="w-full organic-shape bg-transparent js-hover" asChild>
-                    <Link href={`/experience/${event.id}`}>View Details</Link>
-                  </Button>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
+  
 
       {/* Space Rental */}
       <section className="py-16 md:py-24">
@@ -214,7 +170,7 @@ export default function SpacesPage() {
             </p>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <Card className="border-none shadow-md organic-shape js-card">
+              <Card className="border-none shadow-md js-card">
                 <CardContent className="p-6">
                   <h3 className="font-serif text-xl font-bold mb-4">Hourly Rental</h3>
                   <div className="text-3xl font-bold text-primary mb-4">From ₦15,000/hour</div>
@@ -232,15 +188,15 @@ export default function SpacesPage() {
                       <span>Flexible booking times</span>
                     </li>
                   </ul>
-                  <Button variant="outline" className="w-full organic-shape bg-transparent js-hover" asChild>
+                  <Button variant="outline" className="w-full bg-transparent js-hover" asChild>
                     <Link href="/contact">Inquire</Link>
                   </Button>
                 </CardContent>
               </Card>
 
-              <Card className="border-none shadow-md organic-shape ring-2 ring-primary js-card js-hover">
+              <Card className="border-none shadow-md ring-2 ring-primary js-card js-hover">
                 <CardContent className="p-6">
-                  <div className="bg-primary text-primary-foreground text-center py-1 text-sm font-medium rounded organic-shape mb-4">
+                  <div className="bg-primary text-primary-foreground text-center py-1 text-sm font-medium rounded mb-4">
                     Most Popular
                   </div>
                   <h3 className="font-serif text-xl font-bold mb-4">Full Day Rental</h3>
@@ -259,7 +215,7 @@ export default function SpacesPage() {
                       <span>Setup and cleanup assistance</span>
                     </li>
                   </ul>
-                  <Button className="w-full organic-shape js-hover" asChild>
+                  <Button className="w-full js-hover" asChild>
                     <Link href="/contact">Book Now</Link>
                   </Button>
                 </CardContent>
@@ -270,7 +226,7 @@ export default function SpacesPage() {
       </section>
 
       {/* Community Board */}
-      <section className="py-16 md:py-24 bg-primary/5 leaf-pattern">
+      <section className="py-16 md:py-24 bg-primary/5">
         <div className="container px-4">
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="font-serif text-3xl md:text-4xl font-bold mb-4 js-section-title">Join Our Community</h2>
@@ -278,7 +234,7 @@ export default function SpacesPage() {
               Share your experiences, connect with fellow plant lovers, and stay updated on events happening at our
               spaces
             </p>
-            <Button size="lg" asChild className="organic-shape js-hover">
+            <Button size="lg" asChild className="js-hover">
               <Link href="/contact">Get Involved</Link>
             </Button>
           </div>

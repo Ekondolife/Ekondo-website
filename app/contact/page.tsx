@@ -166,7 +166,7 @@ export default function ContactPage() {
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
-      <section className="relative h-[50vh] min-h-[400px] w-full overflow-hidden leaf-pattern">
+      <section className="relative h-[50vh] min-h-[400px] w-full overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-transparent to-background/90 z-10"></div>
         <Image
           src="/images/two women.JPG"
@@ -206,7 +206,7 @@ export default function ContactPage() {
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     required
-                    className="mt-1 organic-shape"
+                    className="mt-1 "
                   />
                 </div>
 
@@ -218,7 +218,7 @@ export default function ContactPage() {
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                     required
-                    className="mt-1 organic-shape"
+                    className="mt-1 "
                   />
                 </div>
 
@@ -229,7 +229,7 @@ export default function ContactPage() {
                     type="tel"
                     value={formData.phone}
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                    className="mt-1 organic-shape"
+                    className="mt-1 "
                   />
                 </div>
 
@@ -239,7 +239,7 @@ export default function ContactPage() {
                     value={formData.subject}
                     onValueChange={(value) => setFormData({ ...formData, subject: value })}
                   >
-                    <SelectTrigger className="mt-1 organic-shape">
+                    <SelectTrigger className="mt-1 ">
                       <SelectValue placeholder="Select a subject" />
                     </SelectTrigger>
                     <SelectContent>
@@ -266,12 +266,12 @@ export default function ContactPage() {
                 </div>
 
                 {success && (
-                  <div className="bg-primary/10 text-primary p-4 rounded organic-shape">
+                  <div className="bg-primary/10 text-primary p-4 rounded ">
                     Thank you! We'll get back to you within 24 hours.
                   </div>
                 )}
 
-                <Button type="submit" disabled={loading} className="w-full organic-shape js-hover" size="lg">
+                <Button type="submit" disabled={loading} className="w-full  js-hover" size="lg">
                   {loading ? "Sending..." : "Send Message"}
                 </Button>
               </form>
@@ -283,7 +283,7 @@ export default function ContactPage() {
                 <h2 className="font-serif text-3xl font-bold mb-6 js-section-title">Our Locations</h2>
                 <div className="space-y-6">
                   {locations.map((location, index) => (
-                    <Card key={index} className="border-none shadow-md organic-shape js-card">
+                    <Card key={index} className="border-none shadow-md  js-card">
                       <CardContent className="p-6">
                         <h3 className="font-serif text-xl font-bold mb-4">{location.city}</h3>
                         <div className="space-y-3 text-sm">
@@ -310,7 +310,7 @@ export default function ContactPage() {
                 </div>
               </div>
 
-              <Card className="border-none shadow-md organic-shape bg-primary/5 js-card js-hover">
+              <Card className="border-none shadow-md  bg-primary/5 js-card js-hover">
                 <CardContent className="p-6">
                   <h3 className="font-serif text-xl font-bold mb-4">Quick Response</h3>
                   <p className="text-sm text-muted-foreground mb-4">
@@ -320,12 +320,6 @@ export default function ContactPage() {
                   <div className="flex flex-col gap-2 text-sm">
                     <div>
                       <span className="font-medium">General:</span> hello@ekondo.com
-                    </div>
-                    <div>
-                      <span className="font-medium">Partnerships:</span> partners@ekondo.com
-                    </div>
-                    <div>
-                      <span className="font-medium">Press:</span> press@ekondo.com
                     </div>
                   </div>
                 </CardContent>

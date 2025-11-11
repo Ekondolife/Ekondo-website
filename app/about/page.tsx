@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect } from "react"
+import { useEffect, useState, useRef } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
@@ -12,20 +12,28 @@ import { ScrollTrigger } from "gsap/ScrollTrigger"
 gsap.registerPlugin(ScrollTrigger)
 
 export default function AboutPage() {
+  const [imageLoaded, setImageLoaded] = useState(false)
+  const heroRef = useRef<HTMLElement>(null)
+
+  // Hero animations - only start after image loads
   useEffect(() => {
+    if (!imageLoaded) return
+
     const ctx = gsap.context(() => {
-      // Hero load
-      gsap.from([".js-hero-title", ".js-hero-sub"], {
+      // Hero load - start all animations together
+      const tl = gsap.timeline({ defaults: { ease: "power3.out" } })
+      
+      tl.from([".js-hero-title", ".js-hero-sub"], {
         y: 20,
         opacity: 0,
         duration: 1,
-        ease: "power3.out",
         stagger: 0.12,
       })
-      gsap.fromTo(
+      .fromTo(
         ".js-hero-image",
         { scale: 1.08 },
-        { scale: 1, duration: 1.4, ease: "power3.out" }
+        { scale: 1, duration: 1.4 },
+        "-=0.5"
       )
 
       // Section titles
@@ -80,7 +88,7 @@ export default function AboutPage() {
       lift(".js-hover, .js-card")
     })
     return () => ctx.revert()
-  }, [])
+  }, [imageLoaded])
 
   const values = [
     {
@@ -132,7 +140,7 @@ export default function AboutPage() {
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
-      <section className="relative h-[60vh] min-h-[500px] w-full overflow-hidden leaf-pattern">
+      <section ref={heroRef} className="relative h-[60vh] min-h-[500px] w-full overflow-hidden bg-muted">
         <div className="absolute inset-0 z-10"></div>
         <Image
           src="/images/img_4455.jpg"
@@ -140,10 +148,17 @@ export default function AboutPage() {
           fill
           className="object-cover image-clean js-hero-image"
           priority
+          onLoad={() => setImageLoaded(true)}
         />
-        <div className="container relative z-20 flex h-full flex-col items-center justify-center text-center px-4">
-          <h1 className="font-serif text-4xl md:text-6xl font-bold text-primary mb-6 js-hero-title">Our Story</h1>
-          <p className="text-lg md:text-xl max-w-2xl text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)] js-hero-sub">
+        <div
+          className={`container relative z-20 flex h-full flex-col items-center justify-center text-center px-4 transition-all duration-700 ${
+            imageLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
+          }`}
+        >
+          <h1 className="font-serif text-4xl md:text-6xl font-bold text-gray-50 drop-shadow-[0_6px_18px_rgba(0,0,0,0.6)] mb-6 js-hero-title">
+            Our Story
+          </h1>
+          <p className="text-lg md:text-xl max-w-2xl text-gray-100 drop-shadow-[0_4px_12px_rgba(0,0,0,0.55)] js-hero-sub">
             Rooted in African creativity and growing towards a sustainable future
           </p>
         </div>
@@ -200,16 +215,16 @@ export default function AboutPage() {
       </section>
 
       {/* Values Section */}
-      <section className="py-16 md:py-24 leaf-pattern-dense">
+      <section className="py-16 md:py-24">
         <div className="container px-4">
           <h2 className="font-serif text-3xl md:text-4xl font-bold text-center mb-12 js-section-title">
             Nature's Framework of Intention
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {values.map((value, index) => (
-              <Card key={index} className="border-none shadow-md organic-shape text-center js-card js-hover">
+              <Card key={index} className="border-none shadow-md rounded-lg text-center js-card js-hover">
                 <CardContent className="p-6">
-                  <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-full mb-4 organic-shape">
+                  <div className="inline-flex items-center justify-center w-16 h-16 rounded-full mb-4 organic-shape">
                     <value.icon className="h-8 w-8 text-primary" />
                   </div>
                   <h3 className="font-serif text-xl font-bold mb-2">{value.title}</h3>
@@ -222,15 +237,24 @@ export default function AboutPage() {
       </section>
 
       {/* Impact Section */}
-      <section className="py-16 md:py-24 bg-primary/5 leaf-pattern">
-        <div className="container px-4">
+      <section 
+        className="py-16 md:py-24 bg-primary/5 relative" 
+        style={{
+          backgroundImage: "url('/images/impact ekondo.JPG')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+        }}
+      >
+        <div className="absolute inset-0 bg-background/60 backdrop-blur-sm"></div>
+        <div className="container px-4 relative z-10">
           <h2 className="font-serif text-3xl md:text-4xl font-bold text-center mb-12 js-section-title">Our Impact</h2>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             {[
-              { number: "10,000+", label: "Plants Adopted" },
-              { number: "5,000+", label: "Workshop Participants" },
-              { number: "200+", label: "Spaces Transformed" },
-              { number: "15", label: "Cities Served" },
+              { number: "20,000+", label: "Plants Adopted" },
+              { number: "3,000+", label: "Event Participants" },
+              { number: "50+", label: "Spaces Transformed" },
+              { number: "12+", label: "Cities Served" },
             ].map((stat, index) => (
               <div key={index} className="text-center js-stat">
                 <div className="font-serif text-4xl md:text-5xl font-bold text-primary mb-2">{stat.number}</div>

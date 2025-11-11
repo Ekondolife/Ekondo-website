@@ -296,7 +296,7 @@ export default function RetailPage() {
           backgroundRepeat: "no-repeat",
         }}
       >
-        <div className="absolute inset-0 leaf-pattern opacity-50"></div>
+        <div className="absolute inset-0 opacity-50"></div>
         <div className="container px-4 relative z-10">
           <div ref={heroContentRef} className="max-w-3xl">
             <Badge className="hero-badge mb-4 organic-shape-soft bg-orange/20 text-white border-orange">
@@ -572,13 +572,7 @@ export default function RetailPage() {
         </div>
       </section>
 
-      {/* Retail Showcase Carousel */}
-      <section className="py-16 md:py-24">
-        <div className="container px-4">
-          <h2 className="font-serif text-3xl md:text-4xl font-bold text-center mb-12">More from Ekondo Retail</h2>
-          <RetailShowcaseCarousel />
-        </div>
-      </section>
+   
 
       {/* Trust Badges */}
       <section ref={trustBadgesRef} className="py-12 border-t orange-gradient">

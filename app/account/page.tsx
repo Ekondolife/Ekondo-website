@@ -158,7 +158,7 @@ export default function AccountPage() {
               <Loader2 className="h-6 w-6 animate-spin text-primary" />
             </div>
           ) : orders.length === 0 ? (
-            <Card className="border-none shadow-md organic-shape">
+            <Card className="border-none shadow-md">
               <CardContent className="p-12 text-center">
                 <Package className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
                 <p className="text-muted-foreground">No orders yet</p>
@@ -166,9 +166,9 @@ export default function AccountPage() {
             </Card>
           ) : (
             orders.map((order, index) => (
-              <Card key={order.id || index} className="border-none shadow-md organic-shape mb-4">
+              <Card key={order.id || index} className="border-none shadow-md oe mb-4">
                 <CardContent className="p-6 flex items-center gap-4">
-                  <div className="relative w-20 h-20 rounded-lg overflow-hidden organic-shape flex-shrink-0">
+                  <div className="relative w-20 h-20 rounded-lg overflow-hidden  flex-shrink-0">
                     <Image 
                       src={order.product_image || "/placeholder.svg"} 
                       alt={order.product_name || "Product"} 
@@ -179,7 +179,7 @@ export default function AccountPage() {
                   <div className="flex-1">
                     <div className="flex justify-between items-start mb-2">
                       <h3 className="font-medium text-lg">{order.product_name}</h3>
-                      <span className={`text-sm px-3 py-1 rounded organic-shape ${
+                      <span className={`text-sm px-3 py-1 rounded  ${
                         order.status === "completed" ? "bg-green-100 text-green-700" : 
                         order.status === "pending" ? "bg-yellow-100 text-yellow-700" : 
                         "bg-gray-100 text-gray-700"
@@ -200,7 +200,7 @@ export default function AccountPage() {
         {/* Profile Tab */}
         <TabsContent value="profile">
           <h2 className="font-serif text-2xl font-bold mb-6">Profile Settings</h2>
-          <Card className="border-none shadow-md organic-shape max-w-2xl">
+          <Card className="border-none shadow-md  max-w-2xl">
             <CardContent className="p-6">
               <form className="space-y-6">
                 <div>
@@ -209,12 +209,12 @@ export default function AccountPage() {
                     id="fullName" 
                     value={formData.fullName} 
                     onChange={(e) => setFormData(prev => ({ ...prev, fullName: e.target.value }))}
-                    className="mt-1 organic-shape" 
+                    className="mt-1 " 
                   />
                 </div>
                 <div>
                   <Label htmlFor="email">Email</Label>
-                  <Input id="email" type="email" value={user.email || ""} className="mt-1 organic-shape" disabled />
+                  <Input id="email" type="email" value={user.email || ""} className="mt-1 " disabled />
                 </div>
                 <div>
                   <Label htmlFor="phone">Phone</Label>
@@ -223,14 +223,14 @@ export default function AccountPage() {
                     type="tel" 
                     value={formData.phone} 
                     onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
-                    className="mt-1 organic-shape" 
+                    className="mt-1 " 
                   />
                 </div>
                 <Button 
                   type="button"
                   onClick={handleSave}
                   disabled={saving}
-                  className="organic-shape btn-gradient"
+                  className=" btn-gradient-clean"
                 >
                   {saving ? (
                     <>

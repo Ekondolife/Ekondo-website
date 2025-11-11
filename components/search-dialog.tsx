@@ -216,7 +216,7 @@ export function SearchDialog() {
       <DialogTrigger asChild>
         <Button
           variant="outline"
-          className="relative w-full md:w-64 justify-start text-sm text-muted-foreground bg-transparent organic-shape"
+          className="relative w-full md:w-64 justify-start text-sm text-muted-foreground bg-transparent rounded-md"
         >
           <Search className="mr-2 h-4 w-4" />
           <span className="hidden md:inline-flex">Search products, articles...</span>

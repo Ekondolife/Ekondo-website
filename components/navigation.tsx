@@ -17,7 +17,7 @@ import { SearchDialog } from "./search-dialog"
 
 const routes = [
   { name: "Home", path: "/" },
-  { name: "Retail", path: "/retail" },
+  { name: "Shop", path: "/retail" },
   { name: "Experiences", path: "/experience" },
   { name: "Services", path: "/services" },
   { name: "Spaces", path: "/spaces" },

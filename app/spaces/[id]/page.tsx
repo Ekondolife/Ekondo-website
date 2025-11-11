@@ -142,7 +142,7 @@ Additional Message: ${formData.message || "None"}`,
     <div className="flex flex-col">
       {/* Back Button */}
       <div className="container px-4 py-8">
-        <Button variant="ghost" asChild className="organic-shape">
+        <Button variant="ghost" asChild className="">
           <Link href="/spaces">
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Spaces
@@ -154,7 +154,7 @@ Additional Message: ${formData.message || "None"}`,
       <section className="container px-4 pb-12">
         <div className="grid lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
           {/* Main Image */}
-          <div className="relative h-[400px] lg:h-[500px] rounded-lg overflow-hidden organic-shape">
+          <div className="relative h-[400px] lg:h-[500px] rounded-lg overflow-hidden">
             <Image
               src={space.image || "/placeholder.svg"}
               alt={space.name}
@@ -164,11 +164,11 @@ Additional Message: ${formData.message || "None"}`,
           </div>
 
           {/* Info Card */}
-          <Card className="border-none shadow-lg organic-shape p-10 h-fit sticky top-24">
+          <Card className="border-none shadow-lg rounded-lg p-10 h-fit sticky top-24">
             <CardHeader>
               {space.featured && (
-                <div className="inline-block bg-primary/10 text-primary text-sm font-medium rounded organic-shape mb-4 p-4">
-                  Flagship Location
+                <div className="inline-block bg-primary/10 text-primary text-sm font-medium rounded-lg mb-4 p-4">
+                  Retail Outlet
                 </div>
               )}
               <CardTitle className="font-serif text-2xl font-bold">{space.name}</CardTitle>
@@ -227,10 +227,10 @@ Additional Message: ${formData.message || "None"}`,
       </section>
 
       {/* Booking Form Section */}
-      <section className="py-12 md:py-16 bg-primary/5 leaf-pattern">
+      <section className="py-12 md:py-16 bg-primary/5">
         <div className="container px-4">
           <div className="w-full max-w-[90vw] sm:max-w-2xl mx-auto">
-            <Card className="border-none shadow-lg organic-shape p-6 sm:p-24 w-full max-w-[90vw] sm:max-w-2xl mx-auto">
+            <Card className="border-none shadow-lg p-6 sm:p-24 w-full max-w-[90vw] sm:max-w-2xl mx-auto">
               <CardHeader>
                 <CardTitle className="font-serif text-2xl font-bold">Book {space.name}</CardTitle>
                 <p className="text-muted-foreground">Fill in your details and we'll get back to you within 24 hours</p>
@@ -253,7 +253,7 @@ Additional Message: ${formData.message || "None"}`,
                       <Button
                         type="button"
                         variant={bookingType === "hourly" ? "default" : "outline"}
-                        className={`organic-shape ${bookingType === "hourly" ? "btn-gradient" : "bg-transparent"}`}
+                        className={` ${bookingType === "hourly" ? "btn-gradient-clean" : "bg-transparent"}`}
                         onClick={() => setBookingType("hourly")}
                       >
                         Hourly
@@ -261,7 +261,7 @@ Additional Message: ${formData.message || "None"}`,
                       <Button
                         type="button"
                         variant={bookingType === "daily" ? "default" : "outline"}
-                        className={`organic-shape ${bookingType === "daily" ? "btn-gradient" : "bg-transparent"}`}
+                        className={` ${bookingType === "daily" ? "btn-gradient-clean" : "bg-transparent"}`}
                         onClick={() => setBookingType("daily")}
                       >
                         Full Day
@@ -282,7 +282,7 @@ Additional Message: ${formData.message || "None"}`,
                         value={formData.name}
                         onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
                         placeholder="John Doe"
-                        className="mt-1 organic-shape"
+                        className="mt-1 "
                         required
                       />
                     </div>
@@ -294,7 +294,7 @@ Additional Message: ${formData.message || "None"}`,
                         value={formData.phone}
                         onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
                         placeholder="+234 801 234 5678"
-                        className="mt-1 organic-shape"
+                        className="mt-1 "
                         required
                       />
                     </div>
@@ -308,7 +308,7 @@ Additional Message: ${formData.message || "None"}`,
                       value={formData.email}
                       onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
                       placeholder="your@email.com"
-                      className="mt-1 organic-shape"
+                      className="mt-1 "
                       required
                     />
                   </div>
@@ -321,7 +321,7 @@ Additional Message: ${formData.message || "None"}`,
                         type="date"
                         value={formData.preferredDate}
                         onChange={(e) => setFormData(prev => ({ ...prev, preferredDate: e.target.value }))}
-                        className="mt-1 organic-shape"
+                        className="mt-1 "
                         required
                         min={new Date().toISOString().split('T')[0]}
                       />
@@ -333,7 +333,7 @@ Additional Message: ${formData.message || "None"}`,
                         type="time"
                         value={formData.preferredTime}
                         onChange={(e) => setFormData(prev => ({ ...prev, preferredTime: e.target.value }))}
-                        className="mt-1 organic-shape"
+                        className="mt-1 "
                       />
                     </div>
                   </div>
@@ -346,7 +346,7 @@ Additional Message: ${formData.message || "None"}`,
                       value={formData.numberOfGuests}
                       onChange={(e) => setFormData(prev => ({ ...prev, numberOfGuests: e.target.value }))}
                       placeholder="e.g., 20"
-                      className="mt-1 organic-shape p-4"
+                      className="mt-1  p-4"
                       min="1"
                     />
                   </div>
@@ -366,7 +366,7 @@ Additional Message: ${formData.message || "None"}`,
                   <Button
                     type="submit"
                     size="lg"
-                    className="w-full organic-shape btn-gradient"
+                    className="w-full  btn-gradient-clean"
                     disabled={isSubmitting}
                   >
                     {isSubmitting ? (
@@ -397,7 +397,7 @@ Additional Message: ${formData.message || "None"}`,
             <p className="text-muted-foreground mb-8">
               Contact us directly for more information about this space
             </p>
-            <Button size="lg" asChild className="organic-shape">
+            <Button size="lg" asChild className="">
               <Link href="/contact">Contact Us</Link>
             </Button>
           </div>

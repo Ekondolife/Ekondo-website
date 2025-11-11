@@ -15,13 +15,83 @@ import localFont from 'next/font/local'
 const museo = localFont({
   src: [
     {
-      path: '../public/fonts/Museo300-Regular.otf',
+      path: '../public/fonts/Museo_Sans_100_italic.otf',
+      weight: '100',
+      style: 'normal',
+    },
+    {
+      path: '../public/fonts/Museo_Sans_100.otf',
+      weight: '100',
+      style: 'italic',
+    },
+    {
+      path: '../public/fonts/Museo_Sans_300_italic.otf',
+      weight: '300',
+      style: 'italic',
+    },
+    {
+      path: '../public/fonts/Museo_Sans_300.otf',
       weight: '300',
       style: 'normal',
     },
     {
-      path: '../public/fonts/Museo700-Regular.otf',
+      path: '../public/fonts/Museo_Sans_500_italic.otf',
+      weight: '500',
+      style: 'italic',
+    },
+    {
+      path: '../public/fonts/Museo_Sans_500.otf',
+      weight: '500',
+      style: 'normal',
+    },
+    {
+      path: '../public/fonts/Museo_Sans_700_italic.otf',
       weight: '700',
+      style: 'italic',
+    },
+    {
+      path: '../public/fonts/Museo_Sans_700.otf',
+      weight: '700',
+      style: 'normal',
+    },
+    {
+      path: '../public/fonts/Museo_Sans_900_italic.otf',
+      weight: '900',
+      style: 'italic',
+    },
+    {
+      path: '../public/fonts/Museo_Sans_900.otf',
+      weight: '900',
+      style: 'normal',
+    },
+    {
+      path: '../public/fonts/Museo_Sans_Rounded_100.otf',
+      weight: '100',
+      style: 'normal',
+    },
+    {
+      path: '../public/fonts/Museo_Sans_Rounded_300.otf',
+      weight: '300',
+      style: 'normal',
+    },
+    {
+      path: '../public/fonts/Museo_Sans_Rounded_500.otf',
+      weight: '500',
+      style: 'normal',
+    },
+    {
+      path: '../public/fonts/Museo_Sans_Rounded_700.otf',
+      weight: '700',
+      style: 'normal',
+    },
+    {
+      path: '../public/fonts/Museo_Sans_Rounded_900.otf',
+      weight: '900',
+      style: 'normal',
+    },
+    {
+      path: '../public/fonts/Museo_Sans_Rounded_1000.otf',
+      weight: '1000',
       style: 'normal',
     },
   ],

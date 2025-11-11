@@ -56,7 +56,7 @@ export default function TestimonialCarousel() {
           style={{ transform: `translateX(-${currentIndex * 100}%)` }}
         >
           {testimonials.map((testimonial) => (
-            <Card key={testimonial.id} className="flex-shrink-0 w-full border-none shadow-md organic-shape">
+            <Card key={testimonial.id} className="flex-shrink-0 w-full border-none shadow-md">
               <CardContent className="p-6 md:p-8 flex flex-col items-center text-center">
                 <div className="w-16 h-16 rounded-full overflow-hidden mb-4 relative">
                   <Image

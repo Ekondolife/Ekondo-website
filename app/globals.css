@@ -127,6 +127,30 @@
   background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%2322c55e' fill-opacity='0.03'%3E%3Cpath d='M20 20c0-5.5-4.5-10-10-10s-10 4.5-10 10 4.5 10 10 10c0-5.5 4.5-10 10-10zm10 0c0-5.5-4.5-10-10-10s-10 4.5-10 10 4.5 10 10 10c0-5.5 4.5-10 10-10z'/%3E%3C/g%3E%3C/svg%3E");
 }
 
+/* Plant emoji pattern */
+.plant-emoji-pattern {
+  position: relative;
+  overflow: hidden;
+}
+
+.plant-emoji-pattern::before {
+  content: '🌱 🌱 🌱 🌱 🌱 🌱 🌱 🌱 🌱 🌱 🌱 🌱 🌱 🌱 🌱 🌱 🌱 🌱 🌱 🌱 🌱 🌱 🌱 🌱 🌱 🌱 🌱 🌱 🌱 🌱 🌱 🌱 🌱 🌱 🌱 🌱 🌱 🌱 🌱 🌱 🌱 🌱 🌱 🌱 🌱 🌱 🌱 🌱 🌱 🌱 🌱 🌱 🌱 🌱 🌱 🌱 🌱 🌱 🌱 🌱 🌱 🌱 🌱 🌱 🌱 🌱 🌱 🌱 🌱 🌱 🌱 🌱 🌱 🌱 🌱 🌱 🌱 🌱 🌱 🌱';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 200%;
+  height: 200%;
+  font-size: 28px;
+  line-height: 1.8;
+  opacity: 0.12;
+  word-spacing: 15px;
+  letter-spacing: 10px;
+  pointer-events: none;
+  transform: rotate(-3deg);
+  white-space: pre-wrap;
+  overflow: hidden;
+}
+
 .orange-gradient {
   background: linear-gradient(135deg, rgba(251, 146, 60, 0.1) 0%, rgba(34, 197, 94, 0.1) 100%);
 }
@@ -237,6 +261,33 @@
 
 .animate-pulse-soft {
   animation: pulse-soft 3s ease-in-out infinite;
+}
+
+/* Festival banner animations */
+@keyframes scroll-banner {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes slide-pattern {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 20px 20px;
+  }
+}
+
+.animate-scroll-banner {
+  animation: scroll-banner 30s linear infinite;
+}
+
+.animate-slide-pattern {
+  animation: slide-pattern 20s linear infinite;
 }
 
 /* Product card hover effects */

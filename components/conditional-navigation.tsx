@@ -2,6 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import Navigation from "@/components/navigation";
+import FestivalBanner from "@/components/festival-banner";
 
 export default function ConditionalNavigation() {
   const pathname = usePathname();
@@ -11,5 +12,10 @@ export default function ConditionalNavigation() {
     return null;
   }
   
-  return <Navigation />;
+  return (
+    <>
+      <FestivalBanner />
+      <Navigation />
+    </>
+  );
 }

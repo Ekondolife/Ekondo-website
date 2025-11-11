@@ -51,8 +51,8 @@ export default function BlogPreview() {
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
       {blogPosts.slice(0, 3).map((post) => (
-       <Card key={post.id} className="overflow-visible border-none shadow-md organic-shape min-h-[460px]">
-       <div className="relative h-72 organic-shape">
+       <Card key={post.id} className="overflow-visible border-none shadow-md rounded-xl min-h-[460px]">
+       <div className="relative h-72  rounded-t-xl overflow-hidden">
          <Image src={post.image || "/placeholder.svg"} alt={post.title} fill className="object-cover" />
        </div>
        <CardContent className="p-6 flex flex-col h-auto">

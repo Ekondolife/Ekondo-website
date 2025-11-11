@@ -233,7 +233,7 @@ export default function ServiceDetailPage({ params }: { params: { id: string } }
       </section>
 
       {/* Booking Form Section */}
-      <section className="py-12 md:py-16 bg-primary/5 leaf-pattern">
+      <section className="py-12 md:py-16 bg-primary/5">
         <div className="container px-4">
           <div className="w-full max-w-[90vw] sm:max-w-2xl mx-auto">
             <Card className="border-none shadow-lg organic-shape p-6 sm:p-24 w-full max-w-[90vw] sm:max-w-2xl mx-auto">

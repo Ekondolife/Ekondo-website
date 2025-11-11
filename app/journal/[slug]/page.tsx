@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Calendar, Clock, User, ArrowLeft, Share2 } from "lucide-react"
 import { Separator } from "@/components/ui/separator"
+import NewsletterSignup from "@/components/newsletter-signup"
 
 export default function BlogPostPage({ params }: { params: { slug: string } }) {
   const postsBySlug: Record<string, any> = {
@@ -24,7 +25,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
         At Ekondo Life, we specialize in low-maintenance indoor plants for Nigeria, carefully chosen for their ability to adapt to Lagos’s humidity, heat, and small living spaces.</p>
 
         <figure>
-          <img src="/images/fine plant image.webp" alt="Lush indoor greenery" />
+          <img src="/images/fine plant image.webp" alt="Lush indoor greenery" style="border-radius: full"/>
           <figcaption>Bring calm to your space with resilient, low-maintenance plants.</figcaption>
         </figure>
 
@@ -216,7 +217,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
         <p>Determining if your plant is receiving the right amount of light is crucial for its overall health and growth. Each plant is unique, and the ideal lighting conditions can vary. By observing your plant’s response and adjusting its placement you can ensure that it receives the optimal amount of light. Place your plant where diffused rays reach it when your curtains or blinds are opened. Experiment with various spots until you find the best fit for each plant.</p>
 
         <figure>
-          <img src="/images/fine plant image.webp" alt="Cozy desk with plants" />
+          <img src="/images/fine plant image.webp" alt="Cozy desk with plants" className="rounded-lg"/>
           <figcaption>Create small rituals with plants on your desk or shelf.</figcaption>
         </figure>
 
@@ -264,7 +265,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
     <div className="flex flex-col bg-background">
       {/* Back Button */}
       <div className="container px-4 py-8">
-        <Button variant="ghost" asChild className="organic-shape">
+        <Button variant="ghost" asChild>
           <Link href="/journal">
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Journal
@@ -306,6 +307,26 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
 
               <Separator className="mb-10" />
 
+              {/* Ensure all images inside article content have a consistent rounded appearance */}
+              <style>{`
+                .article-content img,
+                .article-content figure img {
+                  border-radius: 0.75rem !important;
+                  overflow: hidden;
+                  object-fit: cover;
+                  width: 100%;
+                  max-width: 640px; 
+                  height: 630px;
+                  display: block;
+                  margin: 0.75rem auto; /* center images */
+                }
+                .article-content figure {
+                  overflow: hidden;
+                  border-radius: 0.75rem;
+                  margin: 1.25rem 0;
+                }
+              `}</style>
+
               {/* Main Text */}
               <div
                 className="article-content prose prose-lg md:prose-xl max-w-none
@@ -319,7 +340,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
                 prose-a:text-primary hover:prose-a:underline
                 prose-blockquote:border-l-4 prose-blockquote:border-primary/40 prose-blockquote:pl-4 prose-blockquote:italic
                 prose-img:rounded-xl"
-              dangerouslySetInnerHTML={{ __html: post.content }}
+                dangerouslySetInnerHTML={{ __html: post.content }}
               />
 
               <Separator className="my-12" />
@@ -345,7 +366,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
               .filter(([slug]) => slug !== params.slug)
               .slice(0, 2)
               .map(([slug, rec]) => (
-                <Card key={slug} className="border-none shadow-md organic-shape overflow-hidden group">
+                <Card key={slug} className="border-none shadow-md overflow-hidden group">
                   <Link href={`/journal/${slug}`}>
                     <div className="relative h-56 w-full overflow-hidden">
                       <Image src={rec.image || "/placeholder.svg"} alt={rec.title} fill className="object-cover group-hover:scale-105 transition-transform duration-300" />
@@ -361,6 +382,19 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
           </div>
         </div>
       </article>
+
+      {/* Stay Updated CTA */}
+      <section className="py-16 md:py-24 bg-primary/5">
+        <div className="container px-4">
+          <div className="max-w-2xl mx-auto text-center">
+            <h2 className="font-serif text-3xl md:text-4xl font-bold mb-4">Stay Updated</h2>
+            <p className="text-muted-foreground mb-8">
+              Get the latest articles, tips, and inspiration delivered to your inbox
+            </p>
+            <NewsletterSignup />
+          </div>
+        </div>
+      </section>
     </div>
   )
 }

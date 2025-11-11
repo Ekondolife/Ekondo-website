@@ -47,12 +47,12 @@ export default function Footer() {
             <ul className="space-y-3">
               <li>
                 <Link href="/retail" className="text-muted-foreground hover:text-primary transition-colors">
-                  Retail
+                  Shop
                 </Link>
               </li>
               <li>
                 <Link href="/experience" className="text-muted-foreground hover:text-primary transition-colors">
-                  Experience
+                  Experiences
                 </Link>
               </li>
               <li>
@@ -92,9 +92,8 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="https://docs.google.com/forms/d/1qdVx572VlBkgZg8-VTUgPuuZINzqMKyyfjThUBJTRcg/preview"
-                 target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors">
-                  Become a nature host
+                <Link href="/nature-host" className="text-muted-foreground hover:text-primary transition-colors">
+                  Become a Nature Host
                 </Link>
               </li>
             </ul>

@@ -22,6 +22,32 @@ export default function AuthForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [success, setSuccess] = useState("");
 
+  const mapAuthError = (err: any): string => {
+    const code = err?.code || "";
+    switch (code) {
+      case "auth/invalid-credential":
+      case "auth/wrong-password":
+      case "auth/invalid-password":
+        return "Incorrect email or password. Please try again.";
+      case "auth/user-not-found":
+        return "No account found with this email.";
+      case "auth/too-many-requests":
+        return "Too many attempts. Please wait a moment and try again.";
+      case "auth/network-request-failed":
+        return "Network error. Check your connection and try again.";
+      case "auth/popup-closed-by-user":
+        return "Sign-in was cancelled before completing.";
+      case "auth/popup-blocked":
+        return "Popup was blocked by your browser. Please allow popups and try again.";
+      case "auth/email-already-in-use":
+        return "An account already exists with this email.";
+      case "auth/weak-password":
+        return "Please choose a stronger password.";
+      default:
+        return "Something went wrong. Please try again.";
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
@@ -45,7 +71,7 @@ export default function AuthForm() {
       setFullName("");
       setPhone("");
     } catch (err: any) {
-      setError(err.message || "Something went wrong");
+      setError(mapAuthError(err));
     } finally {
       setLoading(false);
     }
@@ -61,14 +87,14 @@ export default function AuthForm() {
       setSuccess("Signed in with Google successfully!");
       setTimeout(() => router.push("/"), 1500);
     } catch (err: any) {
-      setError(err.message || "Google sign-in failed");
+      setError(mapAuthError(err));
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <Card className="w-full max-w-md border-none shadow-lg organic-shape p-10">
+    <Card className="w-full max-w-md border-none shadow-lg p-10">
       <CardHeader className="text-center pb-4">
         <CardTitle className="font-serif text-2xl font-bold text-primary">
           {isLogin ? "Welcome Back" : "Join Ekondo"}
@@ -91,7 +117,7 @@ export default function AuthForm() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="your@email.com"
-                className="pl-12 pr-4 py-3 h-12 text-base organic-shape"
+                className="pl-12 pr-4 py-3 h-12 text-base"
                 required
               />
             </div>
@@ -108,7 +134,7 @@ export default function AuthForm() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Enter your password"
-                className="pl-10 py-3 h-12 text-basepr-10 organic-shape"
+                className="pl-10 py-3 h-12 text-basepr-10"
                 required
               />
               <button

@@ -100,22 +100,18 @@ export default function Home() {
       <section className="relative h-[80vh] min-h-[600px] w-full overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b  z-10"></div>
         <Image
-          src="./images/ekondo event 2.JPG"
+          src="./images/homepage.png"
           alt="Young African woman tending to plants in urban setting"
           fill
           className="object-cover js-hero-image js-parallax"
           priority
         />
-        <div className="container relative z-20 flex h-full flex-col items-center justify-center text-center px-4">
-          <h1 className="text-xl md:text-4xl lg:text-6xl font-bold text-primary mb-6 js-hero-title">
+        <div className="container relative z-20 flex text-shadow-lg text-shadow-red-500/50 flex-col items-center justify-start text-center px-4 pt-24 md:pt-32">
+          <h1 className="text-xl md:text-4xl lg:text-6xl font-bold text-white drop-shadow-lg mt-6 mb-24 js-hero-title">
             Connect to Nature <br className="hidden md:block" />
             and Community
           </h1>
-          <p className="text-lg md:text-xl max-w-2xl mb-8 text-white dark:text-foreground/80 drop-shadow-xl js-hero-sub">
-            Ekondo brings sustainability and wellness through our retail products, immersive experiences, professional
-            services, and community spaces.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 js-hero-ctas">
+          <div className="flex flex-col sm:flex-row gap-4 js-hero-ctas mt-24">
             <Button size="lg" asChild className="btn-gradient-clean js-hover">
               <Link href="/retail">Explore Our Products</Link>
             </Button>
@@ -134,7 +130,7 @@ export default function Home() {
           <Tabs defaultValue="retail" className="w-full">
             <TabsList className="grid grid-cols-2 md:grid-cols-4 h-auto mb-8 bg-primary/5">
               <TabsTrigger value="retail" className="py-3 data-[state=active]:bg-primary/20 btn-gradient-clean js-hover m-4">
-                Retail
+                Shop
               </TabsTrigger>
               <TabsTrigger
                 value="experience"
@@ -157,7 +153,7 @@ export default function Home() {
               <div className="grid md:grid-cols-2 gap-8 items-center">
                 <div>
                   <Image
-                    src="./images/girl2.jpeg"
+                    src="./images/Ekondo-pot.JPG"
                     alt="Young African woman with beautiful plants"
                     width={800}
                     height={600}
@@ -454,7 +450,7 @@ export default function Home() {
           <div className="text-center mt-8">
             <Button variant="outline" size="lg" asChild className="btn-gradient-clean js-hover">
               <a href="https://www.instagram.com/ekondolife/" target="_blank" rel="noopener noreferrer">
-                Follow @ekondo
+                Follow @ekondolife
               </a>
             </Button>
           </div>

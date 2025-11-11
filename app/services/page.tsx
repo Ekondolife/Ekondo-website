@@ -9,6 +9,7 @@ import { Check, MapPin, ArrowRight } from "lucide-react"
 import { services } from "@/lib/services-data"
 import { gsap } from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
+import CaseStudies from "@/components/case-studies"
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -221,7 +222,7 @@ export default function ServicesPage() {
             {services.map((service) => (
               <Card
                 key={service.id}
-                className={`service-card border-none shadow-md organic-shape p-10 overflow-hidden ${
+                className={`service-card border-none shadow-md overflow-hidden ${
                   service.popular ? "ring-2 ring-primary" : ""
                 }`}
               >
@@ -230,7 +231,7 @@ export default function ServicesPage() {
                     Most Popular
                   </div>
                 )}
-                <div className="relative h-48 overflow-hidden">
+                <div className="relative h-48 w-full overflow-hidden">
                   <Image 
                     src={service.image || "/placeholder.svg"} 
                     alt={service.title} 
@@ -252,7 +253,7 @@ export default function ServicesPage() {
                     ))}
                   </ul>
 
-                  <Button asChild className="w-full organic-shape">
+                  <Button asChild className="w-full">
                     <Link href={`/services/${service.id}`}>Book Service</Link>
                   </Button>
                 </CardContent>
@@ -263,8 +264,18 @@ export default function ServicesPage() {
       </section>
 
       {/* Service Area */}
-      <section ref={serviceAreaRef} className="py-16 md:py-24 leaf-pattern-dense">
-        <div className="container px-4">
+      <section 
+        ref={serviceAreaRef} 
+        className="py-16 md:py-24 relative"
+        style={{
+          backgroundImage: "url('/images/services img.jpg')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+        }}
+      >
+        <div className="absolute inset-0 bg-background/70 "></div>
+        <div className="container px-4 relative z-10">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-12">
               <h2 className="area-title font-serif text-3xl md:text-4xl font-bold mb-4">Where We Serve</h2>
@@ -275,9 +286,9 @@ export default function ServicesPage() {
               {[
                 "Lagos, Nigeria",
                 "Abuja, Nigeria",
-                "Port Harcourt, Nigeria",
+                "Ibadan, Nigeria",
               ].map((city, index) => (
-                <Card key={index} className="city-card border-none shadow-md organic-shape">
+                <Card key={index} className="city-card border-none shadow-md">
                   <CardContent className="p-4 flex items-center gap-3">
                     <div className="bg-primary/10 p-2 rounded-full">
                       <MapPin className="h-5 w-5 text-primary" />
@@ -290,7 +301,7 @@ export default function ServicesPage() {
 
             <div className="area-cta text-center mt-8">
               <p className="text-muted-foreground mb-4">Don't see your city? We're expanding!</p>
-              <Button variant="outline" asChild className="organic-shape bg-transparent">
+              <Button variant="outline" asChild className="bg-transparent">
                 <Link href="/contact">Contact Us</Link>
               </Button>
             </div>
@@ -340,8 +351,11 @@ export default function ServicesPage() {
         </div>
       </section>
 
+      {/* Case Studies - just above footer */}
+      <CaseStudies />
+
       {/* CTA Section */}
-      <section ref={ctaRef} className="py-16 md:py-24 bg-primary/5 leaf-pattern">
+      <section ref={ctaRef} className="py-16 md:py-24 bg-primary/5">
         <div className="container px-4">
           <div className="cta-content max-w-3xl mx-auto text-center">
             <h2 className="font-serif text-3xl md:text-4xl font-bold mb-4">
@@ -350,7 +364,7 @@ export default function ServicesPage() {
             <p className="text-muted-foreground mb-8">
               Book a free consultation with our expert team to discuss your project
             </p>
-            <Button size="lg" asChild className="organic-shape">
+            <Button size="lg" asChild>
               <Link href="/contact">
                 Schedule Consultation <ArrowRight className="ml-2 h-4 w-4" />
               </Link>

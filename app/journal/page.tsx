@@ -120,6 +120,8 @@ export default function JournalPage() {
 
   const [searchQuery, setSearchQuery] = useState("")
   const [activeCategory, setActiveCategory] = useState<string>("All")
+  const [currentPage, setCurrentPage] = useState<number>(1)
+  const perPage = 3
 
   const filteredPosts = useMemo(() => {
     let result = posts
@@ -136,10 +138,19 @@ export default function JournalPage() {
     return result
   }, [posts, activeCategory, searchQuery])
 
+  const totalPages = Math.max(1, Math.ceil(filteredPosts.length / perPage))
+  const startIdx = (currentPage - 1) * perPage
+  const paginatedPosts = filteredPosts.slice(startIdx, startIdx + perPage)
+
+  // Reset to first page when filters/search change
+  useEffect(() => {
+    setCurrentPage(1)
+  }, [activeCategory, searchQuery])
+
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
-      <section className="py-16 md:py-24 leaf-pattern">
+      <section className="py-16 md:py-24">
         <div className="container px-4">
           <div className="max-w-4xl mx-auto text-center mb-12">
             <h1 className="font-serif text-4xl md:text-6xl font-bold text-primary mb-6 js-hero-title">The Ekondo Journal</h1>
@@ -149,7 +160,7 @@ export default function JournalPage() {
           </div>
 
           {/* Featured Post */}
-          <Card className="border-none shadow-lg organic-shape overflow-hidden max-w-5xl mx-auto js-card">
+          <Card className="border-none shadow-lg overflow-hidden max-w-5xl mx-auto js-card">
             <div className="grid md:grid-cols-2 gap-0">
               <div className="relative h-64 md:h-auto">
                 <Image
@@ -177,7 +188,7 @@ export default function JournalPage() {
                   <span>•</span>
                   <span>{featuredPost.readTime}</span>
                 </div>
-                <Button asChild className="organic-shape js-hover">
+                <Button asChild className="js-hover">
                   <Link href={`/journal/${featuredPost.slug}`}>
                     Read Article <ArrowRight className="ml-2 h-4 w-4" />
                   </Link>
@@ -193,7 +204,7 @@ export default function JournalPage() {
         <div className="container px-4">
           <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
             <div className="w-full md:w-96">
-              <Input placeholder="Search articles..." className="organic-shape" value={searchQuery} onChange={e => setSearchQuery(e.target.value)} />
+              <Input placeholder="Search articles..."  value={searchQuery} onChange={e => setSearchQuery(e.target.value)} />
             </div>
             <div className="flex flex-wrap gap-2">
               {categories.map((category) => (
@@ -201,7 +212,7 @@ export default function JournalPage() {
                   key={category}
                   variant={activeCategory === category ? "default" : "outline"}
                   size="sm"
-                  className="organic-shape js-hover"
+                  className="js-hover"
                   onClick={() => setActiveCategory(category)}
                 >
                   {category}
@@ -217,8 +228,8 @@ export default function JournalPage() {
         <div className="container px-4">
           <h2 className="font-serif text-2xl md:text-3xl font-bold mb-12 js-section-title">Latest Articles</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredPosts.map((post) => (
-              <Card key={post.slug} className="border-none shadow-md organic-shape overflow-hidden group h-full max-w-[95vw] w-full mx-auto p-3 md:p-6 js-card js-hover">
+            {paginatedPosts.map((post) => (
+              <Card key={post.slug} className="border-none shadow-md overflow-hidden group h-full max-w-[95vw] w-full mx-auto  js-card js-hover">
                 <Link href={`/journal/${post.slug}`}>
                   <div className="relative h-48 overflow-hidden">
                     <Image
@@ -267,19 +278,33 @@ export default function JournalPage() {
           {/* Pagination */}
           <div className="flex justify-center mt-12">
             <div className="flex items-center gap-2">
-              <Button variant="outline" size="sm" disabled className="organic-shape bg-transparent js-hover">
+              <Button
+                variant="outline"
+                size="sm"
+                className="organic-shape bg-transparent js-hover"
+                disabled={currentPage === 1}
+                onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+              >
                 Previous
               </Button>
-              <Button variant="default" size="sm" className="organic-shape js-hover">
-                1
-              </Button>
-              <Button variant="outline" size="sm" className="organic-shape bg-transparent js-hover">
-                2
-              </Button>
-              <Button variant="outline" size="sm" className="organic-shape bg-transparent js-hover">
-                3
-              </Button>
-              <Button variant="outline" size="sm" className="organic-shape bg-transparent js-hover">
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNum) => (
+                <Button
+                  key={pageNum}
+                  variant={currentPage === pageNum ? "default" : "outline"}
+                  size="sm"
+                  className="organic-shape js-hover"
+                  onClick={() => setCurrentPage(pageNum)}
+                >
+                  {pageNum}
+                </Button>
+              ))}
+              <Button
+                variant="outline"
+                size="sm"
+                className="organic-shape bg-transparent js-hover"
+                disabled={currentPage === totalPages}
+                onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+              >
                 Next
               </Button>
             </div>
@@ -288,7 +313,7 @@ export default function JournalPage() {
       </section>
 
       {/* Newsletter CTA */}
-      <section className="py-16 md:py-24 bg-primary/5 leaf-pattern">
+      <section className="py-16 md:py-24 bg-primary/5">
         <div className="container px-4">
           <div className="max-w-2xl mx-auto text-center">
             <h2 className="font-serif text-3xl md:text-4xl font-bold mb-4 js-section-title">Stay Updated</h2>

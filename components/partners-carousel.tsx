@@ -57,8 +57,8 @@ export default function PartnersCarousel() {
             <div key={idx} className="flex-shrink-0 w-full">
               <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
                 {group.map((src, i) => (
-                  <Card key={i} className=" overflow-hidden border-none shadow-md organic-shape p-6 flex items-center justify-center bg-white">
-                    <div className="relative w-full aspect-[4/3]">
+                  <Card key={i} className=" overflow-hidden border-none shadow-md organic-shape p-1 flex items-center justify-center bg-white transform scale-95 hover:scale-100 transition-transform duration-300">
+                    <div className="relative w-full aspect-[5/3]">
                       <Image
                         src={src}
                         alt="Partner logo"
