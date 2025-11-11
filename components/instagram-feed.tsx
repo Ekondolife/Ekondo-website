@@ -11,7 +11,7 @@ export default function InstagramFeed() {
     },
     {
       id: 2,
-      image: "./images/two_girls.WEBP",
+      image: "./images/two_girls.webp",
       alt: "African hands planting seeds",
       link: "https://www.instagram.com/ekondolife/",
     },

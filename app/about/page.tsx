@@ -240,7 +240,7 @@ export default function AboutPage() {
       <section 
         className="py-16 md:py-24 bg-primary/5 relative" 
         style={{
-          backgroundImage: "url('/images/impact_ekondo.JPG')",
+          backgroundImage: "url('/images/impact_ekondo.jpg')",
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",

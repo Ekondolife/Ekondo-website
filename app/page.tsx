@@ -193,7 +193,7 @@ export default function Home() {
               <div className="grid md:grid-cols-2 gap-8 items-center">
                 <div>
                   <Image
-                    src="./images/two girls.jpg"
+                    src="./images/two_girls.webp"
                     alt="Young African people participating in plant workshop"
                     width={800}
                     height={600}
