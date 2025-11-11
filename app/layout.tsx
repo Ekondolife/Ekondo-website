@@ -15,7 +15,7 @@ import localFont from 'next/font/local'
 const museo = localFont({
   src: [
     {
-      path: '../public/fonts/Museo_Sans_100_italic.otf',
+      path: '../public/fonts/Museo_Sans_100_Italic.otf',
       weight: '100',
       style: 'normal',
     },
@@ -25,7 +25,7 @@ const museo = localFont({
       style: 'italic',
     },
     {
-      path: '../public/fonts/Museo_Sans_300_italic.otf',
+      path: '../public/fonts/Museo_Sans_300_Italic.otf',
       weight: '300',
       style: 'italic',
     },
@@ -35,7 +35,7 @@ const museo = localFont({
       style: 'normal',
     },
     {
-      path: '../public/fonts/Museo_Sans_500_italic.otf',
+      path: '../public/fonts/Museo_Sans_500_Italic.otf',
       weight: '500',
       style: 'italic',
     },
@@ -45,7 +45,7 @@ const museo = localFont({
       style: 'normal',
     },
     {
-      path: '../public/fonts/Museo_Sans_700_italic.otf',
+      path: '../public/fonts/Museo_Sans_700_Italic.otf',
       weight: '700',
       style: 'italic',
     },
@@ -55,7 +55,7 @@ const museo = localFont({
       style: 'normal',
     },
     {
-      path: '../public/fonts/Museo_Sans_900_italic.otf',
+      path: '../public/fonts/Museo_Sans_900_Italic.otf',
       weight: '900',
       style: 'italic',
     },
