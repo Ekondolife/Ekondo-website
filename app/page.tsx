@@ -100,7 +100,7 @@ export default function Home() {
       <section className="relative h-[80vh] min-h-[600px] w-full overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b  z-10"></div>
         <Image
-          src="./images/homepage.png"
+          src="./images/homepage.webp"
           alt="Young African woman tending to plants in urban setting"
           fill
           className="object-cover js-hero-image js-parallax"
