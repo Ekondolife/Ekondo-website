@@ -34,7 +34,7 @@ export const spaces: Space[] = [
     id: 2,
     name: "Locale Lagos",
     description: "An intimate creative space for workshops and private events, surrounded by tropical plants and natural light.",
-    image: "/images/two girls.WEBP",
+    image: "/images/two_girls.WEBP",
     location: "2 Saka Jojo Street, VI, Lagos.",
     hours: "Tue-Sat: 10AM-11PM",
     capacity: "Up to 25 people",
@@ -50,7 +50,7 @@ export const spaces: Space[] = [
   name: "Living Room",
   description:
     "A cozy, plant-filled nook for creativity and connection — where sunlight, greenery, and good ideas meet in harmony.",
-  image: "/images/living room.WEBP",
+  image: "/images/living_room.WEBP",
   location: "19 Thaba Tseka St, Wuse 2, Abuja.",
   hours: "Tue-Sat: 10AM-11PM",
   capacity: "Up to 25 people",
@@ -82,7 +82,7 @@ export const spaces: Space[] = [
   name: "Sage & She",
   description:
     "A serene, feminine-inspired space where mindful living meets botanical beauty — plants, scents, and style in perfect balance.",
-  image: "/images/sage and she.WEBP",
+  image: "/images/sage_and_she.WEBP",
   location: "No. 41 Osun Crescent, Maitama, Abuja.",
   hours: "Tue-Sat: 10AM-11PM",
   capacity: "Up to 25 people",

@@ -143,7 +143,7 @@ export default function AboutPage() {
       <section ref={heroRef} className="relative h-[60vh] min-h-[500px] w-full overflow-hidden bg-muted">
         <div className="absolute inset-0 z-10"></div>
         <Image
-          src="/images/img_4455.JPG"
+          src="/images/IMG_4455.JPG"
           alt="Ekondo team working with plants"
           fill
           className="object-cover image-clean js-hero-image"
