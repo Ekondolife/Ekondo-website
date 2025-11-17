@@ -84,7 +84,7 @@ export default function GiftingPage() {
                       <p className="text-sm text-muted-foreground mb-2 line-clamp-2">{product.description}</p>
                       <span className="block font-semibold text-lg mb-4">₦{product.price?.toLocaleString()}</span>
                       <Button asChild size="lg" className="btn-gradient-clean mt-auto w-full" >
-                        <Link href={{ pathname: "/checkout", query: { productId: product.id, isGift: 1 }}}>Gift This</Link>
+                        <Link href={`/checkout?productId=${product.id}&isGift=1`}>Gift This</Link>
                       </Button>
                     </CardContent>
                   </div>

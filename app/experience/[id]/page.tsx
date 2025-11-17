@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Calendar, Clock, MapPin, Users, ArrowLeft, Check, CheckCircle } from "lucide-react"
 import { Separator } from "@/components/ui/separator"
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog"
 import { experiences } from "@/lib/experiences-data"
 import { useUser } from "@/components/user-provider"
 import { useToast } from "@/components/ui/use-toast"
@@ -23,6 +24,11 @@ export default function ExperienceDetailPage({ params }: { params: { id: string 
   const ticketTypes = isSouthside ? experience.ticketTypes : null
   const [selectedTicket, setSelectedTicket] = useState(ticketTypes ? ticketTypes[0] : null)
   const [isProcessing, setIsProcessing] = useState(false)
+  
+  // Location selection
+  const availableLocations = experience?.availableLocations || ["Abuja", "Lagos"] // Default to both if not specified
+  const [selectedLocation, setSelectedLocation] = useState<string>("")
+  const [showLocationDialog, setShowLocationDialog] = useState(false)
   
   const { uid, email, displayName } = useUser()
   const { toast } = useToast()
@@ -57,6 +63,29 @@ export default function ExperienceDetailPage({ params }: { params: { id: string 
       })
       return
     }
+
+    // Show location selection dialog if location not selected
+    if (!selectedLocation) {
+      setShowLocationDialog(true)
+      return
+    }
+
+    // Validate location for restricted experiences
+    if (availableLocations.length < 2 && !availableLocations.includes(selectedLocation)) {
+      toast({
+        title: "Location Not Available",
+        description: `This experience is only available in ${availableLocations.join(" and ")}. Please select a valid location.`,
+        variant: "destructive",
+      })
+      setShowLocationDialog(true)
+      return
+    }
+
+    // Proceed with booking
+    proceedToPayment()
+  }
+
+  const proceedToPayment = async () => {
 
     setIsProcessing(true)
 
@@ -96,6 +125,7 @@ export default function ExperienceDetailPage({ params }: { params: { id: string 
           experienceName: experience?.title,
           ticketType: ticketTypeName,
           userId: uid,
+          location: selectedLocation, // Include selected location
         }),
       })
 
@@ -115,6 +145,25 @@ export default function ExperienceDetailPage({ params }: { params: { id: string 
     }
   }
 
+  const handleLocationSelect = (location: string) => {
+    setSelectedLocation(location)
+    setShowLocationDialog(false)
+    
+    // Validate location for restricted experiences
+    if (availableLocations.length < 2 && !availableLocations.includes(location)) {
+      toast({
+        title: "Location Not Available",
+        description: `Sorry, ${experience?.title} is currently only available in ${availableLocations.join(" and ")}. We're working on bringing it to more cities soon!`,
+        variant: "destructive",
+      })
+      setSelectedLocation("")
+      return
+    }
+    
+    // If location is valid, proceed to payment
+    proceedToPayment()
+  }
+
   // Handle invalid or missing ID
   if (!experience) {
     return (
@@ -130,7 +179,7 @@ export default function ExperienceDetailPage({ params }: { params: { id: string 
     <div className="flex flex-col overflow-x-hidden">
       {/* Back Button */}
       <div className="container px-4 py-8">
-        <Button variant="ghost" asChild className="organic-shape">
+        <Button variant="ghost" asChild className="">
           <Link href="/experience">
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Experiences
@@ -153,13 +202,13 @@ export default function ExperienceDetailPage({ params }: { params: { id: string 
           </div>
 
           {/* Booking Card */}
-          <Card className="border-none shadow-lg organic-shape h-fit sticky top-24 w-full max-w-[100vw] lg:max-w-none mx-auto">
+          <Card className="border-none shadow-lg  h-fit sticky top-24 w-full max-w-[100vw] lg:max-w-none mx-auto">
             <CardContent className="p-6 w-full">
               <div className="flex items-center gap-2 mb-4">
-                <div className="bg-primary/10 text-primary text-sm font-medium px-3 py-1 rounded organic-shape">
+                <div className="bg-primary/10 text-primary text-sm font-medium px-3 py-1 rounded ">
                   {experience.type}
                 </div>
-                <div className="bg-primary/10 text-primary text-sm font-medium px-3 py-1 rounded organic-shape">
+                <div className="bg-primary/10 text-primary text-sm font-medium px-3 py-1 rounded ">
                   {experience.date}
                 </div>
               </div>
@@ -225,16 +274,22 @@ export default function ExperienceDetailPage({ params }: { params: { id: string 
               </div>
 
               {experience.spotsLeft <= 3 && (
-                <div className="bg-destructive/10 text-destructive p-3 rounded organic-shape mb-6 text-sm font-medium text-center">
+                <div className="bg-destructive/10 text-destructive p-3 rounded  mb-6 text-sm font-medium text-center">
                   Only {experience.spotsLeft} spots remaining!
                 </div>
               )}
 
-              <Button size="lg" className="w-full organic-shape mb-3" onClick={handleBookNow} disabled={isProcessing}>
+              <Button size="lg" className="w-full btn-gradient-clean mb-3" onClick={handleBookNow} disabled={isProcessing}>
                 {isProcessing ? "Processing..." : isSouthside && selectedTicket
                   ? `Book Now - ₦${selectedTicket.price.toLocaleString()}`
                   : `Book Now - ₦${experience.price.toLocaleString()}`}
               </Button>
+              
+              {selectedLocation && (
+                <p className="text-sm text-muted-foreground text-center">
+                  Location: <span className="font-medium">{selectedLocation}</span>
+                </p>
+              )}
 
               <Separator className="my-6" />
 
@@ -266,18 +321,63 @@ export default function ExperienceDetailPage({ params }: { params: { id: string 
               Secure your spot in this popular experience. Limited spaces available!
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="organic-shape" onClick={handleBookNow} disabled={isProcessing}>
+              <Button size="lg" className="" onClick={handleBookNow} disabled={isProcessing}>
                 {isProcessing ? "Processing..." : isSouthside && selectedTicket
                   ? `Book Now - ₦${selectedTicket.price.toLocaleString()}`
                   : `Book Now - ₦${experience.price.toLocaleString()}`}
               </Button>
-              <Button size="lg" variant="outline" asChild className="organic-shape bg-transparent">
+              <Button size="lg" variant="outline" asChild className=" bg-transparent">
                 <Link href="/experience">Browse More Experiences</Link>
               </Button>
             </div>
           </div>
         </div>
       </section>
+
+      {/* Location Selection Dialog */}
+      <Dialog open={showLocationDialog} onOpenChange={setShowLocationDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Select Your Location</DialogTitle>
+            <DialogDescription>
+              Choose the city where you'd like to attend this experience.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-3 py-4">
+            {["Abuja", "Lagos"].map((location) => (
+              <Button
+                key={location}
+                variant={selectedLocation === location ? "default" : "outline"}
+                className="justify-between w-full h-auto py-4"
+                onClick={() => handleLocationSelect(location)}
+                disabled={availableLocations.length < 2 && !availableLocations.includes(location)}
+              >
+                <div className="flex items-center gap-3">
+                  <MapPin className="h-5 w-5" />
+                  <span className="font-semibold">{location}</span>
+                </div>
+                {availableLocations.length < 2 && !availableLocations.includes(location) && (
+                  <span className="text-xs text-muted-foreground">Not available</span>
+                )}
+                {selectedLocation === location && (
+                  <Check className="h-5 w-5 text-primary" />
+                )}
+              </Button>
+            ))}
+          </div>
+          {availableLocations.length < 2 && (
+            <div className="bg-primary/10 border border-primary/20 rounded-lg p-3 text-sm text-muted-foreground">
+              <p className="font-medium text-primary mb-1">Note:</p>
+              <p>This experience is currently only available in {availableLocations.join(" and ")}.</p>
+            </div>
+          )}
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowLocationDialog(false)}>
+              Cancel
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }

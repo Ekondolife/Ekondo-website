@@ -1,6 +1,6 @@
 "use client"
 
-import { Calendar, Clock, MapPin, Users } from "lucide-react"
+import { Calendar, Clock, MapPin, Users, ArrowRight } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { useMemo, useState, useEffect, useRef } from "react"
@@ -140,12 +140,12 @@ useEffect(() => {
       </div>
 
       {/* Featured Experiences */}
-      <section ref={featuredSectionRef} className="mb-16">
+      <section ref={featuredSectionRef} className="mb-24">
         <h2 className="featured-title font-serif text-2xl font-bold mb-8">Featured Experiences</h2>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
           {featuredExperiences.map((experience) => (
-            <Card key={experience.id} className="featured-card group overflow-hidden border-none shadow-lg transition-transform duration-300 hover:-translate-y-2 hover:shadow-xl">
-              <div className="relative h-64 overflow-hidden">
+            <Card key={experience.id} className="featured-card group overflow-hidden border-none shadow-lg transition-transform duration-300 hover:-translate-y-2 hover:shadow-xl h-full flex flex-col">
+              <div className="relative h-96 overflow-hidden">
                 <Image
                   src={experience.image || "/placeholder.svg"}
                   alt={experience.title}
@@ -163,7 +163,7 @@ useEffect(() => {
                   </Badge>
                 </div>
               </div>
-              <CardContent className="p-6">
+              <CardContent className="p-6 flex-1 flex flex-col">
                 <h3 className="font-serif text-xl font-bold mb-2">{experience.title}</h3>
                 <p className="text-muted-foreground mb-4">{experience.description}</p>
 
@@ -186,12 +186,12 @@ useEffect(() => {
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between mt-auto">
                   <div className="text-2xl font-bold">₦{experience.price.toLocaleString()}</div>
                   <Button asChild>
                     <Link 
                        href={`/experience/${experience.id}`}  
-                       className="btn-gradient-clean rounded-md px-6 py-3 font-semibold text-white text-lg inline-block mt-6"
+                       className="btn-gradient-clean rounded-md px-6 py-3 font-semibold text-white text-lg inline-block"
                     >
                       Book Now
                     </Link>
@@ -200,6 +200,33 @@ useEffect(() => {
               </CardContent>
             </Card>
           ))}
+        </div>
+      </section>
+
+      {/* Become a Nature Host Section */}
+      <section className="mb-24 py-16 md:py-20 bg-primary/5 rounded-2xl">
+        <div className="container px-4">
+          <div className="grid md:grid-cols-2 gap-8 items-center">
+            <div className="relative h-64 md:h-80 rounded-lg overflow-hidden">
+              <Image
+                src="/images/two_girls.webp"
+                alt="Nature Hosts at Ekondo event"
+                fill
+                className="object-cover"
+              />
+            </div>
+            <div>
+              <h2 className="font-serif text-2xl md:text-3xl font-bold mb-4">Become a Nature Host</h2>
+              <p className="text-muted-foreground mb-6">
+                Be the warm, welcoming face of Ekondo at events and pop-ups. Create meaningful experiences that introduce people to our world of plants, wellness, and community. Earn rewards while helping others connect with nature.
+              </p>
+              <Button asChild size="lg" className="btn-gradient-clean">
+                <Link href="/nature-host">
+                  Learn More <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -238,7 +265,7 @@ useEffect(() => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {allExperiences.map((experience) => (
             <Card key={experience.id} className="experience-card group overflow-hidden border-none shadow-md transition-transform duration-300 hover:-translate-y-2 hover:shadow-xl">
-              <div className="relative h-48 overflow-hidden">
+              <div className="relative h-64 overflow-hidden">
                 <Image
                   src={experience.image || "/placeholder.svg"}
                   alt={experience.title}
@@ -293,6 +320,34 @@ useEffect(() => {
           ))}
         </div>
       </section>
+
+      {/* Become a Experience Partner Section */}
+      <section className="mb-24 py-16 md:py-20 bg-primary/5 rounded-2xl">
+        <div className="container px-4">
+          <div className="grid md:grid-cols-2 gap-8 items-center">
+            <div className="relative h-64 md:h-80 rounded-lg overflow-hidden">
+              <Image
+                src="/images/experience_partner.webp"
+                alt="Experience Partner at Ekondo event"
+                fill
+                className="object-cover"
+              />
+            </div>
+            <div>
+              <h2 className="font-serif text-2xl md:text-3xl font-bold mb-4">Become an Experience Partner</h2>
+              <p className="text-muted-foreground mb-6">
+                Partner with us to bring enriching Ekondo experiences to life. Support moments that spark creativity, connection, and appreciation for nature.
+              </p>
+              <Button asChild size="lg" className="btn-gradient-clean">
+                <Link href="/contact">
+                  Learn More <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
+            </div>
+          </div>
+        </div>
+      </section>
+
     </div>
   )
 }

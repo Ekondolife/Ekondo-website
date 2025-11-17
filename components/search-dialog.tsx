@@ -271,7 +271,7 @@ export function SearchDialog() {
                         <Badge
                           key={index}
                           variant="secondary"
-                          className="cursor-pointer organic-shape-soft hover:bg-primary/10"
+                          className="cursor-pointer  hover:bg-primary/10"
                           onClick={() => setQuery(search)}
                         >
                           {search}
@@ -292,7 +292,7 @@ export function SearchDialog() {
                       <Badge
                         key={index}
                         variant="outline"
-                        className="cursor-pointer organic-shape-soft hover:bg-primary/10"
+                        className="cursor-pointer  hover:bg-primary/10"
                         onClick={() => setQuery(search)}
                       >
                         {search}
@@ -315,7 +315,7 @@ export function SearchDialog() {
                         key={index}
                         href={link.url}
                         onClick={() => setOpen(false)}
-                        className="flex items-center justify-between p-3 border hover:border-primary hover:bg-primary/5 transition-colors organic-shape-soft"
+                        className="flex items-center justify-between p-3 border hover:border-primary hover:bg-primary/5 transition-colors"
                       >
                         <span className="text-sm">{link.label}</span>
                         <ArrowRight className="h-4 w-4" />
@@ -365,7 +365,7 @@ export function SearchDialog() {
                           }}
                           className="flex items-center gap-3 p-3 rounded-lg hover:bg-muted transition-colors rounded-xl group"
                         >
-                          <div className="relative w-16 h-16 overflow-hidden flex-shrink-0 organic-shape-soft">
+                          <div className="relative w-16 h-16 overflow-hidden flex-shrink-0">
                             <Image
                               src={result.image || "/placeholder.svg"}
                               alt={result.title}
@@ -382,7 +382,7 @@ export function SearchDialog() {
                             </div>
                             <p className="text-xs text-muted-foreground truncate">{result.description}</p>
                             {result.category && (
-                              <Badge variant="secondary" className="text-xs mt-1 organic-shape-soft">
+                              <Badge variant="secondary" className="text-xs mt-1">
                                 {result.category}
                               </Badge>
                             )}

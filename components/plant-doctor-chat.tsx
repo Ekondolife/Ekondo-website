@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button"
 export function PlantDoctorChat() {
   const handleWhatsAppClick = () => {
     const message = "Hi Ekondo! I need help with my plants 🌿"
-    const whatsappUrl = `https://wa.me/2348176267792?text=${encodeURIComponent(message)}`
+    const whatsappUrl = `https://wa.me/2349129937792?text=${encodeURIComponent(message)}`
     window.open(whatsappUrl, "_blank")
   }
 
@@ -21,12 +21,12 @@ export function PlantDoctorChat() {
     >
       <div className="flex items-center justify-center h-full w-full">
         <Image
-          src="/images/whatsapp.png"
+          src="/images/whatsapp_logo.webp"
           alt="WhatsApp"
           width={44}
           height={44}
           // image expands on hover via group-hover, no background on button
-          className="rounded-full transform transition-transform duration-200 ease-out group-hover:scale-110"
+          className="rounded-full transform transition-transform duration-200 ease-out group-hover:scale-110 bg-transparent"
         />
       </div>
       <span className="sr-only">Chat with Ekondo on WhatsApp</span>

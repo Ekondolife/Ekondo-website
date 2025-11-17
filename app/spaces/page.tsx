@@ -5,7 +5,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { MapPin, Clock, Users, Calendar, Phone } from "lucide-react"
+import { MapPin, Clock, Users, Calendar, Phone, ArrowRight, ChevronLeft, ChevronRight } from "lucide-react"
 import { getRecurringEvents } from "@/lib/experiences-data"
 import { spaces } from "@/lib/spaces-data"
 import gsap from "gsap"
@@ -119,7 +119,7 @@ export default function SpacesPage() {
                 <div className={index % 2 === 1 ? "md:col-start-1 md:row-start-1" : ""}>
                   {space.featured && (
                     <div className="inline-block bg-primary/10 text-primary text-sm font-medium px-3 py-1 rounded organic-shape mb-4 js-card">
-                      Retail outlet
+                      Flagship location
                     </div>
                   )}
                   <h2 className="font-serif text-3xl md:text-4xl font-bold mb-4 js-section-title">{space.name}</h2>
@@ -142,7 +142,16 @@ export default function SpacesPage() {
 
                   <div className="flex flex-col sm:flex-row gap-3">
                     <Button asChild className="js-hover">
-                      <Link href={`/spaces/${space.id}`}>Book This Space</Link>
+                       {space.featured ? (
+                        <Link href={`/spaces/${space.id}`}>
+                          Book This Space
+                        </Link>
+                      ) : (
+                        <Link href={`${space.mapUrl}`} target="_blank">
+                          Visit This Space
+                        </Link>
+                      )}
+                      
                     </Button>
                     <Button variant="outline" asChild className="bg-transparent js-hover">
                       <Link href="/contact">
@@ -161,65 +170,100 @@ export default function SpacesPage() {
   
 
       {/* Space Rental */}
-      <section className="py-16 md:py-24">
+      <section className="relative py-16 md:py-24 overflow-hidden">
+        
+        {/* Background Image */}
+        <div
+          className="absolute inset-0 bg-cover bg-center opacity-20 blur-sm"
+          style={{ backgroundImage: "url('/images/ekondo_park.webp')" }}
+        ></div>
+
+        {/* Content Layer */}
+        <div className="relative z-10">
+          <div className="container px-4">
+            <div className="max-w-4xl mx-auto">
+              <h2 className="font-serif text-3xl md:text-4xl font-bold text-center mb-4 js-section-title">Rent Our Spaces</h2>
+              <p className="text-center text-muted-foreground mb-12">
+                Perfect for events, workshops, photoshoots, and private gatherings
+              </p>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <Card className="border-none shadow-md js-card">
+                  <CardContent className="p-6">
+                    <h3 className="font-serif text-xl font-bold mb-4">Hourly Rental</h3>
+                    <div className="text-3xl font-bold text-primary mb-4">From ₦25,000/hour</div>
+                    <ul className="space-y-2 text-sm mb-6">
+                      <li className="flex items-start gap-2">
+                        <div className="h-2 w-2 rounded-full bg-primary mt-1.5 flex-shrink-0"></div>
+                        <span>Perfect for workshops and small events</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <div className="h-2 w-2 rounded-full bg-primary mt-1.5 flex-shrink-0"></div>
+                        <span>Basic amenities included</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <div className="h-2 w-2 rounded-full bg-primary mt-1.5 flex-shrink-0"></div>
+                        <span>Flexible booking times</span>
+                      </li>
+                    </ul>
+                    <Button variant="outline" className="w-full bg-transparent js-hover" asChild>
+                      <Link href="/contact">Inquire</Link>
+                    </Button>
+                  </CardContent>
+                </Card>
+
+                <Card className="border-none shadow-md js-card js-hover">
+                  <CardContent className="p-6">
+                    <h3 className="font-serif text-xl font-bold mb-4">Full Day Rental</h3>
+                    <div className="text-3xl font-bold text-primary mb-4">From ₦150,000/day</div>
+                    <ul className="space-y-2 text-sm mb-6">
+                      <li className="flex items-start gap-2">
+                        <div className="h-2 w-2 rounded-full bg-primary mt-1.5 flex-shrink-0"></div>
+                        <span>8 hours of access</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <div className="h-2 w-2 rounded-full bg-primary mt-1.5 flex-shrink-0"></div>
+                        <span>All amenities included</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <div className="h-2 w-2 rounded-full bg-primary mt-1.5 flex-shrink-0"></div>
+                        <span>Setup and cleanup assistance</span>
+                      </li>
+                    </ul>
+                    <Button className="w-full js-hover" asChild>
+                      <Link href="/contact">Book Now</Link>
+                    </Button>
+                  </CardContent>
+                </Card>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </section>
+
+    {/* Become a Nature Host Section */}
+    <section className="py-16 md:py-24">
         <div className="container px-4">
-          <div className="max-w-4xl mx-auto">
-            <h2 className="font-serif text-3xl md:text-4xl font-bold text-center mb-4 js-section-title">Rent Our Spaces</h2>
-            <p className="text-center text-muted-foreground mb-12">
-              Perfect for events, workshops, photoshoots, and private gatherings
-            </p>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <Card className="border-none shadow-md js-card">
-                <CardContent className="p-6">
-                  <h3 className="font-serif text-xl font-bold mb-4">Hourly Rental</h3>
-                  <div className="text-3xl font-bold text-primary mb-4">From ₦15,000/hour</div>
-                  <ul className="space-y-2 text-sm mb-6">
-                    <li className="flex items-start gap-2">
-                      <div className="h-2 w-2 rounded-full bg-primary mt-1.5 flex-shrink-0"></div>
-                      <span>Perfect for workshops and small events</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <div className="h-2 w-2 rounded-full bg-primary mt-1.5 flex-shrink-0"></div>
-                      <span>Basic amenities included</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <div className="h-2 w-2 rounded-full bg-primary mt-1.5 flex-shrink-0"></div>
-                      <span>Flexible booking times</span>
-                    </li>
-                  </ul>
-                  <Button variant="outline" className="w-full bg-transparent js-hover" asChild>
-                    <Link href="/contact">Inquire</Link>
-                  </Button>
-                </CardContent>
-              </Card>
-
-              <Card className="border-none shadow-md ring-2 ring-primary js-card js-hover">
-                <CardContent className="p-6">
-                  <div className="bg-primary text-primary-foreground text-center py-1 text-sm font-medium rounded mb-4">
-                    Most Popular
-                  </div>
-                  <h3 className="font-serif text-xl font-bold mb-4">Full Day Rental</h3>
-                  <div className="text-3xl font-bold text-primary mb-4">From ₦90,000/day</div>
-                  <ul className="space-y-2 text-sm mb-6">
-                    <li className="flex items-start gap-2">
-                      <div className="h-2 w-2 rounded-full bg-primary mt-1.5 flex-shrink-0"></div>
-                      <span>8 hours of access</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <div className="h-2 w-2 rounded-full bg-primary mt-1.5 flex-shrink-0"></div>
-                      <span>All amenities included</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <div className="h-2 w-2 rounded-full bg-primary mt-1.5 flex-shrink-0"></div>
-                      <span>Setup and cleanup assistance</span>
-                    </li>
-                  </ul>
-                  <Button className="w-full js-hover" asChild>
-                    <Link href="/contact">Book Now</Link>
-                  </Button>
-                </CardContent>
-              </Card>
+          <div className="grid md:grid-cols-2 gap-8 items-center max-w-5xl mx-auto">
+            <div className="relative h-64 md:h-80 rounded-lg overflow-hidden">
+              <Image
+                src="/images/two_girls.webp"
+                alt="Nature Hosts at Ekondo event"
+                fill
+                className="object-cover"
+              />
+            </div>
+            <div>
+              <h2 className="text-2xl md:text-3xl font-bold mb-4 js-section-title">Become a Nature Host</h2>
+              <p className="text-muted-foreground mb-6">
+                Be the warm, welcoming face of Ekondo at events and pop-ups. Create meaningful experiences that introduce people to our world of plants, wellness, and community. Earn rewards while helping others connect with nature.
+              </p>
+              <Button asChild size="lg" className="btn-gradient-clean js-hover">
+                <Link href="/nature-host">
+                  Learn More <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
             </div>
           </div>
         </div>

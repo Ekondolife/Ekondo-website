@@ -16,11 +16,92 @@ export default function FestivalBanner() {
   }
 
   const handleDismiss = () => {
-    // hide only for the current render/session — do NOT persist
     setIsVisible(false)
   }
 
-  // only respect current visibility state; banner will reappear on reload / new page
+  // Function to add event to calendar
+  const addToCalendar = () => {
+    // Event details
+    const eventDetails = {
+      title: "Southside Festival",
+      description: "Join us for an unforgettable experience at the Southside Festival! Get ready for music, food, and amazing vibes.",
+      location: "Ekondo Park, Abuja", // Update with actual location
+      startDate: "2025-12-06T10:00:00", // December 6, 2025, 10:00 AM
+      endDate: "2025-12-06T22:00:00",   // December 6, 2025, 10:00 PM
+    }
+
+    // Convert to ISO format for calendar
+    const startDateTime = new Date(eventDetails.startDate).toISOString().replace(/-|:|\.\d+/g, '')
+    const endDateTime = new Date(eventDetails.endDate).toISOString().replace(/-|:|\.\d+/g, '')
+
+    // Create Google Calendar URL
+    const googleCalendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(
+      eventDetails.title
+    )}&dates=${startDateTime}/${endDateTime}&details=${encodeURIComponent(
+      eventDetails.description
+    )}&location=${encodeURIComponent(eventDetails.location)}&sf=true&output=xml`
+
+    // Create ICS file for Apple Calendar, Outlook, etc.
+    const icsContent = `BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Ekondo//Southside Festival//EN
+BEGIN:VEVENT
+UID:southside-festival-2025@ekondolife.com
+DTSTAMP:${new Date().toISOString().replace(/-|:|\.\d+/g, '')}
+DTSTART:${startDateTime}
+DTEND:${endDateTime}
+SUMMARY:${eventDetails.title}
+DESCRIPTION:${eventDetails.description}
+LOCATION:${eventDetails.location}
+STATUS:CONFIRMED
+SEQUENCE:0
+BEGIN:VALARM
+TRIGGER:-PT24H
+DESCRIPTION:Reminder: Southside Festival tomorrow!
+ACTION:DISPLAY
+END:VALARM
+END:VEVENT
+END:VCALENDAR`
+
+    // Detect user's device/browser and provide appropriate option
+    const userAgent = navigator.userAgent.toLowerCase()
+    const isAppleDevice = /iphone|ipad|ipod|macintosh/.test(userAgent)
+    const isAndroid = /android/.test(userAgent)
+
+    if (isAndroid) {
+      // Android devices - open Google Calendar
+      window.open(googleCalendarUrl, '_blank')
+    } else if (isAppleDevice) {
+      // iOS/Mac devices - download ICS file
+      const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' })
+      const link = document.createElement('a')
+      link.href = URL.createObjectURL(blob)
+      link.download = 'southside-festival-2025.ics'
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+      URL.revokeObjectURL(link.href)
+    } else {
+      // Desktop - show options
+      const choice = confirm(
+        'Add to Calendar\n\nClick OK for Google Calendar\nClick Cancel to download for Outlook/Apple Calendar'
+      )
+      
+      if (choice) {
+        window.open(googleCalendarUrl, '_blank')
+      } else {
+        const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' })
+        const link = document.createElement('a')
+        link.href = URL.createObjectURL(blob)
+        link.download = 'southside-festival-2025.ics'
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+        URL.revokeObjectURL(link.href)
+      }
+    }
+  }
+
   if (!isVisible) return null
 
   return (
@@ -36,7 +117,14 @@ export default function FestivalBanner() {
         <div className="flex items-center gap-3 md:gap-4 flex-1 min-w-0">
           <div className="hidden md:flex items-center gap-2 flex-shrink-0">
             <Sparkles className="h-4 w-4 md:h-5 md:w-5 text-white animate-pulse" />
-            <Calendar className="h-4 w-4 md:h-5 md:w-5 text-white" />
+            <button
+              onClick={addToCalendar}
+              className="hover:scale-110 transition-transform cursor-pointer focus:outline-none focus:ring-2 focus:ring-white/50 rounded-full p-1"
+              aria-label="Add to calendar"
+              title="Add Southside Festival to your calendar"
+            >
+              <Calendar className="h-4 w-4 md:h-5 md:w-5 text-white hover:text-white/90" />
+            </button>
           </div>
           
           {/* Scrolling text */}
@@ -86,8 +174,6 @@ export default function FestivalBanner() {
           </button>
         </div>
       </div>
-
     </div>
   )
 }
-

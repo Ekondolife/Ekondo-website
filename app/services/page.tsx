@@ -9,6 +9,7 @@ import { Check, MapPin, ArrowRight } from "lucide-react"
 import { services } from "@/lib/services-data"
 import { gsap } from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
+import { Badge } from "@/components/ui/badge"
 import CaseStudies from "@/components/case-studies"
 
 gsap.registerPlugin(ScrollTrigger)
@@ -222,15 +223,8 @@ export default function ServicesPage() {
             {services.map((service) => (
               <Card
                 key={service.id}
-                className={`service-card border-none shadow-md overflow-hidden ${
-                  service.popular ? "ring-2 ring-primary" : ""
-                }`}
+                className={`service-card border-none shadow-md overflow-hidden `}
               >
-                {service.popular && (
-                  <div className="bg-primary text-primary-foreground text-center py-2 text-sm font-medium">
-                    Most Popular
-                  </div>
-                )}
                 <div className="relative h-48 w-full overflow-hidden">
                   <Image 
                     src={service.image || "/placeholder.svg"} 

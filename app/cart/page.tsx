@@ -39,12 +39,12 @@ export default function CartPage() {
     return (
       <div className="container px-4 py-16 md:py-24">
         <div className="max-w-2xl mx-auto text-center">
-          <div className="inline-flex items-center justify-center w-24 h-24 bg-primary/10 rounded-full mb-6 organic-shape">
+          <div className="inline-flex items-center justify-center w-24 h-24 bg-primary/10 rounded-full mb-6 ">
             <ShoppingBag className="h-12 w-12 text-primary" />
           </div>
           <h1 className="font-serif text-3xl font-bold mb-4">Your Cart is Empty</h1>
           <p className="text-muted-foreground mb-8">Add some beautiful plants and products to get started!</p>
-          <Button size="lg" asChild className="organic-shape">
+          <Button size="lg" asChild className="">
             <Link href="/retail">Shop Now</Link>
           </Button>
         </div>
@@ -60,7 +60,7 @@ export default function CartPage() {
           <Button 
             variant="outline" 
             onClick={handleClearCart}
-            className="organic-shape bg-transparent text-destructive hover:bg-destructive hover:text-destructive-foreground"
+            className=" bg-transparent text-destructive hover:bg-destructive hover:text-destructive-foreground"
           >
             <Trash2 className="h-4 w-4 mr-2" />
             Clear Cart
@@ -72,10 +72,10 @@ export default function CartPage() {
         {/* Cart Items */}
         <div className="lg:col-span-2 space-y-4">
           {cartItems.map((item) => (
-            <Card key={item.id} className="border-none shadow-md organic-shape">
+            <Card key={item.id} className="border-none shadow-md ">
               <CardContent className="p-4">
                 <div className="flex gap-4">
-                  <div className="relative w-24 h-24 flex-shrink-0 rounded-lg overflow-hidden organic-shape">
+                  <div className="relative w-24 h-24 flex-shrink-0 rounded-lg overflow-hidden ">
                     <Image src={item.image || "/placeholder.svg"} alt={item.name} fill className="object-cover" />
                   </div>
 
@@ -127,7 +127,7 @@ export default function CartPage() {
 
         {/* Order Summary */}
         <div>
-          <Card className="border-none shadow-lg organic-shape sticky top-24">
+          <Card className="border-none shadow-lg  sticky top-24">
             <CardContent className="p-6">
               <h2 className="font-serif text-2xl font-bold mb-6">Order Summary</h2>
 
@@ -156,7 +156,7 @@ export default function CartPage() {
 
               <Button 
                 size="lg" 
-                className="w-full mb-3 organic-shape btn-gradient"
+                className="w-full mb-3  btn-gradient-clean"
                 asChild
               >
                 <Link href="/checkout">
@@ -164,7 +164,7 @@ export default function CartPage() {
                 </Link>
               </Button>
 
-              <Button variant="outline" size="lg" className="w-full organic-shape bg-transparent" asChild>
+              <Button variant="outline" size="lg" className="w-full bg-transparent" asChild>
                 <Link href="/retail">Continue Shopping</Link>
               </Button>
 

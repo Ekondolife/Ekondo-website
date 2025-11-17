@@ -2,7 +2,7 @@
 
 export const dynamic = "force-dynamic"
 import { useState, useEffect, useRef } from "react"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -14,7 +14,6 @@ import { useCart } from "@/components/cart-context"
 import { CreditCard, ArrowLeft, Loader2 } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
-// Note: getProducts dynamically imported client-side to avoid SSR eval of Supabase client
 
 const nigerianStates = [
   "Abuja FCT", "Abia", "Adamawa", "Akwa Ibom", "Anambra", "Bauchi", "Bayelsa", "Benue", "Borno", 
@@ -23,29 +22,101 @@ const nigerianStates = [
   "Osun", "Oyo", "Plateau", "Rivers", "Sokoto", "Taraba", "Yobe", "Zamfara"
 ]
 
+// Gift note categories and messages
+const giftNoteCategories = {
+  birthday: {
+    label: "🎉 Birthday",
+    messages: [
+      "May your new year bloom! Happy Birthday to someone truly special.",
+      "Just like a great plant, you keep growing and thriving. Happy Birthday!",
+      "Wishing you a day as vibrant and full of life as a beautiful garden."
+    ]
+  },
+  newJob: {
+    label: "💼 New Job",
+    messages: [
+      "Congratulations! Time to put down new roots and watch your career flourish.",
+      "We're so excited for your new role! Grow big, shine bright.",
+      "Here's to the seeds you're sowing in this next big venture. Best of luck!"
+    ]
+  },
+  newHome: {
+    label: "🏡 New Home",
+    messages: [
+      "May your new space be a place where happiness takes root. Welcome home!",
+      "A little gift to help you cultivate beauty in your new surroundings.",
+      "Wishing you a home filled with light and warmth—may you flourish here!"
+    ]
+  },
+  anniversary: {
+    label: "💕 Anniversary",
+    messages: [
+      "Happy Anniversary! Your love is an inspiration—it just keeps growing stronger.",
+      "Like a treasured tree, may your relationship be deeply rooted and enduring.",
+      "Celebrating the amazing life you've grown together. Cheers to many more seasons!"
+    ]
+  },
+  justBecause: {
+    label: "🌿 Just Because",
+    messages: [
+      "Just a little reminder to take a moment and breathe. Sending you good vibes!",
+      "Hope this brightens your day. Keep shining, friend!",
+      "No special reason needed—just wanted to send you a little life and light."
+    ]
+  }
+}
+
 export default function CheckoutPage() {
   const { items: cartItems, subtotal, addItem: addCartItem, clearCart } = useCart()
   const router = useRouter()
+  const searchParams = useSearchParams()
   const [tabValue, setTabValue] = useState("delivery")
   const [isProcessing, setIsProcessing] = useState(false)
   const [isGift, setIsGift] = useState(false)
   const [productId, setProductId] = useState<string | null>(null)
   const [giftNote, setGiftNote] = useState("")
   const [giftProductAdded, setGiftProductAdded] = useState(false)
+  const [isLoadingGift, setIsLoadingGift] = useState(false)
+  
+  // Gift note selection state
+  const [selectedCategory, setSelectedCategory] = useState<string>("")
+  const [selectedMessage, setSelectedMessage] = useState<string>("")
+  const [useCustomMessage, setUseCustomMessage] = useState(false)
 
-  // Read query params on client only
+  // Read query params on client only - check both useSearchParams and window.location as fallback
   useEffect(() => {
-    if (typeof window !== "undefined") {
+    const giftParamFromSearch = searchParams.get("isGift") === "1" || searchParams.get("isGift") === "true"
+    const prodIdFromSearch = searchParams.get("productId")
+    
+    // Fallback to window.location if searchParams doesn't have it
+    let giftParam = giftParamFromSearch
+    let prodId = prodIdFromSearch
+    
+    if (typeof window !== "undefined" && !giftParam) {
       const sp = new URLSearchParams(window.location.search)
-      setIsGift(sp.get("isGift") === "1" || sp.get("isGift") === "true")
-      setProductId(sp.get("productId"))
+      giftParam = sp.get("isGift") === "1" || sp.get("isGift") === "true"
+      if (!prodId) {
+        prodId = sp.get("productId")
+      }
     }
-  }, [])
+    
+    if (giftParam) {
+      setIsGift(true)
+    }
+    if (prodId) {
+      setProductId(prodId)
+    }
+    
+    // If it's a gift, set loading state immediately
+    if (giftParam && prodId) {
+      setIsLoadingGift(true)
+    }
+  }, [searchParams])
 
   useEffect(() => {
-    // Add only if isGift && productId and NOT already added & no cart items
     if (isGift && productId && !giftProductAdded && cartItems.length === 0) {
-      (async () => {
+      setIsLoadingGift(true)
+      ;(async () => {
         try {
           const { getProducts } = await import("@/lib/getProducts")
           const products = await getProducts()
@@ -61,6 +132,7 @@ export default function CheckoutPage() {
               category: giftProduct.category,
             })
             setGiftProductAdded(true)
+            setIsLoadingGift(false)
           } else {
             alert("Sorry, this gift product could not be loaded.");
             router.push("/gifting")
@@ -68,12 +140,39 @@ export default function CheckoutPage() {
         } catch (e) {
           alert("Error loading product for gift checkout.");
           router.push("/gifting")
+        } finally {
+          setIsLoadingGift(false)
         }
       })()
     }
   }, [isGift, productId, giftProductAdded, cartItems.length, addCartItem, clearCart, router])
 
-  // TODO: if (isGift && productId) { clear cart, fetch product by id, add to cart }
+  // Handle category selection
+  const handleCategoryChange = (category: string) => {
+    setSelectedCategory(category)
+    setSelectedMessage("") // Reset message when category changes
+    setGiftNote("") // Clear gift note
+    setUseCustomMessage(false)
+  }
+
+  // Handle message selection
+  const handleMessageChange = (messageIndex: string) => {
+    setSelectedMessage(messageIndex)
+    if (selectedCategory && messageIndex) {
+      const categoryKey = selectedCategory as keyof typeof giftNoteCategories
+      const message = giftNoteCategories[categoryKey].messages[parseInt(messageIndex)]
+      setGiftNote(message)
+      setUseCustomMessage(false)
+    }
+  }
+
+  // Handle custom message toggle
+  const handleCustomMessageToggle = () => {
+    setUseCustomMessage(true)
+    setSelectedCategory("")
+    setSelectedMessage("")
+    setGiftNote("")
+  }
 
   // Delivery form state
   const [deliveryData, setDeliveryData] = useState({
@@ -103,7 +202,7 @@ export default function CheckoutPage() {
     },
   ]
 
-  const shipping = tabValue === "pickup" ? 0 : 6000 // Free shipping for pickup, ₦6,000 for delivery
+  const shipping = tabValue === "pickup" ? 0 : 6000
   const total = subtotal + shipping
 
   const handleDeliveryChange = (field: string, value: string) => {
@@ -149,13 +248,13 @@ export default function CheckoutPage() {
       isValid = isPickupFormValid()
       const selectedLocation = pickupLocations.find(loc => loc.id === pickupLocation)
       customerData = {
-        email: "pickup@ekondolife.com", // Default for pickup
+        email: "pickup@ekondolife.com",
         metadata: {
           type: "pickup",
           locationId: pickupLocation,
           locationName: selectedLocation?.name || "",
           locationAddress: selectedLocation?.address || "",
-          phone: "", // Can be optional for pickup
+          phone: "",
         },
       }
     }
@@ -181,7 +280,6 @@ export default function CheckoutPage() {
 
       if (!data.ok) throw new Error(data.error || "Payment init failed")
 
-      // Redirect user to Paystack checkout
       window.location.href = data.data.data.authorization_url
     } catch (err: any) {
       alert("Payment failed: " + err.message)
@@ -191,17 +289,67 @@ export default function CheckoutPage() {
   }
 
   useEffect(() => {
-    // Only redirect if not in the middle of gift-product-adding
+    // Check URL params directly to avoid race conditions with state
+    // Use both searchParams and window.location as fallback
+    let isGiftFromUrl = searchParams.get("isGift") === "1" || searchParams.get("isGift") === "true"
+    let hasProductId = searchParams.get("productId") !== null
+    
+    // Fallback to window.location if searchParams doesn't have it
+    if (typeof window !== "undefined") {
+      const sp = new URLSearchParams(window.location.search)
+      const giftFromWindow = sp.get("isGift") === "1" || sp.get("isGift") === "true"
+      const productIdFromWindow = sp.get("productId") !== null
+      
+      isGiftFromUrl = isGiftFromUrl || giftFromWindow
+      hasProductId = hasProductId || productIdFromWindow
+    }
+    
+    // NEVER redirect if this is a gift flow (check URL params directly)
+    // This prevents the flash and redirect issue
+    if (isGiftFromUrl || hasProductId) {
+      return // Don't redirect, this is a gift flow
+    }
+    
+    // Only redirect to cart if:
+    // 1. Cart is empty AND
+    // 2. It's NOT a gift flow AND
+    // 3. We're not currently loading a gift product
     if (
       cartItems.length === 0 &&
-      !(isGift && productId && !giftProductAdded)
+      !isLoadingGift
     ) {
       router.push("/cart")
     }
-  }, [cartItems.length, router, isGift, productId, giftProductAdded])
+  }, [cartItems.length, router, isLoadingGift, searchParams])
 
-  if (cartItems.length === 0) {
+  // Show loading state while gift product is being added
+  if (isLoadingGift && cartItems.length === 0) {
+    return (
+      <div className="container px-4 py-12 md:py-16">
+        <div className="max-w-6xl mx-auto flex items-center justify-center min-h-[400px]">
+          <div className="text-center">
+            <Loader2 className="h-8 w-8 animate-spin text-primary mx-auto mb-4" />
+            <p className="text-muted-foreground">Preparing your gift...</p>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // Check URL params directly to avoid race conditions
+  const isGiftFromUrl = searchParams.get("isGift") === "1" || searchParams.get("isGift") === "true"
+  const hasProductId = searchParams.get("productId") !== null
+  
+  // Don't render checkout if cart is empty and it's not a gift flow
+  if (cartItems.length === 0 && !isGiftFromUrl && !hasProductId && !isLoadingGift) {
     return null
+  }
+  
+  // Allow rendering if it's a gift (even if cart is temporarily empty while loading)
+  // Check URL params directly, not just state
+  if (cartItems.length === 0 && (isGiftFromUrl || hasProductId) && !isLoadingGift && !giftProductAdded) {
+    // This is a gift flow, allow it to render while product is being added
+    // The loading state will be shown by the useEffect that adds the product
   }
 
   return (
@@ -217,21 +365,116 @@ export default function CheckoutPage() {
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Checkout Form */}
           <div className="lg:col-span-2">
-            <Card className="border-none shadow-md organic-shape">
+            <Card className="border-none shadow-md">
               <CardContent className="p-6">
-                {isGift && (
-                  <div className="mb-6">
-                    <Label htmlFor="giftNote" className="font-medium text-md text-primary">Gift Note</Label>
-                    <textarea
-                      id="giftNote"
-                      value={giftNote}
-                      onChange={e => setGiftNote(e.target.value)}
-                      className="w-full p-4 mt-1 min-h-[80px]  border border-orange-200 rounded"
-                      placeholder="Add a sweet message for your recipient, and we'll print it with the order!"
-                      maxLength={250}
-                    />
+                {(isGift || searchParams.get("isGift") === "1" || searchParams.get("isGift") === "true") && (
+                  <div className="mb-6 space-y-4">
+                    <div className="bg-orange-50 border border-orange-200 rounded-lg p-4">
+                      <h3 className="font-medium text-lg text-primary mb-2 flex items-center gap-2">
+                        🎁 Add a Gift Note
+                      </h3>
+                      <p className="text-sm text-orange-700">
+                        Choose from our plant-inspired messages or write your own. We'll print it beautifully with the order!
+                      </p>
+                    </div>
+
+                    {!useCustomMessage ? (
+                      <>
+                        {/* Category Dropdown */}
+                        <div>
+                          <Label htmlFor="gift-category" className="text-sm font-medium mb-2 block">
+                            Select Message Category
+                          </Label>
+                          <Select value={selectedCategory} onValueChange={handleCategoryChange}>
+                            <SelectTrigger id="gift-category" className="w-full">
+                              <SelectValue placeholder="Choose a category..." />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {Object.entries(giftNoteCategories).map(([key, category]) => (
+                                <SelectItem key={key} value={key}>
+                                  {category.label}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </div>
+
+                        {/* Message Dropdown - Only shows when category is selected */}
+                        {selectedCategory && (
+                          <div>
+                            <Label htmlFor="gift-message" className="text-sm font-medium mb-2 block">
+                              Select Your Message
+                            </Label>
+                            <Select value={selectedMessage} onValueChange={handleMessageChange}>
+                              <SelectTrigger id="gift-message" className="w-full">
+                                <SelectValue placeholder="Choose a message..." />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {giftNoteCategories[selectedCategory as keyof typeof giftNoteCategories].messages.map((message, idx) => (
+                                  <SelectItem key={idx} value={idx.toString()}>
+                                    {message.substring(0, 50)}{message.length > 50 ? "..." : ""}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          </div>
+                        )}
+
+                        {/* Preview of selected message */}
+                        {giftNote && (
+                          <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
+                            <p className="text-sm font-medium text-green-800 mb-1">Your gift note:</p>
+                            <p className="text-sm text-green-700 italic">"{giftNote}"</p>
+                          </div>
+                        )}
+
+                        {/* Option to write custom message */}
+                        <div className="text-center pt-2">
+                          <button
+                            type="button"
+                            onClick={handleCustomMessageToggle}
+                            className="text-sm text-primary hover:underline font-medium"
+                          >
+                            Or write your own custom message
+                          </button>
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        {/* Custom Message Textbox */}
+                        <div>
+                          <Label htmlFor="custom-gift-note" className="text-sm font-medium mb-2 block">
+                            Write Your Custom Message
+                          </Label>
+                          <textarea
+                            id="custom-gift-note"
+                            value={giftNote}
+                            onChange={(e) => setGiftNote(e.target.value)}
+                            className="w-full p-4 min-h-[100px] border border-orange-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                            placeholder="Write a heartfelt message for your recipient..."
+                            maxLength={250}
+                          />
+                          <div className="flex items-center justify-between mt-1">
+                            <span className="text-xs text-muted-foreground">
+                              {giftNote.length}/250 characters
+                            </span>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setUseCustomMessage(false)
+                                setGiftNote("")
+                              }}
+                              className="text-xs text-primary hover:underline"
+                            >
+                              Choose from templates instead
+                            </button>
+                          </div>
+                        </div>
+                      </>
+                    )}
                   </div>
                 )}
+
                 <Tabs value={tabValue} onValueChange={setTabValue}>
                   <TabsList className="grid w-full grid-cols-2 mb-6">
                     <TabsTrigger value="delivery">Delivery</TabsTrigger>
@@ -250,7 +493,7 @@ export default function CheckoutPage() {
                           type="email"
                           value={deliveryData.email}
                           onChange={(e) => handleDeliveryChange("email", e.target.value)}
-                          className="mt-1 organic-shape"
+                          className="mt-1"
                           placeholder="your@email.com"
                           required
                         />
@@ -263,7 +506,7 @@ export default function CheckoutPage() {
                           id="country"
                           value={deliveryData.country}
                           onChange={(e) => handleDeliveryChange("country", e.target.value)}
-                          className="mt-1 organic-shape"
+                          className="mt-1"
                           required
                         />
                       </div>
@@ -278,7 +521,7 @@ export default function CheckoutPage() {
                           id="firstName"
                           value={deliveryData.firstName}
                           onChange={(e) => handleDeliveryChange("firstName", e.target.value)}
-                          className="mt-1 organic-shape"
+                          className="mt-1"
                           required
                         />
                       </div>
@@ -290,7 +533,7 @@ export default function CheckoutPage() {
                           id="lastName"
                           value={deliveryData.lastName}
                           onChange={(e) => handleDeliveryChange("lastName", e.target.value)}
-                          className="mt-1 organic-shape"
+                          className="mt-1"
                           required
                         />
                       </div>
@@ -304,7 +547,7 @@ export default function CheckoutPage() {
                         id="streetAddress"
                         value={deliveryData.streetAddress}
                         onChange={(e) => handleDeliveryChange("streetAddress", e.target.value)}
-                        className="mt-1 organic-shape"
+                        className="mt-1"
                         placeholder="House number and street name"
                         required
                       />
@@ -319,7 +562,7 @@ export default function CheckoutPage() {
                           id="townCity"
                           value={deliveryData.townCity}
                           onChange={(e) => handleDeliveryChange("townCity", e.target.value)}
-                          className="mt-1 organic-shape"
+                          className="mt-1"
                           required
                         />
                       </div>
@@ -328,7 +571,7 @@ export default function CheckoutPage() {
                           State <span className="text-destructive">*</span>
                         </Label>
                         <Select value={deliveryData.state} onValueChange={(value) => handleDeliveryChange("state", value)}>
-                          <SelectTrigger className="mt-1 organic-shape">
+                          <SelectTrigger className="mt-1">
                             <SelectValue placeholder="Select state" />
                           </SelectTrigger>
                           <SelectContent>
@@ -351,7 +594,7 @@ export default function CheckoutPage() {
                         type="tel"
                         value={deliveryData.phone}
                         onChange={(e) => handleDeliveryChange("phone", e.target.value)}
-                        className="mt-1 organic-shape"
+                        className="mt-1"
                         placeholder="08012345678"
                         required
                       />
@@ -369,7 +612,7 @@ export default function CheckoutPage() {
                           <div
                             key={location.id}
                             onClick={() => setPickupLocation(location.id)}
-                            className={`border-2 rounded-lg p-4 cursor-pointer transition-colors organic-shape ${
+                            className={`border-2 rounded-lg p-4 cursor-pointer transition-colors ${
                               pickupLocation === location.id
                                 ? "border-primary bg-primary/5"
                                 : "border-border hover:border-primary/50"
@@ -404,7 +647,7 @@ export default function CheckoutPage() {
 
           {/* Order Summary */}
           <div>
-            <Card className="border-none shadow-lg organic-shape sticky top-24">
+            <Card className="border-none shadow-lg sticky top-24">
               <CardContent className="p-6">
                 <h2 className="font-serif text-2xl font-bold mb-6">Order Summary</h2>
 
@@ -412,7 +655,7 @@ export default function CheckoutPage() {
                 <div className="space-y-3 mb-6 max-h-[300px] overflow-y-auto">
                   {cartItems.map((item) => (
                     <div key={item.id} className="flex gap-3">
-                      <div className="relative w-16 h-16 rounded-lg overflow-hidden organic-shape flex-shrink-0">
+                      <div className="relative w-16 h-16 rounded-lg overflow-hidden flex-shrink-0">
                         <Image src={item.image || "/placeholder.svg"} alt={item.name} fill className="object-cover" />
                       </div>
                       <div className="flex-1 min-w-0">
@@ -424,9 +667,10 @@ export default function CheckoutPage() {
                   ))}
                 </div>
 
-                {isGift && !!giftNote && (
-                  <div className="mb-3 p-3 rounded bg-orange-50 border border-orange-100 text-sm text-orange-800">
-                    <span className="font-semibold">Gift Note:</span> {giftNote}
+                {(isGift || searchParams.get("isGift") === "1" || searchParams.get("isGift") === "true") && !!giftNote && (
+                  <div className="mb-3 p-3 rounded bg-orange-50 border border-orange-100">
+                    <p className="text-xs font-semibold text-orange-800 mb-1">Gift Note:</p>
+                    <p className="text-xs text-orange-700 italic">"{giftNote}"</p>
                   </div>
                 )}
 
@@ -486,4 +730,3 @@ export default function CheckoutPage() {
     </div>
   )
 }
-

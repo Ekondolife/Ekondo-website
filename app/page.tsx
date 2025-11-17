@@ -1,7 +1,7 @@
 "use client"
 
-import { useEffect } from "react"
-import { ArrowRight } from "lucide-react"
+import { useEffect, useState } from "react"
+import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
@@ -23,10 +23,74 @@ import { ScrollTrigger } from "gsap/ScrollTrigger"
 gsap.registerPlugin(ScrollTrigger)
 
 export default function Home() {
+  const [currentSlide, setCurrentSlide] = useState(0)
+  const [isAutoPlaying, setIsAutoPlaying] = useState(true)
+
+  // Updated heroSlides with explicit links for the background image
+  const heroSlides = [
+    {
+      image: "/images/homepage.webp",
+      title: "Connect to Nature and Community",
+      link: "/", // Landing page (not clickable, or link to home)
+      showTitle: true,
+    },
+    {
+      image: "/images/Gift_plant.webp",
+      title: "",
+      link: "/gifting", // Link for "Send a Gift"
+      showTitle: false,
+    },
+    {
+      image: "/images/ekondo_christmas.webp",
+      title: "",
+      link: "/retail", // Link for "Shop Now"
+      showTitle: false,
+    },
+    {
+      image: "/images/soilmate.webp",
+      title: "",
+      link: "https://v0-remix-of-plant-matching-app.vercel.app/", // Link for "Find your Soilmate"
+      showTitle: false,
+    },
+  ]
+
+  // Auto-play carousel
+  useEffect(() => {
+    if (!isAutoPlaying) return
+    
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % heroSlides.length)
+    }, 5000) // Change slide every 5 seconds
+
+    return () => clearInterval(interval)
+  }, [isAutoPlaying, heroSlides.length])
+
+  // Pause auto-play on hover
+  const handleMouseEnter = () => setIsAutoPlaying(false)
+  const handleMouseLeave = () => setIsAutoPlaying(true)
+
+  const goToSlide = (index: number) => {
+    setCurrentSlide(index)
+    setIsAutoPlaying(false)
+    setTimeout(() => setIsAutoPlaying(true), 3000) // Resume after 3 seconds
+  }
+
+  const nextSlide = () => {
+    setCurrentSlide((prev) => (prev + 1) % heroSlides.length)
+    setIsAutoPlaying(false)
+    setTimeout(() => setIsAutoPlaying(true), 3000)
+  }
+
+  const prevSlide = () => {
+    setCurrentSlide((prev) => (prev - 1 + heroSlides.length) % heroSlides.length)
+    setIsAutoPlaying(false)
+    setTimeout(() => setIsAutoPlaying(true), 3000)
+  }
+
   useEffect(() => {
     const ctx = gsap.context(() => {
       // On-load hero text
-      gsap.from(".js-hero-title, .js-hero-sub, .js-hero-ctas", {
+      gsap.from(".js-hero-title", {
         y: 24,
         opacity: 0,
         duration: 1.1,
@@ -34,13 +98,6 @@ export default function Home() {
         stagger: 0.12,
         delay: 0.1,
       })
-
-      // Hero image soft scale reveal
-      gsap.fromTo(
-        ".js-hero-image",
-        { scale: 1.08, transformOrigin: "center center" },
-        { scale: 1, duration: 1.6, ease: "power3.out" }
-      )
 
       // Section headers fade-up on scroll
       gsap.utils.toArray<HTMLElement>(".js-section-title").forEach((el) => {
@@ -94,33 +151,101 @@ export default function Home() {
     return () => ctx.revert()
   }, [])
 
+  // Helper component for internal/external linking
+  const ClickableSlide = ({ link, children }: { link: string; children: React.ReactNode }) => {
+    if (link.startsWith("http")) {
+      return (
+        <a href={link} target="_blank" rel="noopener noreferrer" className="absolute inset-0 block cursor-pointer">
+          {children}
+        </a>
+      )
+    }
+    if (link !== "/") { // Prevent linking to home from the home page (unless it's a specific requirement)
+      return (
+        <Link href={link} className="absolute inset-0 block cursor-pointer">
+          {children}
+        </Link>
+      )
+    }
+    return <>{children}</> // If link is '/', just render the children without a link
+  }
+
   return (
     <div className="flex flex-col">
-      {/* Hero Section */}
-      <section className="relative h-[80vh] min-h-[600px] w-full overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b  z-10"></div>
-        <Image
-          src="./images/homepage.webp"
-          alt="Young African woman tending to plants in urban setting"
-          fill
-          className="object-cover js-hero-image js-parallax"
-          priority
-        />
-        <div className="container relative z-20 flex text-shadow-lg text-shadow-red-500/50 flex-col items-center justify-start text-center px-4 pt-24 md:pt-32">
-          <h1 className="text-xl md:text-4xl lg:text-6xl font-bold text-white drop-shadow-lg mt-6 mb-24 js-hero-title">
-            Connect to Nature <br className="hidden md:block" />
-            and Community
-          </h1>
-          <div className="flex flex-col sm:flex-row gap-4 js-hero-ctas mt-24">
-            <Button size="lg" asChild className="btn-gradient-clean js-hover">
-              <Link href="/retail">Explore Our Products</Link>
-            </Button>
-            <Button size="lg" variant="outline" asChild className="btn-gradient-clean js-hover">
-              <Link href="/about">Our Story</Link>
-            </Button>
-          </div>
-        </div>
-      </section>
+ {/* Hero Section Carousel — MODIFIED BLOCK */}
+<section
+  className="relative h-[60vh] sm:h-[70vh] md:h-[80vh] min-h-[320px] w-full overflow-hidden"
+  onMouseEnter={handleMouseEnter}
+  onMouseLeave={handleMouseLeave}
+>
+  {/* subtle gradient overlay — pointer-events-none so it doesn't block clicks */}
+  <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/40 z-10 pointer-events-none" />
+
+  {/* Slides */}
+  <div className="relative w-full h-full">
+    {heroSlides.map((slide, index) => (
+      <div
+        key={index}
+        className={`absolute inset-0 transition-opacity duration-1000 ${
+          index === currentSlide ? "opacity-100 z-20" : "opacity-0 z-10"
+        }`}
+        aria-hidden={index !== currentSlide}
+      >
+        <ClickableSlide link={slide.link}>
+          <Image
+            src={slide.image}
+            alt={slide.title || `Hero slide ${index + 1}`}
+            fill
+            priority={index === 0}
+            className="object-contain md:object-cover w-full h-full"
+          />
+
+          {/* Content overlay: centered title */}
+          {slide.showTitle && (
+            <div className="container relative z-30 flex flex-col items-center justify-center h-full text-center px-4 pointer-events-none">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-bold text-white drop-shadow-lg mb-6 js-hero-title">
+                {slide.title}
+              </h1>
+            </div>
+          )}
+        </ClickableSlide>
+      </div>
+    ))}
+  </div>
+
+  {/* Navigation Arrows (smaller on mobile) */}
+  <button
+    onClick={prevSlide}
+    className="absolute left-3 top-1/2 -translate-y-1/2 z-40 bg-black/30 hover:bg-black/50 text-white p-2.5 md:p-3 rounded-full transition-all backdrop-blur-sm"
+    aria-label="Previous slide"
+  >
+    <ChevronLeft className="h-5 w-5 md:h-6 md:w-6" />
+  </button>
+  <button
+    onClick={nextSlide}
+    className="absolute right-3 top-1/2 -translate-y-1/2 z-40 bg-black/30 hover:bg-black/50 text-white p-2.5 md:p-3 rounded-full transition-all backdrop-blur-sm"
+    aria-label="Next slide"
+  >
+    <ChevronRight className="h-5 w-5 md:h-6 md:w-6" />
+  </button>
+
+  {/* Dots Indicator (smaller on mobile) */}
+  <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-40 flex gap-2">
+    {heroSlides.map((_, index) => (
+      <button
+        key={index}
+        onClick={() => goToSlide(index)}
+        className={`rounded-full transition-all ${
+          index === currentSlide ? "h-2 w-8 bg-white" : "h-2 w-2 bg-white/50 hover:bg-white/75"
+        }`}
+        aria-label={`Go to slide ${index + 1}`}
+      />
+    ))}
+  </div>
+</section>
+{/* End MODIFIED replacement */}
+
+
 
       {/* Four Branches Section */}
       <section className="py-16 md:py-24">
@@ -389,7 +514,7 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
             {getFeaturedExperiences().slice(0, 3).map((item) => (
               <Card key={item.id} className="overflow-hidden border-none shadow-md card-organic js-card js-hover">
-                <div className="relative h-48">
+                <div className="relative h-96">
                   <Image src={item.image || "/placeholder.svg"} alt={item.title} fill className="object-cover" />
                 </div>
                 <CardContent className="p-4">
@@ -407,6 +532,33 @@ export default function Home() {
                 </CardContent>
               </Card>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Become a Nature Host Section */}
+      <section className="py-16 md:py-24 bg-primary/5">
+        <div className="container px-4">
+          <div className="grid md:grid-cols-2 gap-8 items-center max-w-5xl mx-auto">
+            <div className="relative h-64 md:h-80 rounded-lg overflow-hidden">
+              <Image
+                src="/images/two_girls.webp"
+                alt="Nature Hosts at Ekondo event"
+                fill
+                className="object-cover"
+              />
+            </div>
+            <div>
+              <h2 className="text-2xl md:text-3xl font-bold mb-4 js-section-title">Become a Nature Host</h2>
+              <p className="text-muted-foreground mb-6">
+                Be the warm, welcoming face of Ekondo at events and pop-ups. Create meaningful experiences that introduce people to our world of plants, wellness, and community. Earn rewards while helping others connect with nature.
+              </p>
+              <Button asChild size="lg" className="btn-gradient-clean js-hover">
+                <Link href="/nature-host">
+                  Learn More <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
+            </div>
           </div>
         </div>
       </section>

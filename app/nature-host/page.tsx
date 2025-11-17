@@ -133,7 +133,7 @@ export default function NatureHostPage() {
       <section ref={heroRef} className="relative h-[60vh] min-h-[500px] w-full overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-primary/20 to-background z-10"></div>
         <Image
-          src="/images/two girls.jpg"
+          src="/images/two_girls.webp"
           alt="Nature Hosts at Ekondo event"
           fill
           className="object-cover"
@@ -149,11 +149,11 @@ export default function NatureHostPage() {
         </div>
       </section>
 
-      {/* What is a Nature Host */}
+      {/* Who is a Nature Host */}
       <section className="py-16 md:py-24 bg-primary/5">
         <div className="container px-4">
           <div className="max-w-3xl mx-auto text-center">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">What is a Nature Host?</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">Who is a Nature Host?</h2>
             <p className="text-lg text-muted-foreground mb-8">
               Nature Hosts are the warm, welcoming faces of Ekondo. You don't just sell products—you create meaningful experiences that introduce people to our world of plants, wellness, and community.
             </p>

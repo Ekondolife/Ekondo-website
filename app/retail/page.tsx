@@ -1,6 +1,6 @@
 "use client"
 
-import { Filter, Loader2 } from "lucide-react"
+import { Filter, Loader2, ChevronLeft, ChevronRight, ArrowRight } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { useState, useEffect, useRef } from "react"
@@ -34,6 +34,82 @@ export default function RetailPage() {
   const [selectedPriceRanges, setSelectedPriceRanges] = useState<string[]>([])
   const [selectedPlantTypes, setSelectedPlantTypes] = useState<string[]>([])
   const [sortBy, setSortBy] = useState("featured")
+  
+  // Carousel state
+  const [currentSlide, setCurrentSlide] = useState(0)
+  const [isAutoPlaying, setIsAutoPlaying] = useState(true)
+
+  const heroSlides = [
+    {
+      image: "/images/Ekondo-110 2.webp",
+      badge: "New Collection",
+      title: "Handcrafted for Nature Lovers",
+      description: "Discover our curated collection of sustainable planters, tools, and accessories handmade by African artisans.",
+      showContent: true,
+      ctaText: "",
+      ctaLink: "",
+    },
+    {
+      image: "/images/Gift_plant.webp",
+      badge: "",
+      title: "",
+      description: "",
+      showContent: false,
+      ctaText: "Send a Gift",
+      ctaLink: "/gifting",
+    },
+    {
+      image: "/images/ekondo_christmas.webp",
+      badge: "",
+      title: "",
+      description: "",
+      showContent: false,
+      ctaText: "Shop Now",
+      ctaLink: "/retail",
+    },
+    {
+      image: "/images/soilmate.webp",
+      badge: "",
+      title: "",
+      description: "",
+      showContent: false,
+      ctaText: "Find your Soilmate",
+      ctaLink: "https://v0-remix-of-plant-matching-app.vercel.app/",
+    },
+  ]
+
+  // Auto-play carousel
+  useEffect(() => {
+    if (!isAutoPlaying) return
+    
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % heroSlides.length)
+    }, 5000) // Change slide every 5 seconds
+
+    return () => clearInterval(interval)
+  }, [isAutoPlaying, heroSlides.length])
+
+  // Pause auto-play on hover
+  const handleMouseEnter = () => setIsAutoPlaying(false)
+  const handleMouseLeave = () => setIsAutoPlaying(true)
+
+  const goToSlide = (index: number) => {
+    setCurrentSlide(index)
+    setIsAutoPlaying(false)
+    setTimeout(() => setIsAutoPlaying(true), 3000) // Resume after 3 seconds
+  }
+
+  const nextSlide = () => {
+    setCurrentSlide((prev) => (prev + 1) % heroSlides.length)
+    setIsAutoPlaying(false)
+    setTimeout(() => setIsAutoPlaying(true), 3000)
+  }
+
+  const prevSlide = () => {
+    setCurrentSlide((prev) => (prev - 1 + heroSlides.length) % heroSlides.length)
+    setIsAutoPlaying(false)
+    setTimeout(() => setIsAutoPlaying(true), 3000)
+  }
 
   // Refs for GSAP animations
   const heroRef = useRef<HTMLDivElement>(null)
@@ -285,39 +361,130 @@ export default function RetailPage() {
 
   return (
     <div className="flex flex-col">
-      {/* Hero Section */}
+      {/* Hero Section Carousel */}
       <section
         ref={heroRef}
-        className="relative py-16 md:py-20 orange-gradient-strong overflow-hidden"
-        style={{
-          backgroundImage: "url('/images/Ekondo-110 2.webp')",
-          backgroundSize: "cover",
-          backgroundPosition: "center bottom",
-          backgroundRepeat: "no-repeat",
-        }}
+        className="relative py-12 md:py-16 lg:py-20 orange-gradient-strong overflow-hidden min-h-[300px] sm:min-h-[500px] md:min-h-[600px]"
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
       >
-        <div className="absolute inset-0 opacity-50"></div>
-        <div className="container px-4 relative z-10">
-          <div ref={heroContentRef} className="max-w-3xl">
-            <Badge className="hero-badge mb-4 organic-shape-soft bg-orange/20 text-white border-orange">
-              New Collection
-            </Badge>
-            <h1 className="hero-title text-4xl md:text-6xl font-bold mb-4 text-white">
-              Handcrafted for <span className="text-primary">Nature</span> Lovers
-            </h1>
-            <p className="hero-description text-lg md:text-xl text-white dark:text-foreground mb-8 drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)]">
-              Discover our curated collection of sustainable planters, tools, and accessories handmade by African
-              artisans.
-            </p>
-            <div className="hero-buttons flex flex-wrap gap-3">
-              <Button size="lg" className="btn-gradient-clean">
-                Shop Best Sellers
-              </Button>
-              <Button size="lg" variant="outline" asChild className="bg-background">
-                <Link href="/gifting">View Gifts</Link>
-              </Button>
-            </div>
-          </div>
+        {/* Slides */}
+        <div className="absolute inset-0">
+          {heroSlides.map((slide, index) => {
+            const isSoilmate = slide.ctaText?.toLowerCase().includes("soilmate")
+
+            return (
+              <div
+                key={index}
+                className={`absolute inset-0 transition-opacity duration-1000 ${
+                  index === currentSlide ? "opacity-100 z-20" : "opacity-0 z-10"
+                }`}
+                style={{
+                  backgroundImage: `url('${slide.image}')`,
+                  backgroundSize: "cover",
+                  backgroundPosition: "center center",
+                  backgroundRepeat: "no-repeat",
+                }}
+              >
+                <div className="absolute inset-0 opacity-50"></div>
+                <div className="container px-4 sm:px-6 relative z-30 h-full flex items-center">
+                  {slide.showContent ? (
+                    <div ref={heroContentRef} className="max-w-3xl w-full">
+                      {slide.badge && (
+                        <Badge className="hero-badge mb-3 md:mb-4 organic-shape-soft bg-orange/20 text-white border-orange text-xs sm:text-sm">
+                          {slide.badge}
+                        </Badge>
+                      )}
+                      <h1 className="hero-title text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-bold mb-3 md:mb-4 text-white leading-tight">
+                        Handcrafted for <span className="text-primary">Nature</span> Lovers
+                      </h1>
+                      <p className="hero-description text-sm sm:text-base md:text-lg lg:text-xl text-white dark:text-foreground mb-4 md:mb-6 lg:mb-8 drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)]">
+                        {slide.description}
+                      </p>
+                      <div className="hero-buttons flex flex-wrap gap-2 sm:gap-3">
+                        <Button size="sm" className="btn-gradient-clean text-sm sm:text-base sm:px-6 sm:py-3">
+                          Shop Best Sellers
+                        </Button>
+                        <Button size="sm" variant="outline" asChild className="bg-background text-sm sm:text-base sm:px-6 sm:py-3">
+                          <Link href="/gifting">View Gifts</Link>
+                        </Button>
+                      </div>
+                    </div>
+                  ) : (
+                    slide.ctaText && (
+                      <div className={`absolute bottom-6 sm:bottom-10 md:bottom-16 left-4 sm:left-6 md:left-20 z-30`}>
+                        {slide.ctaLink.startsWith('http') ? (
+                          <Button
+                            asChild
+                            size="sm"
+                            className={
+                              "btn-gradient-clean text-sm sm:text-base " +
+                              (isSoilmate
+                                ? "w-[260px] sm:w-auto px-4 sm:px-6 py-3 sm:py-3.5"
+                                : "px-4 sm:px-6 py-2 sm:py-3")
+                            }
+                          >
+                            <a href={slide.ctaLink} target="_blank" rel="noopener noreferrer">
+                              {slide.ctaText}{" "}
+                              <ArrowRight className="ml-1 sm:ml-2 h-3 w-3 sm:h-4 sm:w-4 md:h-5 md:w-5" />
+                            </a>
+                          </Button>
+                        ) : (
+                          <Button
+                            asChild
+                            size="sm"
+                            className={
+                              "btn-gradient-clean text-sm sm:text-base " +
+                              (isSoilmate
+                                ? "w-[260px] sm:w-auto px-4 sm:px-6 py-3 sm:py-3.5"
+                                : "px-4 sm:px-6 py-2 sm:py-3")
+                            }
+                          >
+                            <Link href={slide.ctaLink}>
+                              {slide.ctaText}{" "}
+                              <ArrowRight className="ml-1 sm:ml-2 h-3 w-3 sm:h-4 sm:w-4 md:h-5 md:w-5" />
+                            </Link>
+                          </Button>
+                        )}
+                      </div>
+                    )
+                  )}
+                </div>
+              </div>
+            )
+          })}
+        </div>
+
+        {/* Navigation Arrows */}
+        <button
+          onClick={prevSlide}
+          className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-40 bg-black/30 hover:bg-black/50 text-white p-2 sm:p-3 rounded-full transition-all backdrop-blur-sm"
+          aria-label="Previous slide"
+        >
+          <ChevronLeft className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6" />
+        </button>
+        <button
+          onClick={nextSlide}
+          className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 z-40 bg-black/30 hover:bg-black/50 text-white p-2 sm:p-3 rounded-full transition-all backdrop-blur-sm"
+          aria-label="Next slide"
+        >
+          <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6" />
+        </button>
+
+        {/* Dots Indicator */}
+        <div className="absolute bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 z-40 flex gap-1.5 sm:gap-2">
+          {heroSlides.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => goToSlide(index)}
+              className={`h-1.5 sm:h-2 rounded-full transition-all ${
+                index === currentSlide
+                  ? "w-6 sm:w-8 bg-white"
+                  : "w-1.5 sm:w-2 bg-white/50 hover:bg-white/75"
+              }`}
+              aria-label={`Go to slide ${index + 1}`}
+            />
+          ))}
         </div>
       </section>
 
@@ -333,7 +500,7 @@ export default function RetailPage() {
             <div className="flex items-center gap-4 w-full md:w-auto">
               <Sheet>
                 <SheetTrigger asChild>
-                  <Button variant="outline" className="md:hidden organic-shape bg-transparent">
+                  <Button variant="outline" className="md:hidden bg-transparent">
                     <Filter className="h-4 w-4 mr-2" />
                     Filters
                   </Button>
@@ -346,7 +513,7 @@ export default function RetailPage() {
                   <div className="py-4">
                     <h3 className="font-medium mb-2">Categories</h3>
                     <div className="space-y-2">
-                      {["Pots", "Plants", "Accessories"].map((category) => (
+                      {["Pots", "Plants", "Accessories", "Christmas"].map((category) => (
                         <div key={category} className="flex items-center space-x-2">
                           <Checkbox 
                             id={`category-mobile-${category}`}
@@ -410,8 +577,12 @@ export default function RetailPage() {
           <div className="flex flex-col md:flex-row gap-8">
             {/* Desktop Filters Sidebar */}
             <div ref={filterSidebarRef} className="hidden md:block w-64 shrink-0">
-              <div className="sticky top-24">
-                <Card className="border-none shadow-md organic-shape orange-gradient">
+              {/* keep sticky but allow internal scrolling when content is tall */}
+              <div
+                className="sticky top-24 pr-2"
+                style={{ maxHeight: "calc(100vh - 6rem)", overflow: "auto" }}
+              >
+                <Card className="border-none shadow-md orange-gradient">
                   <CardContent className="p-6">
                     <h3 className="font-bold text-lg mb-4">Filters</h3>
 
@@ -419,7 +590,7 @@ export default function RetailPage() {
                       <div>
                         <h4 className="font-medium mb-3">Categories</h4>
                         <div className="space-y-2">
-                          {["Pots", "Plants", "Accessories"].map((category) => (
+                          {["Pots", "Plants", "Accessories", "Christmas"].map((category) => (
                             <div key={category} className="flex items-center space-x-2">
                               <Checkbox 
                                 id={`category-${category}`}
@@ -510,7 +681,7 @@ export default function RetailPage() {
                     </Link>
                     <CardContent className="p-4">
                       <div className="flex items-center gap-2 mb-2">
-                        <Badge variant="secondary" className="text-xs organic-shape-soft">
+                        <Badge variant="secondary" className="text-xs">
                           {product.category}
                         </Badge>
                       </div>

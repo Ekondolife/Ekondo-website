@@ -94,7 +94,7 @@ export const services: Service[] = [
     id: 6,
     title: "Vertical Garden Installation",
     description: "Maximize your space with beautiful living walls and vertical gardens.",
-    image: "/images/pot group.jpg",
+    image: "/images/Services Casestudy/French Institute4.webp",
     price: "From ₦120,000",
     longDescription: "Install stunning vertical gardens and living walls to maximize your space while creating beautiful, functional green features. Our team handles the complete process from structural assessment to plant installation, ensuring a stunning and sustainable result.",
     features: [

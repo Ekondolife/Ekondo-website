@@ -168,7 +168,7 @@ Additional Message: ${formData.message || "None"}`,
             <CardHeader>
               {space.featured && (
                 <div className="inline-block bg-primary/10 text-primary text-sm font-medium rounded-lg mb-4 p-4">
-                  Retail Outlet
+                  Flagship Location
                 </div>
               )}
               <CardTitle className="font-serif text-2xl font-bold">{space.name}</CardTitle>
