@@ -85,29 +85,16 @@ export default function CheckoutPage() {
 
   // Read query params on client only - check both useSearchParams and window.location as fallback
   useEffect(() => {
-    const giftParamFromSearch = searchParams.get("isGift") === "1" || searchParams.get("isGift") === "true"
-    const prodIdFromSearch = searchParams.get("productId")
-    
-    // Fallback to window.location if searchParams doesn't have it
-    let giftParam = giftParamFromSearch
-    let prodId = prodIdFromSearch
-    
-    if (typeof window !== "undefined" && !giftParam) {
-      const sp = new URLSearchParams(window.location.search)
-      giftParam = sp.get("isGift") === "1" || sp.get("isGift") === "true"
-      if (!prodId) {
-        prodId = sp.get("productId")
-      }
-    }
-    
+    const giftParam = searchParams.get("isGift") === "1" || searchParams.get("isGift") === "true"
+    const prodId = searchParams.get("productId")
+      
     if (giftParam) {
       setIsGift(true)
     }
     if (prodId) {
       setProductId(prodId)
     }
-    
-    // If it's a gift, set loading state immediately
+      
     if (giftParam && prodId) {
       setIsLoadingGift(true)
     }
@@ -288,39 +275,22 @@ export default function CheckoutPage() {
     }
   }
 
-  useEffect(() => {
-    // Check URL params directly to avoid race conditions with state
-    // Use both searchParams and window.location as fallback
-    let isGiftFromUrl = searchParams.get("isGift") === "1" || searchParams.get("isGift") === "true"
-    let hasProductId = searchParams.get("productId") !== null
+
+useEffect(() => {
+  // Rely purely on searchParams for URL checks
+  const isGiftFromUrl = searchParams.get("isGift") === "1" || searchParams.get("isGift") === "true"
+  const hasProductId = searchParams.get("productId") !== null
     
-    // Fallback to window.location if searchParams doesn't have it
-    if (typeof window !== "undefined") {
-      const sp = new URLSearchParams(window.location.search)
-      const giftFromWindow = sp.get("isGift") === "1" || sp.get("isGift") === "true"
-      const productIdFromWindow = sp.get("productId") !== null
-      
-      isGiftFromUrl = isGiftFromUrl || giftFromWindow
-      hasProductId = hasProductId || productIdFromWindow
-    }
+  // NEVER redirect if this is a gift flow
+  if (isGiftFromUrl || hasProductId) {
+    return // Don't redirect, this is a gift flow
+  }
     
-    // NEVER redirect if this is a gift flow (check URL params directly)
-    // This prevents the flash and redirect issue
-    if (isGiftFromUrl || hasProductId) {
-      return // Don't redirect, this is a gift flow
-    }
-    
-    // Only redirect to cart if:
-    // 1. Cart is empty AND
-    // 2. It's NOT a gift flow AND
-    // 3. We're not currently loading a gift product
-    if (
-      cartItems.length === 0 &&
-      !isLoadingGift
-    ) {
-      router.push("/cart")
-    }
-  }, [cartItems.length, router, isLoadingGift, searchParams])
+  // Only redirect to cart if: cart is empty AND we're not loading a gift product
+  if (cartItems.length === 0 && !isLoadingGift) {
+    router.push("/cart")
+  }
+}, [cartItems.length, router, isLoadingGift, searchParams])
 
   // Show loading state while gift product is being added
   if (isLoadingGift && cartItems.length === 0) {
