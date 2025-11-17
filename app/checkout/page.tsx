@@ -100,39 +100,49 @@ export default function CheckoutPage() {
     }
   }, [searchParams])
 
-  useEffect(() => {
-    if (isGift && productId && !giftProductAdded && cartItems.length === 0) {
-      setIsLoadingGift(true)
-      ;(async () => {
-        try {
-          const { getProducts } = await import("@/lib/getProducts")
-          const products = await getProducts()
-          const giftProduct = products.find(p => p.id === Number(productId))
-          if (giftProduct) {
-            clearCart();
-            addCartItem({
-              id: giftProduct.id,
-              name: giftProduct.name,
-              description: giftProduct.description,
-              price: giftProduct.price,
-              image: giftProduct.image,
-              category: giftProduct.category,
-            })
-            setGiftProductAdded(true)
-            setIsLoadingGift(false)
-          } else {
-            alert("Sorry, this gift product could not be loaded.");
-            router.push("/gifting")
-          }
-        } catch (e) {
-          alert("Error loading product for gift checkout.");
-          router.push("/gifting")
-        } finally {
-          setIsLoadingGift(false)
+  // CheckoutPage.tsx (Refactored useEffect, starting around line 97)
+
+useEffect(() => {
+  if (isGift && productId && !giftProductAdded && cartItems.length === 0) {
+    setIsLoadingGift(true)
+    ;(async () => {
+      try {
+        // *** REPLACEMENT: Call the new API route instead of local file import ***
+        const res = await fetch(`/api/gift-product?productId=${productId}`)
+        const data = await res.json()
+
+        if (!res.ok || data.error) {
+          throw new Error(data.error || "Failed to load gift product.")
         }
-      })()
-    }
-  }, [isGift, productId, giftProductAdded, cartItems.length, addCartItem, clearCart, router])
+        
+        const giftProduct = data.data // Assuming the API returns the product in a 'data' field
+        // *** END REPLACEMENT ***
+
+        if (giftProduct) {
+          clearCart();
+          addCartItem({
+            id: giftProduct.id,
+            name: giftProduct.name,
+            description: giftProduct.description,
+            price: giftProduct.price,
+            image: giftProduct.image,
+            category: giftProduct.category,
+          })
+          setGiftProductAdded(true)
+          setIsLoadingGift(false)
+        } else {
+          alert("Sorry, this gift product could not be loaded.");
+          router.push("/gifting")
+        }
+      } catch (e: any) {
+        alert("Error loading product for gift checkout: " + e.message);
+        router.push("/gifting")
+      } finally {
+        setIsLoadingGift(false)
+      }
+    })()
+  }
+}, [isGift, productId, giftProductAdded, cartItems.length, addCartItem, clearCart, router])
 
   // Handle category selection
   const handleCategoryChange = (category: string) => {
