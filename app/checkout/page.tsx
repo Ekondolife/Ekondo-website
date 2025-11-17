@@ -1,8 +1,7 @@
 "use client"
 
-export const dynamic = "force-dynamic"
-import { useState, useEffect, useRef } from "react"
-import { useRouter, useSearchParams } from "next/navigation"
+import { useState, useEffect } from "react"
+import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -66,10 +65,37 @@ const giftNoteCategories = {
   }
 }
 
+const pickupLocations = [
+  {
+    id: "abuja",
+    name: "Ekondo Park",
+    address: "Mama village garden, beside Sharon rose garden, Utako, Gwarinpa 900108, Federal Capital Territory, Abuja",
+  },
+  {
+    id: "lagos",
+    name: "Locale Lagos",
+    address: "2 Saka Jojo St, Victoria Island, Lagos 101241, Lagos",
+  },
+]
+
+// Custom hook for safe search params access
+function useSafeSearchParams() {
+  const [params, setParams] = useState<URLSearchParams | null>(null)
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setParams(new URLSearchParams(window.location.search))
+    }
+  }, [])
+
+  return params
+}
+
 export default function CheckoutPage() {
   const { items: cartItems, subtotal, addItem: addCartItem, clearCart } = useCart()
   const router = useRouter()
-  const searchParams = useSearchParams()
+  const searchParams = useSafeSearchParams()
+  
   const [tabValue, setTabValue] = useState("delivery")
   const [isProcessing, setIsProcessing] = useState(false)
   const [isGift, setIsGift] = useState(false)
@@ -82,102 +108,6 @@ export default function CheckoutPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>("")
   const [selectedMessage, setSelectedMessage] = useState<string>("")
   const [useCustomMessage, setUseCustomMessage] = useState(false)
-
-  // Read query params on client only - check both useSearchParams and window.location as fallback
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const searchParams = new URLSearchParams(window.location.search)
-      const giftParam = searchParams.get("isGift") === "1" || searchParams.get("isGift") === "true"
-      const prodId = searchParams.get("productId")
-        
-      if (giftParam) {
-        setIsGift(true)
-      }
-      if (prodId) {
-        setProductId(prodId)
-      }
-        
-      if (giftParam && prodId) {
-        setIsLoadingGift(true)
-      }
-    }
-  }, [])
-
-  const getSearchParam = (param: string): string | null => {
-    if (typeof window === 'undefined') return null
-    const searchParams = new URLSearchParams(window.location.search)
-    return searchParams.get(param)
-  }
-  // CheckoutPage.tsx (Refactored useEffect, starting around line 97)
-
-  useEffect(() => {
-    const isGiftFromUrl = getSearchParam("isGift") === "1" || getSearchParam("isGift") === "true"
-    const productIdFromUrl = getSearchParam("productId")
-  
-    if (isGiftFromUrl && productIdFromUrl && !giftProductAdded && cartItems.length === 0) {
-      setIsLoadingGift(true)
-      ;(async () => {
-        try {
-          const res = await fetch(`/api/gift-product?productId=${productIdFromUrl}`)
-          const data = await res.json()
-  
-          if (!res.ok || data.error) {
-            throw new Error(data.error || "Failed to load gift product.")
-          }
-          
-          const giftProduct = data.data
-  
-          if (giftProduct) {
-            clearCart();
-            addCartItem({
-              id: giftProduct.id,
-              name: giftProduct.name,
-              description: giftProduct.description,
-              price: giftProduct.price,
-              image: giftProduct.image,
-              category: giftProduct.category,
-            })
-            setGiftProductAdded(true)
-            setIsLoadingGift(false)
-          } else {
-            alert("Sorry, this gift product could not be loaded.");
-            router.push("/gifting")
-          }
-        } catch (e: any) {
-          alert("Error loading product for gift checkout: " + e.message);
-          router.push("/gifting")
-        } finally {
-          setIsLoadingGift(false)
-        }
-      })()
-    }
-  }, [isGift, productId, giftProductAdded, cartItems.length, addCartItem, clearCart, router])
-  // Handle category selection
-  const handleCategoryChange = (category: string) => {
-    setSelectedCategory(category)
-    setSelectedMessage("") // Reset message when category changes
-    setGiftNote("") // Clear gift note
-    setUseCustomMessage(false)
-  }
-
-  // Handle message selection
-  const handleMessageChange = (messageIndex: string) => {
-    setSelectedMessage(messageIndex)
-    if (selectedCategory && messageIndex) {
-      const categoryKey = selectedCategory as keyof typeof giftNoteCategories
-      const message = giftNoteCategories[categoryKey].messages[parseInt(messageIndex)]
-      setGiftNote(message)
-      setUseCustomMessage(false)
-    }
-  }
-
-  // Handle custom message toggle
-  const handleCustomMessageToggle = () => {
-    setUseCustomMessage(true)
-    setSelectedCategory("")
-    setSelectedMessage("")
-    setGiftNote("")
-  }
 
   // Delivery form state
   const [deliveryData, setDeliveryData] = useState({
@@ -194,18 +124,88 @@ export default function CheckoutPage() {
   // Pickup form state
   const [pickupLocation, setPickupLocation] = useState("")
 
-  const pickupLocations = [
-    {
-      id: "abuja",
-      name: "Ekondo Park",
-      address: "Mama village garden, beside Sharon rose garden, Utako, Gwarinpa 900108, Federal Capital Territory, Abuja",
-    },
-    {
-      id: "lagos",
-      name: "Locale Lagos",
-      address: "2 Saka Jojo St, Victoria Island, Lagos 101241, Lagos",
-    },
-  ]
+  // Safe parameter getter
+  const getSearchParam = (param: string): string | null => {
+    return searchParams?.get(param) || null
+  }
+
+  // Read query params on client only
+  useEffect(() => {
+    if (!searchParams) return
+
+    const giftParam = getSearchParam("isGift") === "1" || getSearchParam("isGift") === "true"
+    const prodId = getSearchParam("productId")
+      
+    if (giftParam) {
+      setIsGift(true)
+    }
+    if (prodId) {
+      setProductId(prodId)
+    }
+  }, [searchParams])
+
+  // Gift product loading effect
+  useEffect(() => {
+    if (!searchParams) return
+
+    const isGiftFromUrl = getSearchParam("isGift") === "1" || getSearchParam("isGift") === "true"
+    const productIdFromUrl = getSearchParam("productId")
+
+    if (isGiftFromUrl && productIdFromUrl && !giftProductAdded && cartItems.length === 0) {
+      setIsLoadingGift(true)
+      ;(async () => {
+        try {
+          const res = await fetch(`/api/gift-product?productId=${productIdFromUrl}`)
+          const data = await res.json()
+
+          if (!res.ok || data.error) {
+            throw new Error(data.error || "Failed to load gift product.")
+          }
+          
+          const giftProduct = data.data
+
+          if (giftProduct) {
+            clearCart();
+            addCartItem({
+              id: giftProduct.id,
+              name: giftProduct.name,
+              description: giftProduct.description,
+              price: giftProduct.price,
+              image: giftProduct.image,
+              category: giftProduct.category,
+            })
+            setGiftProductAdded(true)
+          } else {
+            alert("Sorry, this gift product could not be loaded.")
+            router.push("/gifting")
+          }
+        } catch (e: any) {
+          alert("Error loading product for gift checkout: " + e.message)
+          router.push("/gifting")
+        } finally {
+          setIsLoadingGift(false)
+        }
+      })()
+    }
+  }, [searchParams, giftProductAdded, cartItems.length, addCartItem, clearCart, router])
+
+  // Redirect logic
+  useEffect(() => {
+    if (!searchParams) return
+
+    const isGiftFromUrl = getSearchParam("isGift") === "1" || getSearchParam("isGift") === "true"
+    const hasProductId = getSearchParam("productId") !== null
+    
+    // Don't redirect if this is a gift flow
+    if (isGiftFromUrl || hasProductId) {
+      return
+    }
+    
+    // Only redirect to cart if cart is empty and we're not loading a gift product
+    if (cartItems.length === 0 && !isLoadingGift) {
+      router.push("/cart")
+    }
+  }, [cartItems.length, router, isLoadingGift, searchParams])
 
   const shipping = tabValue === "pickup" ? 0 : 6000
   const total = subtotal + shipping
@@ -228,6 +228,30 @@ export default function CheckoutPage() {
 
   const isPickupFormValid = () => {
     return pickupLocation !== ""
+  }
+
+  const handleCategoryChange = (category: string) => {
+    setSelectedCategory(category)
+    setSelectedMessage("")
+    setGiftNote("")
+    setUseCustomMessage(false)
+  }
+
+  const handleMessageChange = (messageIndex: string) => {
+    setSelectedMessage(messageIndex)
+    if (selectedCategory && messageIndex) {
+      const categoryKey = selectedCategory as keyof typeof giftNoteCategories
+      const message = giftNoteCategories[categoryKey].messages[parseInt(messageIndex)]
+      setGiftNote(message)
+      setUseCustomMessage(false)
+    }
+  }
+
+  const handleCustomMessageToggle = () => {
+    setUseCustomMessage(true)
+    setSelectedCategory("")
+    setSelectedMessage("")
+    setGiftNote("")
   }
 
   const handleCheckout = async () => {
@@ -293,21 +317,19 @@ export default function CheckoutPage() {
     }
   }
 
-
-  useEffect(() => {
-    const isGiftFromUrl = getSearchParam("isGift") === "1" || getSearchParam("isGift") === "true"
-    const hasProductId = getSearchParam("productId") !== null
-      
-    // NEVER redirect if this is a gift flow
-    if (isGiftFromUrl || hasProductId) {
-      return // Don't redirect, this is a gift flow
-    }
-      
-    // Only redirect to cart if: cart is empty AND we're not loading a gift product
-    if (cartItems.length === 0 && !isLoadingGift) {
-      router.push("/cart")
-    }
-  }, [cartItems.length, router, isLoadingGift])
+  // Show loading while search params are being parsed
+  if (!searchParams) {
+    return (
+      <div className="container px-4 py-12 md:py-16">
+        <div className="max-w-6xl mx-auto flex items-center justify-center min-h-[400px]">
+          <div className="text-center">
+            <Loader2 className="h-8 w-8 animate-spin text-primary mx-auto mb-4" />
+            <p className="text-muted-foreground">Loading checkout...</p>
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   // Show loading state while gift product is being added
   if (isLoadingGift && cartItems.length === 0) {
@@ -323,20 +345,14 @@ export default function CheckoutPage() {
     )
   }
 
-// Check URL params directly to avoid race conditions
-const isGiftFromUrl = getSearchParam("isGift") === "1" || getSearchParam("isGift") === "true"
-const hasProductId = getSearchParam("productId") !== null
+  // Check URL params directly to avoid race conditions
+  const isGiftFromUrl = getSearchParam("isGift") === "1" || getSearchParam("isGift") === "true"
+  const hasProductId = getSearchParam("productId") !== null
 
-// Don't render checkout if cart is empty and it's not a gift flow
-if (cartItems.length === 0 && !isGiftFromUrl && !hasProductId && !isLoadingGift) {
-  return null
-}
-
-// Allow rendering if it's a gift (even if cart is temporarily empty while loading)
-if (cartItems.length === 0 && (isGiftFromUrl || hasProductId) && !isLoadingGift && !giftProductAdded) {
-  // This is a gift flow, allow it to render while product is being added
-  // The loading state will be shown by the useEffect that adds the product
-}
+  // Don't render checkout if cart is empty and it's not a gift flow
+  if (cartItems.length === 0 && !isGiftFromUrl && !hasProductId && !isLoadingGift) {
+    return null
+  }
 
   return (
     <div className="container px-4 py-12 md:py-16">
@@ -353,7 +369,7 @@ if (cartItems.length === 0 && (isGiftFromUrl || hasProductId) && !isLoadingGift 
           <div className="lg:col-span-2">
             <Card className="border-none shadow-md">
               <CardContent className="p-6">
-                {(isGift || searchParams.get("isGift") === "1" || searchParams.get("isGift") === "true") && (
+                {(isGift || isGiftFromUrl) && (
                   <div className="mb-6 space-y-4">
                     <div className="bg-orange-50 border border-orange-200 rounded-lg p-4">
                       <h3 className="font-medium text-lg text-primary mb-2 flex items-center gap-2">
@@ -653,7 +669,7 @@ if (cartItems.length === 0 && (isGiftFromUrl || hasProductId) && !isLoadingGift 
                   ))}
                 </div>
 
-                {(isGift || searchParams.get("isGift") === "1" || searchParams.get("isGift") === "true") && !!giftNote && (
+                {(isGift || isGiftFromUrl) && !!giftNote && (
                   <div className="mb-3 p-3 rounded bg-orange-50 border border-orange-100">
                     <p className="text-xs font-semibold text-orange-800 mb-1">Gift Note:</p>
                     <p className="text-xs text-orange-700 italic">"{giftNote}"</p>
