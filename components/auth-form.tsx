@@ -161,7 +161,7 @@ export default function AuthForm() {
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
                     placeholder="John Doe"
-                    className="pl-10 organic-shape"
+                    className="pl-10"
                     required
                   />
                 </div>
@@ -178,7 +178,7 @@ export default function AuthForm() {
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
                     placeholder="+234 801 234 5678"
-                    className="pl-10 organic-shape"
+                    className="pl-10"
                     required
                   />
                 </div>
