@@ -42,7 +42,7 @@ export default function RetailPage() {
   const heroSlides = [
     {
       image: "/images/Ekondo-110 2.webp",
-      badge: "New Collection",
+      badge: "",
       title: "Handcrafted for Nature Lovers",
       description: "Discover our curated collection of sustainable planters, tools, and accessories handmade by African artisans.",
       showContent: true,
@@ -364,14 +364,19 @@ export default function RetailPage() {
       {/* Hero Section Carousel */}
       <section
         ref={heroRef}
-        className="relative py-12 md:py-16 lg:py-20 orange-gradient-strong overflow-hidden min-h-[300px] sm:min-h-[500px] md:min-h-[600px]"
+        className="relative h-[60vh] sm:h-[70vh] md:h-[80vh] min-h-[320px] w-full overflow-hidden"
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       >
+        {/* Subtle gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/40 z-10 pointer-events-none" />
+
         {/* Slides */}
-        <div className="absolute inset-0">
+        <div className="relative w-full h-full">
           {heroSlides.map((slide, index) => {
-            const isSoilmate = slide.ctaText?.toLowerCase().includes("soilmate")
+            const isExternal = slide.ctaLink.startsWith("http")
+            const isRetail = slide.ctaLink === "/retail"
+            const isFirstSlide = slide.showContent
 
             return (
               <div
@@ -379,108 +384,118 @@ export default function RetailPage() {
                 className={`absolute inset-0 transition-opacity duration-1000 ${
                   index === currentSlide ? "opacity-100 z-20" : "opacity-0 z-10"
                 }`}
-                style={{
-                  backgroundImage: `url('${slide.image}')`,
-                  backgroundSize: "cover",
-                  backgroundPosition: "center center",
-                  backgroundRepeat: "no-repeat",
-                }}
+                aria-hidden={index !== currentSlide}
               >
-                <div className="absolute inset-0 opacity-50"></div>
-                <div className="container px-4 sm:px-6 relative z-30 h-full flex items-center">
-                  {slide.showContent ? (
-                    <div ref={heroContentRef} className="max-w-3xl w-full">
-                      {slide.badge && (
-                        <Badge className="hero-badge mb-3 md:mb-4 organic-shape-soft bg-orange/20 text-white border-orange text-xs sm:text-sm">
-                          {slide.badge}
-                        </Badge>
-                      )}
-                      <h1 className="hero-title text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-bold mb-3 md:mb-4 text-white leading-tight">
-                        Handcrafted for <span className="text-primary">Nature</span> Lovers
-                      </h1>
-                      <p className="hero-description text-sm sm:text-base md:text-lg lg:text-xl text-white dark:text-foreground mb-4 md:mb-6 lg:mb-8 drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)]">
-                        {slide.description}
-                      </p>
-                      <div className="hero-buttons flex flex-wrap gap-2 sm:gap-3">
-                        <Button size="sm" className="btn-gradient-clean text-sm sm:text-base sm:px-6 sm:py-3">
-                          Shop Best Sellers
-                        </Button>
-                        <Button size="sm" variant="outline" asChild className="bg-background text-sm sm:text-base sm:px-6 sm:py-3">
-                          <Link href="/gifting">View Gifts</Link>
-                        </Button>
+                {/* Clickable wrapper for slides 2-4 (non-first slides) */}
+                {!isFirstSlide && (
+                  <>
+                    {isExternal ? (
+                      <a
+                        href={slide.ctaLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="absolute inset-0 block cursor-pointer"
+                      >
+                        <Image
+                          src={slide.image}
+                          alt={slide.ctaText || `Hero slide ${index + 1}`}
+                          fill
+                          priority={index === 0}
+                          className="object-contain md:object-cover w-full h-full"
+                        />
+                      </a>
+                    ) : !isRetail ? (
+                      <Link href={slide.ctaLink} className="absolute inset-0 block cursor-pointer">
+                        <Image
+                          src={slide.image}
+                          alt={slide.ctaText || `Hero slide ${index + 1}`}
+                          fill
+                          priority={index === 0}
+                          className="object-contain md:object-cover w-full h-full"
+                        />
+                      </Link>
+                    ) : (
+                      <div className="absolute inset-0">
+                        <Image
+                          src={slide.image}
+                          alt={slide.ctaText || `Hero slide ${index + 1}`}
+                          fill
+                          priority={index === 0}
+                          className="object-contain md:object-cover w-full h-full"
+                        />
+                      </div>
+                    )}
+                  </>
+                )}
+
+                {/* First slide with content and buttons (not clickable) */}
+                {isFirstSlide && (
+                  <>
+                    <div className="absolute inset-0">
+                      <Image
+                        src={slide.image}
+                        alt={slide.title}
+                        fill
+                        priority
+                        className="object-contain md:object-cover w-full h-full"
+                      />
+                    </div>
+
+                    {/* Content overlay */}
+                    <div className="container relative z-30 flex flex-col items-center justify-center h-full text-center px-4 pointer-events-none">
+                      <div ref={heroContentRef} className="max-w-3xl w-full">
+                        {slide.badge && (
+                          <Badge className="hero-badge mb-3 md:mb-4 organic-shape-soft bg-orange/20 text-white border-orange text-xs sm:text-sm pointer-events-none">
+                            {slide.badge}
+                          </Badge>
+                        )}
+                        <h1 className="hero-title text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-bold mb-3 md:mb-4 text-white drop-shadow-lg leading-tight">
+                          Handcrafted for <span className="text-primary">Nature</span> Lovers
+                        </h1>
+                        <p className="hero-description text-sm sm:text-base md:text-lg lg:text-xl text-white mb-4 md:mb-6 lg:mb-8 drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)]">
+                          {slide.description}
+                        </p>
+                        <div className="hero-buttons flex flex-wrap gap-2 sm:gap-3 justify-center pointer-events-auto">
+                          <Button size="sm" className="btn-gradient-clean text-sm sm:text-base sm:px-6 sm:py-3">
+                            Shop Best Sellers
+                          </Button>
+                          <Button size="sm" variant="outline" asChild className="bg-background text-sm sm:text-base sm:px-6 sm:py-3">
+                            <Link href="/gifting">View Gifts</Link>
+                          </Button>
+                        </div>
                       </div>
                     </div>
-                  ) : (
-                    slide.ctaText && (
-                      <div className={`absolute bottom-6 sm:bottom-10 md:bottom-16 left-4 sm:left-6 md:left-20 z-30`}>
-                        {slide.ctaLink.startsWith('http') ? (
-                          <Button
-                            asChild
-                            size="sm"
-                            className={
-                              "btn-gradient-clean text-sm sm:text-base " +
-                              (isSoilmate
-                                ? "w-[260px] sm:w-auto px-4 sm:px-6 py-3 sm:py-3.5"
-                                : "px-4 sm:px-6 py-2 sm:py-3")
-                            }
-                          >
-                            <a href={slide.ctaLink} target="_blank" rel="noopener noreferrer">
-                              {slide.ctaText}{" "}
-                              <ArrowRight className="ml-1 sm:ml-2 h-3 w-3 sm:h-4 sm:w-4 md:h-5 md:w-5" />
-                            </a>
-                          </Button>
-                        ) : (
-                          <Button
-                            asChild
-                            size="sm"
-                            className={
-                              "btn-gradient-clean text-sm sm:text-base " +
-                              (isSoilmate
-                                ? "w-[260px] sm:w-auto px-4 sm:px-6 py-3 sm:py-3.5"
-                                : "px-4 sm:px-6 py-2 sm:py-3")
-                            }
-                          >
-                            <Link href={slide.ctaLink}>
-                              {slide.ctaText}{" "}
-                              <ArrowRight className="ml-1 sm:ml-2 h-3 w-3 sm:h-4 sm:w-4 md:h-5 md:w-5" />
-                            </Link>
-                          </Button>
-                        )}
-                      </div>
-                    )
-                  )}
-                </div>
+                  </>
+                )}
               </div>
             )
           })}
         </div>
 
-        {/* Navigation Arrows */}
+        {/* Navigation Arrows (smaller on mobile) */}
         <button
           onClick={prevSlide}
-          className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-40 bg-black/30 hover:bg-black/50 text-white p-2 sm:p-3 rounded-full transition-all backdrop-blur-sm"
+          className="absolute left-3 top-1/2 -translate-y-1/2 z-40 bg-black/30 hover:bg-black/50 text-white p-2.5 md:p-3 rounded-full transition-all backdrop-blur-sm"
           aria-label="Previous slide"
         >
-          <ChevronLeft className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6" />
+          <ChevronLeft className="h-5 w-5 md:h-6 md:w-6" />
         </button>
         <button
           onClick={nextSlide}
-          className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 z-40 bg-black/30 hover:bg-black/50 text-white p-2 sm:p-3 rounded-full transition-all backdrop-blur-sm"
+          className="absolute right-3 top-1/2 -translate-y-1/2 z-40 bg-black/30 hover:bg-black/50 text-white p-2.5 md:p-3 rounded-full transition-all backdrop-blur-sm"
           aria-label="Next slide"
         >
-          <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6" />
+          <ChevronRight className="h-5 w-5 md:h-6 md:w-6" />
         </button>
 
-        {/* Dots Indicator */}
-        <div className="absolute bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 z-40 flex gap-1.5 sm:gap-2">
+        {/* Dots Indicator (smaller on mobile) */}
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-40 flex gap-2">
           {heroSlides.map((_, index) => (
             <button
               key={index}
               onClick={() => goToSlide(index)}
-              className={`h-1.5 sm:h-2 rounded-full transition-all ${
-                index === currentSlide
-                  ? "w-6 sm:w-8 bg-white"
-                  : "w-1.5 sm:w-2 bg-white/50 hover:bg-white/75"
+              className={`rounded-full transition-all ${
+                index === currentSlide ? "h-2 w-8 bg-white" : "h-2 w-2 bg-white/50 hover:bg-white/75"
               }`}
               aria-label={`Go to slide ${index + 1}`}
             />

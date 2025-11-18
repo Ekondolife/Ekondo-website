@@ -192,7 +192,7 @@ export default function ExperienceDetailPage({ params }: { params: { id: string 
       <section className="container px-4 pb-12">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
           {/* Main Image */}
-          <div className="relative w-full h-48 xs:h-56 sm:h-[360px] lg:h-[500px] rounded-lg overflow-hidden organic-shape max-w-[100vw] mx-auto">
+          <div className="relative w-full h-48 xs:h-56 sm:h-[360px] lg:h-[500px] rounded-lg overflow-hidden max-w-[100vw] mx-auto">
             <Image
               src={experience.image || "/placeholder.svg"}
               alt={experience.title}
