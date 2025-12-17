@@ -245,6 +245,107 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
         <p>Take the time to understand your plant. Read its care card and observe it regularly—leaves, color, and growth patterns. Don’t be discouraged by setbacks; learning from experience is part of the process. Enjoy the calm and beauty plants bring into your life. Happy plant parenting — we’re rooting for you! 🌿</p>
       `,
     },
+    "how-to-care-for-your-plant-during-hot-and-dusty-period": {
+      title: "How to Care for Your Plant During This Hot and Dusty Period",
+      author: "Ekondo",
+      authorBio: "Ekondo — nurturing plants through every season.",
+      authorImage: "/placeholder-user.jpg",
+      date: "March 2025",
+      readTime: "6 min read",
+      category: "Plant Care",
+      image: "/images/fine plant image.webp",
+      content: `
+        <p>
+          There is something about this time of the year. The heat sits heavy in the air, the wind carries dust like fine powder, 
+          and everything feels a little louder and a little quieter at the same time. Our plants feel it too. They breathe the weather 
+          just as we do, and during this hot and dusty season, they need a little extra care, a softer kind of attention, and a gentler rhythm to stay happy.
+        </p>
+
+        <p>
+          If your plants have been looking a bit tired lately, you are not alone. Every plant parent in Abuja and across Nigeria is navigating 
+          the same season. The good news is that with the right care, your plant will not just survive — it will thrive. 
+          Here is how to keep your leafy friends glowing.
+        </p>
+
+        <h2>Give Your Plant More Water — the Right Way</h2>
+        <p>
+          Heat takes moisture from the soil faster than usual, which means your plant becomes thirsty more often. 
+          Instead of sprinkling water lightly, water deeply and slowly, allowing the soil to fully drink. 
+          You want the roots to stay hydrated from within.
+        </p>
+        <p>
+          Morning watering works beautifully because your plant has enough time to absorb moisture and prepare for the hot afternoon.
+          Always touch the soil before watering — if the top layer feels dry, it is time.
+        </p>
+
+        <h2>Clean Off the Dust So Your Plant Can Breathe</h2>
+        <p>
+          Dust blocks light, and light is food for your plant. A layer of dust can slow down photosynthesis and make your plant struggle.
+          Use a soft, damp cloth and gently wipe each leaf — think of it as giving your plant a small spa moment.
+        </p>
+        <p>
+          For plants with many small leaves, wiping may be difficult. In that case, a gentle shower works perfectly.
+          Dust-free leaves are happier, brighter, and more energized.
+        </p>
+
+        <figure>
+          <img src="/images/Ekondo Products/Size_B_Spider_Plant_in_a_Red_Chidi-scaled.webp" alt="Clean leaves helping plants breathe" />
+          <figcaption>Dust-free leaves absorb light better and stay healthier.</figcaption>
+        </figure>
+
+        <h2>Protect Your Plant from Direct Heat</h2>
+        <p>
+          The sun is harsher during this season. Even plants that love bright light can get stressed.
+          Brown edges or curling leaves are signs that the sun feels too strong.
+        </p>
+        <p>
+          Move your plant slightly away from windows, soften sunlight with light curtains,
+          or create gentle shade when needed. During dusty periods, soft light is your friend.
+        </p>
+
+        <h2>Add Humidity Back into Your Space</h2>
+        <p>
+          Hot air pulls moisture from everything — including your plant. If your home feels dry, your plant feels it too.
+          Light misting in the morning helps, as does grouping plants together to create a small humid zone.
+        </p>
+        <p>
+          Placing a bowl of water close to your plant can also help. As the water evaporates, it creates a kinder atmosphere
+          for your green companion.
+        </p>
+
+        <h2>Feed Slowly and Gently</h2>
+        <p>
+          This season puts plants under stress, so overfeeding can overwhelm them.
+          If fertilizing is necessary, choose something mild and natural, and use it sparingly.
+          Think of it as a nourishing drink rather than a heavy meal.
+        </p>
+
+        <h2>Pay Attention — Plants Speak</h2>
+        <p>
+          Your plant will always tell you what it needs, but the language is soft.
+          Drooping often means thirst. Brown tips usually signal too much heat.
+          Pale leaves may mean dust buildup or poor light.
+        </p>
+        <p>
+          When you watch closely, you will always know how to help.
+        </p>
+
+        <h2>Final Thoughts</h2>
+        <p>
+          At Ekondo, we believe plants are more than décor. They are living companions that add softness,
+          beauty, and grounding to our lives. This season may be hot and dusty, but with a little tenderness,
+          your plants will stay strong and lush.
+        </p>
+
+        <p>
+          If you ever need help choosing the right plant for your space or learning how to care for the ones you already have,
+          Ekondo is always here to guide you gently.
+        </p>
+
+        <p><strong>As always, we are rooting for you. 🌿</strong></p>
+      `,
+    },
+
   }
 
   const fallback = {
