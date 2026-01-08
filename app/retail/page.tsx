@@ -59,15 +59,6 @@ export default function RetailPage() {
       ctaLink: "/gifting",
     },
     {
-      image: "/images/ekondo_christmas.webp",
-      badge: "",
-      title: "",
-      description: "",
-      showContent: false,
-      ctaText: "Shop Now",
-      ctaLink: "/retail",
-    },
-    {
       image: "/images/soilmate.webp",
       badge: "",
       title: "",

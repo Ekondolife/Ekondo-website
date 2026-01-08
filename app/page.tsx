@@ -41,12 +41,6 @@ export default function Home() {
       showTitle: false,
     },
     {
-      image: "/images/ekondo_christmas.webp",
-      title: "",
-      link: "/retail", // Link for "Shop Now"
-      showTitle: false,
-    },
-    {
       image: "/images/soilmate.webp",
       title: "",
       link: "https://v0-remix-of-plant-matching-app.vercel.app/", // Link for "Find your Soilmate"
