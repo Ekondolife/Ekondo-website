@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input"
 import NewsletterSignup from "@/components/newsletter-signup"
 import gsap from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
+import { postsBySlug } from "./[slug]/page"
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -68,55 +69,27 @@ export default function JournalPage() {
     return () => ctx.revert()
   }, [])
 
-  const featuredPost = {
-    title: "10 Low-Maintenance Indoor Plants You Can Buy in Lagos (Under ₦20,000)",
-    excerpt:
-      "Looking for affordable low-maintenance indoor plants in Lagos that thrive in Nigeria’s climate? Discover 10 low-maintenance houseplants (under ₦20,000)…",
-    author: "Favour",
-    date: "October 6, 2025",
-    readTime: "6 min read",
-    category: "Plant Care",
-    image: "/images/Ekondo Products/Size_B_Spider_Plant_in_a_Red_Chidi-scaled.webp",
-    slug: "low-maintenance-indoor-plants-lagos-under-20000",
-  }
+  // build post list from the central postsBySlug map
+  const allPosts = useMemo(() => {
+    return Object.entries(postsBySlug).map(([slug, p]) => ({ slug, ...p }))
+  }, [])
 
-  const posts = [
-    {
-      title: "DETERMINING THE RIGHT LIGHT OF YOUR SPACE FOR YOUR PLANT.",
-      excerpt:
-        "This article helps you evaluate light conditions so you can place your plants where they will flourish.",
-      author: "Favour",
-      date: "August 20, 2025",
-      readTime: "5 min read",
-      category: "Plant Care",
-      image: "/images/fine plant image.webp",
-      slug: "determining-right-light-for-your-plant",
-    },
-    {
-      title: "5 essential tips for keeping your plants alive",
-      excerpt:
-        "Embarking on your journey as a plant parent can be exciting—start here with five essential tips to keep your plants thriving.",
-      author: "Favour",
-      date: "August 20, 2025",
-      readTime: "4 min read",
-      category: "Plant Care",
-      image: "/images/sans img.jpg",
-      slug: "essential-tips-for-keeping-plants-alive",
-    },
-    {
-      title: "EKONDO- COMMUNITY HERALDING CONTENTMENT",
-      excerpt:
-        "A heartfelt look at how Ekondo fosters contentment and togetherness through community and creativity.",
-      author: "Favour",
-      date: "August 20, 2025",
-      readTime: "6 min read",
-      category: "Community",
-      image: "/images/two women.JPG",
-      slug: "ekondo-community-heralding-contentment",
-    },
-  ]
+  // pick featured (use canonical slug if present), otherwise first
+  const featuredPost = useMemo(
+    () =>
+      allPosts.find((p) => p.slug === "low-maintenance-indoor-plants-lagos-under-20000") ??
+      allPosts[0],
+    [allPosts]
+  )
 
-  const categories = ["All", "Plant Care", "Community", "Urban Farming", "Design", "Wellness", "Sustainability"]
+  // posts shown in the grid exclude the featured post
+  const posts = useMemo(() => allPosts.filter((p) => p.slug !== featuredPost?.slug), [allPosts, featuredPost])
+
+  const categories = useMemo(() => {
+    const set = new Set<string>(["All"])
+    allPosts.forEach((p) => p.category && set.add(p.category))
+    return Array.from(set)
+  }, [allPosts])
 
   const [searchQuery, setSearchQuery] = useState("")
   const [activeCategory, setActiveCategory] = useState<string>("All")
