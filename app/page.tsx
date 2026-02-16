@@ -588,10 +588,6 @@ export default function Home() {
       {/* Instagram Feed Section */}
       <section className="py-16 md:py-24">
         <div className="container px-4">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-4 js-section-title">Follow Our Journey</h2>
-          <p className="text-center text-muted-foreground mb-12 max-w-2xl mx-auto">
-            Join our community on Instagram and share your Ekondo experiences with us.
-          </p>
           <InstagramFeed />
           <div className="text-center mt-8">
             <Button variant="outline" size="lg" asChild className="btn-gradient-clean js-hover">
