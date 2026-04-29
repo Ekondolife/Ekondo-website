@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, type ReactNode } from "react"
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
@@ -25,26 +25,38 @@ gsap.registerPlugin(ScrollTrigger)
 export default function Home() {
   const [currentSlide, setCurrentSlide] = useState(0)
   const [isAutoPlaying, setIsAutoPlaying] = useState(true)
+  const [showSoilmateModal, setShowSoilmateModal] = useState(false)
+  const [hideSoilmatePopup, setHideSoilmatePopup] = useState(false)
 
   // Updated heroSlides with explicit links for the background image
   const heroSlides = [
+    {
+      image: "/Events/nature-play.png",
+      title: "Nature Play Day - May 2",
+      link: "/",
+      showTitle: false,
+      isEvent: true,
+    },
     {
       image: "/images/homepage.webp",
       title: "Connect to Nature and Community",
       link: "/", // Landing page (not clickable, or link to home)
       showTitle: true,
+      isEvent: false,
     },
     {
       image: "/images/Gift_plant.webp",
       title: "",
       link: "/gifting", // Link for "Send a Gift"
       showTitle: false,
+      isEvent: false,
     },
     {
       image: "/images/soilmate.webp",
       title: "",
-      link: "https://v0-remix-of-plant-matching-app.vercel.app/", // Link for "Find your Soilmate"
+      link: "/", // Soilmate now promoted via modal CTA
       showTitle: false,
+      isEvent: false,
     },
   ]
 
@@ -145,8 +157,19 @@ export default function Home() {
     return () => ctx.revert()
   }, [])
 
+  useEffect(() => {
+    const shouldHideModal = window.localStorage.getItem("ekondo-hide-soilmate-popup") === "true"
+    if (shouldHideModal) return
+
+    const timer = window.setTimeout(() => {
+      setShowSoilmateModal(true)
+    }, 1500)
+
+    return () => window.clearTimeout(timer)
+  }, [])
+
   // Helper component for internal/external linking
-  const ClickableSlide = ({ link, children }: { link: string; children: React.ReactNode }) => {
+  const ClickableSlide = ({ link, children }: { link: string; children: ReactNode }) => {
     if (link.startsWith("http")) {
       return (
         <a href={link} target="_blank" rel="noopener noreferrer" className="absolute inset-0 block cursor-pointer">
@@ -162,6 +185,13 @@ export default function Home() {
       )
     }
     return <>{children}</> // If link is '/', just render the children without a link
+  }
+
+  const closeSoilmateModal = () => {
+    if (hideSoilmatePopup) {
+      window.localStorage.setItem("ekondo-hide-soilmate-popup", "true")
+    }
+    setShowSoilmateModal(false)
   }
 
   return (
@@ -202,6 +232,25 @@ export default function Home() {
               </h1>
             </div>
           )}
+
+          {slide.isEvent && (
+            <div className="absolute inset-0 z-30 flex items-end md:items-center">
+              <div className="container px-4 pb-8 md:pb-0 pointer-events-none">
+                <div className="max-w-xl bg-black/55 text-white rounded-xl p-5 md:p-6 backdrop-blur-sm">
+                  <p className="uppercase text-xs tracking-widest mb-2 text-primary-foreground/90">Live Event | May 2</p>
+                  <h2 className="text-2xl md:text-4xl font-bold mb-2">Nature Play Day</h2>
+                  <p className="text-sm md:text-base text-white/90 mb-4">
+                    Step into a playful nature experience with workshops, games, and community moments.
+                  </p>
+                  <Button asChild className="btn-gradient-clean pointer-events-auto js-hover">
+                    <a href="https://tix.africa/discover/nature-play-day" target="_blank" rel="noopener noreferrer">
+                      Book Your Spot
+                    </a>
+                  </Button>
+                </div>
+              </div>
+            </div>
+          )}
         </ClickableSlide>
       </div>
     ))}
@@ -240,6 +289,8 @@ export default function Home() {
 {/* End MODIFIED replacement */}
 
 
+
+     
 
       {/* Four Branches Section */}
       <section className="py-16 md:py-24">
@@ -609,6 +660,37 @@ export default function Home() {
 
       {/* Plant Doctor Chat */}
       <PlantDoctorChat />
+
+      {showSoilmateModal && (
+        <div className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="w-full max-w-lg rounded-2xl bg-white p-6 md:p-8 shadow-2xl">
+            <p className="text-sm font-semibold uppercase tracking-wide text-primary mb-2">Find your Soilmate</p>
+            <h3 className="text-2xl md:text-3xl font-bold mb-3 text-green-500">Take the quiz and find your perfect plant match</h3>
+            <p className="text-muted-foreground mb-6">
+              Not sure what to buy? Soilmate helps you discover plants that fit your lifestyle so you can shop with confidence.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3 mb-4">
+              <Button asChild className="btn-gradient-clean js-hover">
+                <a href="https://v0-remix-of-plant-matching-app.vercel.app/" target="_blank" rel="noopener noreferrer">
+                  Go to Soilmate
+                </a>
+              </Button>
+              <Button variant="outline" onClick={closeSoilmateModal} className="js-hover">
+                Maybe later
+              </Button>
+            </div>
+            <label className="flex items-center gap-2 text-sm text-muted-foreground">
+              <input
+                type="checkbox"
+                checked={hideSoilmatePopup}
+                onChange={(e) => setHideSoilmatePopup(e.target.checked)}
+                className="h-4 w-4 accent-primary"
+              />
+              Do not show me this again
+            </label>
+          </div>
+        </div>
+      )}
 
       {/* Newsletter Section */}
       <section className="py-16 md:py-24 bg-primary/5 ">
