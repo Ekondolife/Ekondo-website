@@ -31,32 +31,22 @@ export default function Home() {
   // Updated heroSlides with explicit links for the background image
   const heroSlides = [
     {
-      image: "/Events/nature-play.png",
-      title: "Nature Play Day - May 2",
-      link: "/",
-      showTitle: false,
-      isEvent: true,
-    },
-    {
       image: "/images/homepage.webp",
       title: "Connect to Nature and Community",
-      link: "/", // Landing page (not clickable, or link to home)
+      link: "/",
       showTitle: true,
-      isEvent: false,
     },
     {
       image: "/images/Gift_plant.webp",
       title: "",
-      link: "/gifting", // Link for "Send a Gift"
+      link: "/gifting",
       showTitle: false,
-      isEvent: false,
     },
     {
       image: "/images/soilmate.webp",
       title: "",
-      link: "/", // Soilmate now promoted via modal CTA
+      link: "/",
       showTitle: false,
-      isEvent: false,
     },
   ]
 
@@ -233,24 +223,6 @@ export default function Home() {
             </div>
           )}
 
-          {slide.isEvent && (
-            <div className="absolute inset-0 z-30 flex items-end md:items-center">
-              <div className="container px-4 pb-8 md:pb-0 pointer-events-none">
-                <div className="max-w-xl bg-black/55 text-white rounded-xl p-5 md:p-6 backdrop-blur-sm">
-                  <p className="uppercase text-xs tracking-widest mb-2 text-primary-foreground/90">Live Event | May 2</p>
-                  <h2 className="text-2xl md:text-4xl font-bold mb-2">Nature Play Day</h2>
-                  <p className="text-sm md:text-base text-white/90 mb-4">
-                    Step into a playful nature experience with workshops, games, and community moments.
-                  </p>
-                  <Button asChild className="btn-gradient-clean pointer-events-auto js-hover">
-                    <a href="https://tix.africa/discover/nature-play-day" target="_blank" rel="noopener noreferrer">
-                      Book Your Spot
-                    </a>
-                  </Button>
-                </div>
-              </div>
-            </div>
-          )}
         </ClickableSlide>
       </div>
     ))}

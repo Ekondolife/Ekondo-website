@@ -149,7 +149,7 @@ export default function ContactPage() {
   const locations = [
     {
       city: "Abuja, Nigeria",
-      address: "MaMa Village Garden, beside Sharon Rose Garden, Abuja, Nigeria",
+      address: "Whispers Art Haus Maitama, Abuja, Nigeria",
       phone: "09162358827",
       email: "hello@ekondolife.com",
       hours: "Mon-Sat: 9AM-7PM",

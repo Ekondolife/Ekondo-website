@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { X } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -28,18 +29,16 @@ export default function FestivalBanner() {
       <div className="container flex items-center justify-between gap-3 px-4 py-2.5 md:py-3">
         <div className="flex-1 min-w-0 overflow-hidden">
           <div className="flex items-center gap-10 whitespace-nowrap animate-scroll-banner text-xs sm:text-sm md:text-base font-medium">
-            <span>Nature Play Day - May 2</span>
-            <span>Limited tickets available</span>
-            <span>Nature Play Day - May 2</span>
-            <span>Limited tickets available</span>
+            <span>Get the best deals right now — curated plants, pots & more</span>
+            <span>Shop Ekondo retail for fresh picks and member-worthy savings</span>
+            <span>Get the best deals right now — curated plants, pots & more</span>
+            <span>Shop Ekondo retail for fresh picks and member-worthy savings</span>
           </div>
         </div>
 
         <div className="flex items-center gap-2 shrink-0">
           <Button asChild size="sm" className="bg-white text-primary hover:bg-white/90 font-semibold h-8 px-3">
-            <a href="https://tix.africa/discover/nature-play-day" target="_blank" rel="noopener noreferrer">
-              Get Tickets
-            </a>
+            <Link href="/retail">Shop retail</Link>
           </Button>
           <button onClick={handleDismiss} className="rounded-full p-1 hover:bg-white/15 transition-colors" aria-label="Dismiss banner">
             <X className="h-4 w-4" />
