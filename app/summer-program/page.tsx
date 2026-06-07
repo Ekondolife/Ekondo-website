@@ -420,16 +420,16 @@ function SummerProgramContent() {
       </section>
 
       {/* Activities */}
-      <section className="py-10 bg">
+      <section className="py-10 bg-primary/5">
         <div className="container px-4 max-w-6xl mx-auto">
-          <h2 className="font-serif text-xl md:text-2xl font-bold text-[#1a4d2e] mb-6 text-center">
+          <h2 className="font-serif text-xl md:text-2xl font-bold text-primary mb-6 text-center">
             What they&apos;ll explore —
           </h2>
           <div className="flex flex-wrap justify-center gap-3">
             {ACTIVITIES.map((activity) => (
               <span
                 key={activity.label}
-                className={`${activity.color} text-white text-sm font-medium px-4 py-2 rounded-full`}
+                className={`${activity.color} text-primary text-sm font-medium px-4 py-2 rounded-full`}
               >
                 {activity.label}
               </span>
