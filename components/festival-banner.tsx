@@ -29,16 +29,16 @@ export default function FestivalBanner() {
       <div className="container flex items-center justify-between gap-3 px-4 py-2.5 md:py-3">
         <div className="flex-1 min-w-0 overflow-hidden">
           <div className="flex items-center gap-10 whitespace-nowrap animate-scroll-banner text-xs sm:text-sm md:text-base font-medium">
-            <span>Get the best deals right now — curated plants, pots & more</span>
-            <span>Shop Ekondo retail for fresh picks and member-worthy savings</span>
-            <span>Get the best deals right now — curated plants, pots & more</span>
-            <span>Shop Ekondo retail for fresh picks and member-worthy savings</span>
+            <span>Ekondo Kids Summer Program — Aug 3–28 · Register now 🌱</span>
+            <span>Plants, paint, pottery &amp; play for ages 5–15 at Whispers Art Haus, Maitama</span>
+            <span>Ekondo Kids Summer Program — Aug 3–28 · Register now 🌱</span>
+            <span>Plants, paint, pottery &amp; play for ages 5–15 at Whispers Art Haus, Maitama</span>
           </div>
         </div>
 
         <div className="flex items-center gap-2 shrink-0">
           <Button asChild size="sm" className="bg-white text-primary hover:bg-white/90 font-semibold h-8 px-3">
-            <Link href="/retail">Shop retail</Link>
+            <Link href="/summer-program">Register</Link>
           </Button>
           <button onClick={handleDismiss} className="rounded-full p-1 hover:bg-white/15 transition-colors" aria-label="Dismiss banner">
             <X className="h-4 w-4" />

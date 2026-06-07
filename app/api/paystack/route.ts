@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
   try {
-    const { email, amount, experienceId, experienceName, ticketType, userId, metadata: customerMetadata } = await request.json();
+    const { email, amount, experienceId, experienceName, ticketType, userId, registrationId, metadata: customerMetadata } = await request.json();
 
     if (!process.env.PAYSTACK_SECRET_KEY) {
       throw new Error("PAYSTACK_SECRET_KEY not set");
@@ -12,6 +12,8 @@ export async function POST(request: Request) {
     let callbackUrl = `${process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"}/payment/success`;
     if (experienceId) {
       callbackUrl += `?experienceId=${experienceId}&experienceName=${encodeURIComponent(experienceName)}&ticketType=${encodeURIComponent(ticketType || "")}&userId=${userId || ""}`;
+    } else if (registrationId) {
+      callbackUrl += `?registrationId=${registrationId}&type=summer-program`;
     }
 
     // Build metadata object
@@ -25,6 +27,11 @@ export async function POST(request: Request) {
     }
     
     // Add customer metadata from checkout
+    if (registrationId) {
+      paymentMetadata.registrationId = registrationId;
+      paymentMetadata.type = "summer-program";
+    }
+
     if (customerMetadata) {
       Object.assign(paymentMetadata, customerMetadata);
     }

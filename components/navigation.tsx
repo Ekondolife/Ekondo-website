@@ -18,6 +18,7 @@ import { SearchDialog } from "./search-dialog"
 const routes = [
   { name: "Home", path: "/" },
   { name: "Shop", path: "/retail" },
+  { name: "Summer Program", path: "/summer-program" },
   { name: "Experiences", path: "/experience" },
   { name: "Services", path: "/services" },
   { name: "Spaces", path: "/spaces" },

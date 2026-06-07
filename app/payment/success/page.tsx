@@ -10,18 +10,46 @@ function PaymentSuccessContent() {
   const searchParams = useSearchParams();
   const { email, displayName, uid } = useUser();
   const [isProcessing, setIsProcessing] = useState(true);
+  const [isSummerProgram, setIsSummerProgram] = useState(false);
 
   useEffect(() => {
     const processPayment = async () => {
       const experienceId = searchParams.get("experienceId");
       const experienceName = searchParams.get("experienceName");
-      const ticketType = searchParams.get("ticketType");
+      const registrationId =
+        searchParams.get("registrationId") ||
+        sessionStorage.getItem("summerProgramRegistrationId");
+      const paymentType = searchParams.get("type");
+      const reference =
+        searchParams.get("reference") ||
+        searchParams.get("trxref");
 
-      // If this is an experience booking, add to Brevo list
+      const isSummer =
+        paymentType === "summer-program" || !!registrationId;
+
+      if (isSummer && registrationId && reference) {
+        setIsSummerProgram(true);
+        try {
+          const confirmRes = await fetch("/api/summer-program/confirm", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ registrationId, reference }),
+          });
+          const confirmData = await confirmRes.json();
+          if (confirmData.ok) {
+            console.log("Summer program registration confirmed");
+          }
+        } catch (error) {
+          console.error("Failed to confirm summer program payment:", error);
+        } finally {
+          sessionStorage.removeItem("summerProgramRegistrationId");
+        }
+      }
+
       if (experienceId && email && displayName) {
         try {
-          const brevoListId = experienceId === "5" ? 15 : null; // Southside Festival has specific list ID
-          
+          const brevoListId = experienceId === "5" ? 15 : null;
+
           const response = await fetch("/api/brevo", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -42,13 +70,12 @@ function PaymentSuccessContent() {
         }
       }
 
-      // If this is a service booking, add to Brevo list
-      if (!experienceId) {
+      if (!experienceId && !isSummer) {
         const bookingData = sessionStorage.getItem("serviceBookingData");
         if (bookingData && email) {
           try {
             const booking = JSON.parse(bookingData);
-            
+
             const response = await fetch("/api/brevo", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
@@ -56,13 +83,16 @@ function PaymentSuccessContent() {
                 email,
                 firstName: displayName || booking.name || "User",
                 experienceName: booking.serviceName || "Service",
-                listId: null, // Create new list for the service
+                listId: null,
               }),
             });
 
             const data = await response.json();
             if (data.ok) {
-              console.log("Successfully added service booking to Brevo list:", data.listId);
+              console.log(
+                "Successfully added service booking to Brevo list:",
+                data.listId
+              );
             }
           } catch (error) {
             console.error("Failed to add service booking to Brevo:", error);
@@ -72,14 +102,17 @@ function PaymentSuccessContent() {
         }
       }
 
-      // Record order in Supabase if this is a cart payment (not experience/service)
-      if (!experienceId && !sessionStorage.getItem("serviceBookingData") && uid) {
+      if (
+        !experienceId &&
+        !isSummer &&
+        !sessionStorage.getItem("serviceBookingData") &&
+        uid
+      ) {
         const cartData = localStorage.getItem("ekondo-cart");
         if (cartData) {
           try {
             const cartItems = JSON.parse(cartData);
-            
-            // Record each product in the order
+
             for (const item of cartItems) {
               await supabase.from("orders").insert([
                 {
@@ -100,24 +133,24 @@ function PaymentSuccessContent() {
         }
       }
 
-      // Clear cart after successful payment
       localStorage.removeItem("ekondo-cart");
       setIsProcessing(false);
 
-      // Redirect based on what was purchased
       const timer = setTimeout(() => {
-        if (experienceId) {
+        if (isSummer) {
+          router.push("/summer-program?registered=true");
+        } else if (experienceId) {
           router.push("/experience");
         } else {
           router.push("/retail");
         }
-      }, 3000);
+      }, 4000);
 
       return () => clearTimeout(timer);
     };
 
     processPayment();
-  }, [router, searchParams, email, displayName]);
+  }, [router, searchParams, email, displayName, uid]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background">
@@ -125,14 +158,20 @@ function PaymentSuccessContent() {
         <div className="mb-6">
           <CheckCircle className="h-16 w-16 text-green-500 mx-auto" />
         </div>
-        <h1 className="font-serif text-3xl font-bold mb-4">Payment Successful!</h1>
+        <h1 className="font-serif text-3xl font-bold mb-4">
+          Payment Successful!
+        </h1>
         <p className="text-lg mb-8 text-muted-foreground">
-          Thank you for your purchase! You will receive a confirmation email shortly.
+          {isSummerProgram
+            ? "Your child is registered for the Ekondo Kids Summer Program! We'll be in touch with camp details soon."
+            : "Thank you for your purchase! You will receive a confirmation email shortly."}
         </p>
-        {isProcessing && <p className="text-sm text-muted-foreground mb-4">Processing your booking...</p>}
-        <p className="text-sm text-muted-foreground">
-          Redirecting you...
-        </p>
+        {isProcessing && (
+          <p className="text-sm text-muted-foreground mb-4">
+            Processing your booking...
+          </p>
+        )}
+        <p className="text-sm text-muted-foreground">Redirecting you...</p>
       </div>
     </div>
   );
@@ -140,13 +179,15 @@ function PaymentSuccessContent() {
 
 export default function PaymentSuccess() {
   return (
-    <Suspense fallback={
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="text-center">
-          <p>Loading...</p>
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center bg-background">
+          <div className="text-center">
+            <p>Loading...</p>
+          </div>
         </div>
-      </div>
-    }>
+      }
+    >
       <PaymentSuccessContent />
     </Suspense>
   );

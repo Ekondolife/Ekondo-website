@@ -126,7 +126,7 @@ export default function TestBrevoPage() {
       <div className="max-w-2xl mx-auto">
         <h1 className="font-serif text-3xl font-bold mb-8">Test Brevo Integration</h1>
 
-        <Card className="border-none shadow-lg organic-shape mb-6">
+        <Card className="border-none shadow-lg  mb-6">
           <CardHeader>
             <CardTitle>Test Adding Contact to Brevo</CardTitle>
           </CardHeader>
@@ -139,7 +139,7 @@ export default function TestBrevoPage() {
                 value={testEmail}
                 onChange={(e) => setTestEmail(e.target.value)}
                 placeholder="your@email.com"
-                className="mt-1 organic-shape"
+                className="mt-1 "
               />
             </div>
 
@@ -151,7 +151,7 @@ export default function TestBrevoPage() {
                 value={experienceName}
                 onChange={(e) => setExperienceName(e.target.value)}
                 placeholder="Test Experience"
-                className="mt-1 organic-shape"
+                className="mt-1 "
               />
             </div>
 
@@ -159,7 +159,7 @@ export default function TestBrevoPage() {
               <Button
                 onClick={handleTest}
                 disabled={isProcessing}
-                className="w-full organic-shape btn-gradient"
+                className="w-full  btn-gradient"
               >
                 {isProcessing ? (
                   <>
@@ -175,7 +175,7 @@ export default function TestBrevoPage() {
                 onClick={() => handleTestSpecificList(15)}
                 disabled={isProcessing}
                 variant="outline"
-                className="w-full organic-shape bg-transparent"
+                className="w-full  bg-transparent"
               >
                 {isProcessing ? (
                   <>
@@ -191,7 +191,7 @@ export default function TestBrevoPage() {
         </Card>
 
         {result && (
-          <Card className={`border-none shadow-lg organic-shape ${result.ok ? "bg-green-50" : "bg-red-50"}`}>
+          <Card className={`border-none shadow-lg  ${result.ok ? "bg-green-50" : "bg-red-50"}`}>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 {result.ok ? (
