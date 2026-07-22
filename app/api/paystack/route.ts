@@ -8,12 +8,16 @@ export async function POST(request: Request) {
       throw new Error("PAYSTACK_SECRET_KEY not set");
     }
 
+    const isHomegrown = customerMetadata?.type === "homegrown";
+
     // Build callback URL based on whether it's a checkout or experience payment
     let callbackUrl = `${process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"}/payment/success`;
     if (experienceId) {
       callbackUrl += `?experienceId=${experienceId}&experienceName=${encodeURIComponent(experienceName)}&ticketType=${encodeURIComponent(ticketType || "")}&userId=${userId || ""}`;
     } else if (registrationId) {
       callbackUrl += `?registrationId=${registrationId}&type=summer-program`;
+    } else if (isHomegrown) {
+      callbackUrl += `?type=homegrown`;
     }
 
     // Build metadata object

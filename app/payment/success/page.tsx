@@ -10,7 +10,9 @@ function PaymentSuccessContent() {
   const searchParams = useSearchParams();
   const { email, displayName, uid } = useUser();
   const [isProcessing, setIsProcessing] = useState(true);
-  const [isSummerProgram, setIsSummerProgram] = useState(false);
+  const [successMessage, setSuccessMessage] = useState(
+    "Thank you for your purchase! You will receive a confirmation email shortly."
+  );
 
   useEffect(() => {
     const processPayment = async () => {
@@ -21,14 +23,23 @@ function PaymentSuccessContent() {
         sessionStorage.getItem("summerProgramRegistrationId");
       const paymentType = searchParams.get("type");
       const reference =
-        searchParams.get("reference") ||
-        searchParams.get("trxref");
+        searchParams.get("reference") || searchParams.get("trxref");
 
       const isSummer =
-        paymentType === "summer-program" || !!registrationId;
+        paymentType === "summer-program" ||
+        (!!registrationId && paymentType !== "homegrown");
+      const isHomegrown =
+        paymentType === "homegrown" ||
+        !!sessionStorage.getItem("homegrownBookingData");
+
+      let nextPath = "/retail";
+      let message =
+        "Thank you for your purchase! You will receive a confirmation email shortly.";
 
       if (isSummer && registrationId && reference) {
-        setIsSummerProgram(true);
+        message =
+          "Your child is registered for the Ekondo Kids Summer Program! We'll be in touch with camp details soon.";
+        nextPath = "/summer-program?registered=true";
         try {
           const confirmRes = await fetch("/api/summer-program/confirm", {
             method: "POST",
@@ -46,7 +57,15 @@ function PaymentSuccessContent() {
         }
       }
 
+      if (isHomegrown) {
+        message =
+          "You're booked for Homegrown! See you on 1 August at Whispers Art Haus, Maitama. Your ticket is fully redeemable as plant credit.";
+        nextPath = "/homegrown";
+        sessionStorage.removeItem("homegrownBookingData");
+      }
+
       if (experienceId && email && displayName) {
+        nextPath = "/experience";
         try {
           const brevoListId = experienceId === "5" ? 15 : null;
 
@@ -70,7 +89,7 @@ function PaymentSuccessContent() {
         }
       }
 
-      if (!experienceId && !isSummer) {
+      if (!experienceId && !isSummer && !isHomegrown) {
         const bookingData = sessionStorage.getItem("serviceBookingData");
         if (bookingData && email) {
           try {
@@ -105,6 +124,7 @@ function PaymentSuccessContent() {
       if (
         !experienceId &&
         !isSummer &&
+        !isHomegrown &&
         !sessionStorage.getItem("serviceBookingData") &&
         uid
       ) {
@@ -134,16 +154,11 @@ function PaymentSuccessContent() {
       }
 
       localStorage.removeItem("ekondo-cart");
+      setSuccessMessage(message);
       setIsProcessing(false);
 
       const timer = setTimeout(() => {
-        if (isSummer) {
-          router.push("/summer-program?registered=true");
-        } else if (experienceId) {
-          router.push("/experience");
-        } else {
-          router.push("/retail");
-        }
+        router.push(nextPath);
       }, 4000);
 
       return () => clearTimeout(timer);
@@ -161,11 +176,7 @@ function PaymentSuccessContent() {
         <h1 className="font-serif text-3xl font-bold mb-4">
           Payment Successful!
         </h1>
-        <p className="text-lg mb-8 text-muted-foreground">
-          {isSummerProgram
-            ? "Your child is registered for the Ekondo Kids Summer Program! We'll be in touch with camp details soon."
-            : "Thank you for your purchase! You will receive a confirmation email shortly."}
-        </p>
+        <p className="text-lg mb-8 text-muted-foreground">{successMessage}</p>
         {isProcessing && (
           <p className="text-sm text-muted-foreground mb-4">
             Processing your booking...

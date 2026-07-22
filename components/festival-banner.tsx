@@ -10,7 +10,6 @@ export default function FestivalBanner() {
   const pathname = usePathname()
   const [isVisible, setIsVisible] = useState(true)
 
-  // Don't show banner on login page
   if (pathname === "/login") {
     return null
   }
@@ -29,16 +28,16 @@ export default function FestivalBanner() {
       <div className="container flex items-center justify-between gap-3 px-4 py-2.5 md:py-3">
         <div className="flex-1 min-w-0 overflow-hidden">
           <div className="flex items-center gap-10 whitespace-nowrap animate-scroll-banner text-xs sm:text-sm md:text-base font-medium">
-            <span>Ekondo Kids Summer Program — Aug 3–28 · Register now 🌱</span>
-            <span>Plants, paint, pottery &amp; play for ages 5–15 at Whispers Art Haus, Maitama</span>
-            <span>Ekondo Kids Summer Program — Aug 3–28 · Register now 🌱</span>
-            <span>Plants, paint, pottery &amp; play for ages 5–15 at Whispers Art Haus, Maitama</span>
+            <span>Homegrown — Learn to grow herbs &amp; veggies at home · 1 Aug · Whispers Art Haus, Maitama</span>
+            <span>Tickets ₦5,000 · Fully redeemable as plant credit · Limited spots</span>
+            <span>Homegrown — Learn to grow herbs &amp; veggies at home · 1 Aug · Whispers Art Haus, Maitama</span>
+            <span>Tickets ₦5,000 · Fully redeemable as plant credit · Limited spots</span>
           </div>
         </div>
 
         <div className="flex items-center gap-2 shrink-0">
           <Button asChild size="sm" className="bg-white text-primary hover:bg-white/90 font-semibold h-8 px-3">
-            <Link href="/summer-program">Register</Link>
+            <Link href="/homegrown">Reserve spot</Link>
           </Button>
           <button onClick={handleDismiss} className="rounded-full p-1 hover:bg-white/15 transition-colors" aria-label="Dismiss banner">
             <X className="h-4 w-4" />
