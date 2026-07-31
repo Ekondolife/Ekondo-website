@@ -9,13 +9,14 @@ export async function POST(request: Request) {
     }
 
     const isHomegrown = customerMetadata?.type === "homegrown";
+    const paymentType = customerMetadata?.type || (registrationId ? "summer-program" : undefined);
 
     // Build callback URL based on whether it's a checkout or experience payment
     let callbackUrl = `${process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"}/payment/success`;
     if (experienceId) {
       callbackUrl += `?experienceId=${experienceId}&experienceName=${encodeURIComponent(experienceName)}&ticketType=${encodeURIComponent(ticketType || "")}&userId=${userId || ""}`;
     } else if (registrationId) {
-      callbackUrl += `?registrationId=${registrationId}&type=summer-program`;
+      callbackUrl += `?registrationId=${registrationId}&type=${encodeURIComponent(paymentType || "summer-program")}`;
     } else if (isHomegrown) {
       callbackUrl += `?type=homegrown`;
     }
@@ -33,7 +34,7 @@ export async function POST(request: Request) {
     // Add customer metadata from checkout
     if (registrationId) {
       paymentMetadata.registrationId = registrationId;
-      paymentMetadata.type = "summer-program";
+      paymentMetadata.type = paymentType || "summer-program";
     }
 
     if (customerMetadata) {

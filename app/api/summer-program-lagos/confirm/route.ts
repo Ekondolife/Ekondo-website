@@ -1,4 +1,3 @@
-// api/summer-program/confirm/route.ts
 import { NextResponse } from "next/server";
 import { createSupabaseServer } from "@/lib/supabaseServer";
 
@@ -36,7 +35,7 @@ export async function POST(request: Request) {
 
     const supabase = createSupabaseServer();
     const { data: registration, error: fetchError } = await supabase
-      .from("summer_program_registrations")
+      .from("summer_program_lagos_registrations")
       .select("*")
       .eq("id", registrationId)
       .single();
@@ -61,7 +60,7 @@ export async function POST(request: Request) {
     }
 
     const { error: updateError } = await supabase
-      .from("summer_program_registrations")
+      .from("summer_program_lagos_registrations")
       .update({
         payment_status: "paid",
         paystack_reference: reference,
@@ -77,34 +76,10 @@ export async function POST(request: Request) {
       );
     }
 
-    if (process.env.BREVO_API_KEY) {
-      try {
-        const apiKey = process.env.BREVO_API_KEY;
-        await fetch(
-          `https://api.brevo.com/v3/contacts/${encodeURIComponent(registration.parent_email)}`,
-          {
-            method: "PUT",
-            headers: {
-              "api-key": apiKey,
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              attributes: {
-                PAYMENT_STATUS: "paid",
-                PAYSTACK_REFERENCE: reference,
-              },
-            }),
-          }
-        );
-      } catch (brevoErr) {
-        console.error("Brevo payment update error (non-fatal):", brevoErr);
-      }
-    }
-
     return NextResponse.json({ ok: true });
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : "Confirmation failed";
-    console.error("Summer program confirm error:", error);
+    console.error("Lagos summer program confirm error:", error);
     return NextResponse.json({ ok: false, error: message }, { status: 500 });
   }
 }

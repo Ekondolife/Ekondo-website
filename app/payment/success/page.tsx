@@ -18,15 +18,21 @@ function PaymentSuccessContent() {
     const processPayment = async () => {
       const experienceId = searchParams.get("experienceId");
       const experienceName = searchParams.get("experienceName");
+      const summerProgramRegistrationId = sessionStorage.getItem("summerProgramRegistrationId");
+      const summerProgramLagosRegistrationId = sessionStorage.getItem("summerProgramLagosRegistrationId");
       const registrationId =
         searchParams.get("registrationId") ||
-        sessionStorage.getItem("summerProgramRegistrationId");
-      const paymentType = searchParams.get("type");
+        summerProgramRegistrationId ||
+        summerProgramLagosRegistrationId;
+      const paymentType = searchParams.get("type") ||
+        (summerProgramLagosRegistrationId ? "summer-program-lagos" : undefined);
       const reference =
         searchParams.get("reference") || searchParams.get("trxref");
 
+      const isSummerProgramLagos = paymentType === "summer-program-lagos";
       const isSummer =
         paymentType === "summer-program" ||
+        isSummerProgramLagos ||
         (!!registrationId && paymentType !== "homegrown");
       const isHomegrown =
         paymentType === "homegrown" ||
@@ -37,11 +43,18 @@ function PaymentSuccessContent() {
         "Thank you for your purchase! You will receive a confirmation email shortly.";
 
       if (isSummer && registrationId && reference) {
+        const confirmRoute = isSummerProgramLagos
+          ? "/api/summer-program-lagos/confirm"
+          : "/api/summer-program/confirm";
+        const successPath = isSummerProgramLagos
+          ? "/summer-program-lagos?registered=true"
+          : "/summer-program?registered=true";
+
         message =
           "Your child is registered for the Ekondo Kids Summer Program! We'll be in touch with camp details soon.";
-        nextPath = "/summer-program?registered=true";
+        nextPath = successPath;
         try {
-          const confirmRes = await fetch("/api/summer-program/confirm", {
+          const confirmRes = await fetch(confirmRoute, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ registrationId, reference }),
@@ -54,6 +67,7 @@ function PaymentSuccessContent() {
           console.error("Failed to confirm summer program payment:", error);
         } finally {
           sessionStorage.removeItem("summerProgramRegistrationId");
+          sessionStorage.removeItem("summerProgramLagosRegistrationId");
         }
       }
 
