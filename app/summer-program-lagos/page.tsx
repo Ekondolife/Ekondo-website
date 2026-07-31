@@ -411,7 +411,7 @@ function SummerProgramLagosContent() {
             <div className="hero-animate relative hidden lg:block">
               <div className="relative rounded-2xl overflow-hidden shadow-2xl">
                 <Image
-                  src="/images/ekondo-summer-lagos.JPEG"
+                  src="/images/ekondo-summer-lagos.jpeg"
                   alt="Ekondo Kids Summer Program — Lagos Edition"
                   width={600}
                   height={800}
